@@ -3,11 +3,16 @@ package smalls.javafxinventorysystem.model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import smalls.javafxinventorysystem.MainApplication;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Comparator;
+import java.util.Scanner;
 
 public class Inventory {
 
+    private static final String INVENTORY_FILE = "src/main/java/smalls/javafxinventorysystem/parts.txt";
     private static Inventory inv = null;
     private int nextId = 1001;
     private ObservableList<Part> allParts = FXCollections.observableArrayList();
@@ -208,5 +213,21 @@ public class Inventory {
             mid = (start + end) / 2;
         }
         return product;
+    }
+
+    public void loadParts() {
+        String[] record;
+        try (Scanner inFile = new Scanner(new FileInputStream(INVENTORY_FILE))) {
+            while (inFile.hasNextLine()) {
+                record = inFile.nextLine().split(",");
+                Part part = new InHouse(Integer.parseInt(record[0]), record[1], Double.parseDouble(record[2]),
+                        Integer.parseInt(record[3]), Integer.parseInt(record[4]), Integer.parseInt(record[5]),
+                        Integer.parseInt(record[6]));
+                inv.addPart(part);
+            }
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

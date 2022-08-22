@@ -6,25 +6,19 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import smalls.javafxinventorysystem.controller.MainWindowController;
+import smalls.javafxinventorysystem.model.Inventory;
+import smalls.javafxinventorysystem.view.MainWindow;
 
 import java.io.IOException;
 
 public class MainApplication extends Application {
     @Override
     public void start(Stage stage) {
-        try {
-            MainWindowController ctrl = new MainWindowController();
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("mainWindow.fxml"));
-            loader.setController(ctrl);
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            stage.setTitle("JavaFX Inventory System");
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        Inventory inv = Inventory.getInstance();
+        inv.loadParts();
+        MainWindow mainWindow = new MainWindow(stage);
+        mainWindow.show(inv);
     }
 
     public static void main(String[] args) {

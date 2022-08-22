@@ -22,4 +22,9 @@ public class InHouse extends Part {
     public int getMachineId() {
         return machineId;
     }
+
+    @Override
+    public String toString() {
+        return "InHouse{" + this.getName() + '}';
+    }
 }
