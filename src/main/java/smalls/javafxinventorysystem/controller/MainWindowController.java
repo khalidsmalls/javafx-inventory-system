@@ -7,7 +7,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import smalls.javafxinventorysystem.model.*;
+import smalls.javafxinventorysystem.view.AddPartWindow;
 
 import java.net.URL;
 import java.text.NumberFormat;
@@ -30,9 +32,11 @@ public class MainWindowController implements Initializable {
     private Inventory inv;
 
     private NumberFormat currencyFormat;
+    private Stage stage;
 
     public MainWindowController() {
         inv = Inventory.getInstance();
+        stage = new Stage();
     }
 
     @Override
@@ -72,12 +76,8 @@ public class MainWindowController implements Initializable {
     }
 
     public void onAddPart() {
-        Part p = new InHouse(3001, "hose", 5.99, 25, 10, 100, 1345);
-        inv.addPart(p);
-
-        for (Part part : inv.getAllParts()) {
-            System.out.println(part);
-        }
+        AddPartWindow win = new AddPartWindow(stage);
+        win.show(inv);
     }
 
     public void onModifyPart() {
