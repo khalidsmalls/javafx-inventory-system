@@ -10,6 +10,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import smalls.javafxinventorysystem.model.*;
 import smalls.javafxinventorysystem.view.AddPartWindowLoader;
+import smalls.javafxinventorysystem.view.ModifyPartWindowLoader;
 
 import java.net.URL;
 import java.text.NumberFormat;
@@ -81,6 +82,13 @@ public class MainWindowController implements Initializable {
     }
 
     public void onModifyPart() {
+        Part p = partTable.getSelectionModel().getSelectedItem();
+        if (p != null) {
+            ModifyPartWindowLoader win = new ModifyPartWindowLoader(stage, p);
+            win.show();
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Please select a part").showAndWait();
+        }
     }
 
     public void onDeletePart() {

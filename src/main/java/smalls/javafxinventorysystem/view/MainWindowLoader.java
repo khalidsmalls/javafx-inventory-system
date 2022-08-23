@@ -5,14 +5,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import smalls.javafxinventorysystem.controller.MainWindowController;
-import smalls.javafxinventorysystem.model.Inventory;
 
 import java.io.IOException;
 
 public class MainWindowLoader {
 
     private Stage stage;
-    //private Inventory inv;
 
     public MainWindowLoader(Stage stage) {
         this.stage = stage;
@@ -31,7 +29,6 @@ public class MainWindowLoader {
     }
 
     public void show() {
-        //this.inv = inv;
         if (this.stage.isShowing()) {
             stage.toFront();
         } else {
