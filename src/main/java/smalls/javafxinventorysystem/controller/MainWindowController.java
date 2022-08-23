@@ -50,7 +50,7 @@ public class MainWindowController implements Initializable {
         initProductTable();
     }
 
-    public void onPartSearch() {
+    @FXML private void onPartSearch() {
         String searchString = partSearchField.getText();
         boolean isInt = true;
         try {
@@ -73,15 +73,15 @@ public class MainWindowController implements Initializable {
         partTable.setPlaceholder(new Text("Part not found"));
     }
 
-    public void onProductSearch() {
+    @FXML private void onProductSearch() {
     }
 
-    public void onAddPart() {
+    @FXML private void onAddPart() {
         AddPartWindowLoader win = new AddPartWindowLoader(stage);
         win.show();
     }
 
-    public void onModifyPart() {
+    @FXML private void onModifyPart() {
         Part p = partTable.getSelectionModel().getSelectedItem();
         if (p != null) {
             ModifyPartWindowLoader win = new ModifyPartWindowLoader(stage, p);
@@ -91,22 +91,22 @@ public class MainWindowController implements Initializable {
         }
     }
 
-    public void onDeletePart() {
+    @FXML private void onDeletePart() {
     }
 
-    public void onAddProduct() {
+    @FXML private void onAddProduct() {
     }
 
-    public void onModifyProduct() {
+    @FXML private void onModifyProduct() {
     }
 
-    public void onDeleteProduct() {
+    @FXML private void onDeleteProduct() {
     }
 
-   public void onClose() {
+   @FXML private void onClose() {
    }
 
-   public void initPartTable() {
+   private void initPartTable() {
        TableColumn<Part, Integer> partIdColumn = new TableColumn<Part, Integer>("Part ID");
        partIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
        TableColumn<Part, String> partNameColumn = new TableColumn<Part, String>("Part Name");
@@ -141,7 +141,7 @@ public class MainWindowController implements Initializable {
        });
    }//END of initPartTable
 
-    public void initProductTable() {
+    private void initProductTable() {
         TableColumn<Product, Integer> productIdColumn = new TableColumn<Product, Integer>("Product ID");
         productIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         TableColumn<Product, String> productNameColumn = new TableColumn<Product, String>("Product Name");

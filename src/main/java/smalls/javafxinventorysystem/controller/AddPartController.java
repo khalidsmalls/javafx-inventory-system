@@ -81,26 +81,22 @@ public class AddPartController implements Initializable {
         partIdTextfield.setText(PART_ID_TEXTFIELD_TEXT);
         partWindowLabel.setText(partWindowLabelText);
 
-        partInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
-        partMaxTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
-        partMinTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
-        partPriceTextfield.setTextFormatter(new TextFormatter<Double>(doubleFilter));
-        partNameTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
+        setTextFormatters();
     }
 
-    public void onInHouseRadioClick() {
+    @FXML private void onInHouseRadioClick() {
         dynamicPartLabel.setText(IN_HOUSE_LABEL);
         dynamicPartTextfield.clear();
         dynamicPartTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
     }
 
-    public void onOutsourcedRadioClick() {
+    @FXML private void onOutsourcedRadioClick() {
         dynamicPartLabel.setText(OUTSOURCED_LABEL);
         dynamicPartTextfield.clear();
         dynamicPartTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
     }
 
-    public void onPartSave(ActionEvent event) {
+    @FXML private void onPartSave(ActionEvent event) {
         Part p = null;
         String newPartName;
         double newPartPrice;
@@ -144,11 +140,11 @@ public class AddPartController implements Initializable {
         }
     }//END of onPartSave
 
-    public void onPartCancel(ActionEvent e) {
+    @FXML private void onPartCancel(ActionEvent e) {
         ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
     }
 
-    public boolean validateFields() {
+    private boolean validateFields() {
         return !(partNameTextfield.getText().equals("") || partNameTextfield.getText().length() == 0 ||
                 partPriceTextfield.getText().equals("") || partPriceTextfield.getText().length() == 0 ||
                 partInvTextfield.getText().equals("") || partInvTextfield.getText().length() == 0 ||
@@ -156,7 +152,7 @@ public class AddPartController implements Initializable {
                 partMinTextfield.getText().equals("") || partMinTextfield.getText().length() == 0);
     }
 
-    public boolean validateInventory() {
+    private boolean validateInventory() {
         return Integer.parseInt(partMinTextfield.getText()) <= Integer.parseInt(partInvTextfield.getText()) &&
                 (Integer.parseInt(partInvTextfield.getText()) <= Integer.parseInt(partMaxTextfield.getText()));
     }
@@ -168,6 +164,14 @@ public class AddPartController implements Initializable {
         partMinTextfield.clear();
         partMaxTextfield.clear();
         dynamicPartTextfield.clear();
+    }
+
+    private void setTextFormatters() {
+        partInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
+        partMaxTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
+        partMinTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
+        partPriceTextfield.setTextFormatter(new TextFormatter<Double>(doubleFilter));
+        partNameTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
     }
 
 }//END of class

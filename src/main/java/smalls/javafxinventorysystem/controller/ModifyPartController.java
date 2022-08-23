@@ -16,10 +16,8 @@ import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
 public class ModifyPartController implements Initializable {
-
-    private static final String PART_ID_TEXTFIELD_TEXT = "Auto Gen- Disabled";
-    private static final String IN_HOUSE_LABEL = "Machine ID";
-    private static final String OUTSOURCED_LABEL = "Company Name";
+    private final String IN_HOUSE_LABEL = "Machine ID";
+    private final String OUTSOURCED_LABEL = "Company Name";
     @FXML private Label partWindowLabel;
     @FXML private Label dynamicPartLabel;
     @FXML private RadioButton inHouseRadioBtn;
@@ -33,11 +31,8 @@ public class ModifyPartController implements Initializable {
     @FXML private TextField dynamicPartTextfield;
     private Inventory inv;
     private String partWindowLabelText;
-    private ToggleGroup toggleGroup;
     private Part part;
     private int partIndex;
-    private int partId;
-
     private InvalidationListener partNameChangeListener;
     private InvalidationListener partPriceChangeListener;
     private InvalidationListener partInvChangeListener;
@@ -86,56 +81,36 @@ public class ModifyPartController implements Initializable {
         this.partWindowLabelText = windowLabelText;
     }
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         partWindowLabel.setText(partWindowLabelText);
         inv = Inventory.getInstance();
-        toggleGroup = new ToggleGroup();
+        ToggleGroup toggleGroup = new ToggleGroup();
         toggleGroup.getToggles().addAll(inHouseRadioBtn, outsourcedRadioBtn);
         inHouseRadioBtn.setSelected(true);
         partIdTextfield.setEditable(false);
         partIdTextfield.setText(String.valueOf(part.getId()));
-
-        partInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
-        partMaxTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
-        partMinTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
-        partPriceTextfield.setTextFormatter(new TextFormatter<Double>(doubleFilter));
-        partNameTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
-        dynamicPartTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
-
-        autoFillForm(part);
         partIndex = inv.getAllParts().indexOf(part);
-        partId = part.getId();
-
-        partNameModified = false;
-        partPriceModified = false;
-        partInvModified = false;
-        partMinModified = false;
-        partMaxModified = false;
-
+        setTextFormatters();
+        autoFillForm(part);
+        initModifiedPropertyBooleans();
         initInvalidationListeners();
-        partNameTextfield.textProperty().addListener(partNameChangeListener);
-        partPriceTextfield.textProperty().addListener(partPriceChangeListener);
-        partInvTextfield.textProperty().addListener(partInvChangeListener);
-        partMinTextfield.textProperty().addListener(partMinChangeListener);
-        partMaxTextfield.textProperty().addListener(partMaxChangeListener);
-
+        addInvalidationListeners();
     }//END of initialize
 
-    public void onInHouseRadioClick() {
+    @FXML private void onInHouseRadioClick() {
         dynamicPartLabel.setText(IN_HOUSE_LABEL);
         dynamicPartTextfield.clear();
         dynamicPartTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
     }
 
-    public void onOutsourcedRadioClick() {
+    @FXML private void onOutsourcedRadioClick() {
         dynamicPartLabel.setText(OUTSOURCED_LABEL);
         dynamicPartTextfield.clear();
         dynamicPartTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
     }
 
-    public void onPartSave(ActionEvent event) {
+    @FXML private void onPartSave(ActionEvent event) {
         if (validateFields()) {
             if (validateInventory()) {
                 if (partNameModified) {
@@ -167,7 +142,7 @@ public class ModifyPartController implements Initializable {
         }
     }
 
-    public void onPartCancel(ActionEvent e) {
+    @FXML private void onPartCancel(ActionEvent e) {
         ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
     }
 
@@ -211,6 +186,23 @@ public class ModifyPartController implements Initializable {
         dynamicPartTextfield.clear();
     }
 
+    public void initModifiedPropertyBooleans() {
+        partNameModified = false;
+        partPriceModified = false;
+        partInvModified = false;
+        partMinModified = false;
+        partMaxModified = false;
+    }
+
+    public void setTextFormatters() {
+        partInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
+        partMaxTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
+        partMinTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
+        partPriceTextfield.setTextFormatter(new TextFormatter<Double>(doubleFilter));
+        partNameTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
+        dynamicPartTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
+    }
+
     public void initInvalidationListeners() {
         partNameChangeListener = new InvalidationListener() {
             @Override
@@ -243,37 +235,15 @@ public class ModifyPartController implements Initializable {
             }
         };
     }
+
+    public void addInvalidationListeners() {
+        partNameTextfield.textProperty().addListener(partNameChangeListener);
+        partPriceTextfield.textProperty().addListener(partPriceChangeListener);
+        partInvTextfield.textProperty().addListener(partInvChangeListener);
+        partMinTextfield.textProperty().addListener(partMinChangeListener);
+        partMaxTextfield.textProperty().addListener(partMaxChangeListener);
+    }
 }
 
-
-//
-//    public void onSave(ActionEvent e) {
-//        try {
-//            if ((!(partNameTextfield.getText() == null || partNameTextfield.getText().length() == 0 ||
-//                    partPriceTextfield.getText() == null || partPriceTextfield.getText().length() == 0) ||
-//                    partInvTextfield.getText() == null || partInvTextfield.getText().length() == 0 ||
-//                    partMaxTextfield.getText() == null || partMaxTextfield.getText().length() == 0  ||
-//                    partMinTextfield.getText() == null || partMinTextfield.getText().length() == 0) &&
-//                    (Integer.valueOf(partMinTextfield.getText()) <= Integer.valueOf(partInvTextfield.getText()) &&
-//                            (Integer.valueOf(partInvTextfield.getText()) <= Integer.valueOf(partMaxTextfield.getText())))) {
-//
-//                if ((toggleGroup.getSelectedToggle() == inHouseRadioBtn)) {
-//                    InHouse newPart = new InHouse(partId, partNameTextfield.getText(), Double.parseDouble(partPriceTextfield.getText()),
-//                            Integer.parseInt(partInvTextfield.getText()), Integer.parseInt(partMinTextfield.getText()),
-//                            Integer.parseInt(partMaxTextfield.getText()), Integer.parseInt(dynamicTextfield.getText()));
-//                    inv.updatePart(partIndex, newPart);
-//                } else {
-//                    Outsourced newPart = new Outsourced(partId, partNameTextfield.getText(), Double.parseDouble(partPriceTextfield.getText()),
-//                            Integer.parseInt(partInvTextfield.getText()), Integer.parseInt(partMinTextfield.getText()),
-//                            Integer.parseInt(partMaxTextfield.getText()), dynamicTextfield.getText());
-//                    inv.updatePart(partIndex, newPart);
-//                }
-//                clearFields();
-//                ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
-//            }
-//        } catch (NumberFormatException ex) {
-//            new Alert(Alert.AlertType.ERROR, "Something went wrong").show();
-//        }
-//    }
 
 
