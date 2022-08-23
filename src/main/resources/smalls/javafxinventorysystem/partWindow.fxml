@@ -11,15 +11,15 @@
          <top>
             <HBox prefHeight="79.0" prefWidth="980.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="partWindowLabel">
+                  <Label fx:id="partWindowLabel" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="325.0">
                      <HBox.margin>
-                        <Insets left="100.0" right="100.0" top="30.0" />
+                        <Insets left="120.0" top="10.0" />
                      </HBox.margin>
                      <font>
-                        <Font size="28.0" />
+                        <Font size="30.0" />
                      </font>
                   </Label>
-                  <HBox alignment="CENTER" prefHeight="79.0" prefWidth="693.0">
+                  <HBox alignment="CENTER" prefHeight="69.0" prefWidth="518.0">
                      <children>
                         <RadioButton fx:id="inHouseRadioBtn" mnemonicParsing="false" onAction="#onInHouseRadioClick" text="In-House">
                            <HBox.margin>
@@ -41,8 +41,8 @@
          <bottom>
             <ButtonBar prefHeight="67.0" prefWidth="980.0" BorderPane.alignment="CENTER">
               <buttons>
-                <Button fx:id="partSaveBtn" mnemonicParsing="false" onAction="#onPartSave" text="Save" />
-                  <Button fx:id="partCancelBtn" mnemonicParsing="false" onAction="#onPartCancel" text="Cancel" />
+                <Button mnemonicParsing="false" onAction="#onPartSave" text="Save" />
+                  <Button mnemonicParsing="false" onAction="#onPartCancel" text="Cancel" />
               </buttons>
                <padding>
                   <Insets right="100.0" />

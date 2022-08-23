@@ -13,10 +13,11 @@ public class AddPartWindow {
 
     private Stage stage;
     private Inventory inv;
+    private final String WINDOW_LABEL_TEXT = "Add Part";
 
     public AddPartWindow(Stage stage) {
         this.stage = stage;
-        AddPartController ctrl = new AddPartController();
+        AddPartController ctrl = new AddPartController(WINDOW_LABEL_TEXT);
         FXMLLoader loader = new FXMLLoader();
         loader.setController(ctrl);
         loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/partWindow.fxml"));
