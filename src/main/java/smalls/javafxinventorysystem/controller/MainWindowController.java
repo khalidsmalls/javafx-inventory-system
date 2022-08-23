@@ -9,7 +9,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import smalls.javafxinventorysystem.model.*;
-import smalls.javafxinventorysystem.view.AddPartWindow;
+import smalls.javafxinventorysystem.view.AddPartWindowLoader;
 
 import java.net.URL;
 import java.text.NumberFormat;
@@ -76,7 +76,7 @@ public class MainWindowController implements Initializable {
     }
 
     public void onAddPart() {
-        AddPartWindow win = new AddPartWindow(stage);
+        AddPartWindowLoader win = new AddPartWindowLoader(stage);
         win.show(inv);
     }
 

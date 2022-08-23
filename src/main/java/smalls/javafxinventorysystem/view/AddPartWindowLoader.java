@@ -4,28 +4,23 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import smalls.javafxinventorysystem.MainApplication;
-import smalls.javafxinventorysystem.controller.MainWindowController;
+import smalls.javafxinventorysystem.controller.AddPartController;
 import smalls.javafxinventorysystem.model.Inventory;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 
-public class MainWindow {
+public class AddPartWindowLoader {
 
     private Stage stage;
     private Inventory inv;
+    private final String WINDOW_LABEL_TEXT = "Add Part";
 
-    public MainWindow(Stage stage) {
+    public AddPartWindowLoader(Stage stage) {
         this.stage = stage;
-        MainWindowController ctrl = new MainWindowController();
+        AddPartController ctrl = new AddPartController(WINDOW_LABEL_TEXT);
         FXMLLoader loader = new FXMLLoader();
         loader.setController(ctrl);
-        loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/mainWindow.fxml"));
+        loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/partWindow.fxml"));
 
         try {
             Parent root = loader.load();
@@ -44,6 +39,4 @@ public class MainWindow {
             this.stage.show();
         }
     }
-
-
-}//END of class
+}

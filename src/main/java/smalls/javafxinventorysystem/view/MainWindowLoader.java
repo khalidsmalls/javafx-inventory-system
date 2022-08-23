@@ -4,23 +4,22 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import smalls.javafxinventorysystem.controller.AddPartController;
+import smalls.javafxinventorysystem.controller.MainWindowController;
 import smalls.javafxinventorysystem.model.Inventory;
 
 import java.io.IOException;
 
-public class AddPartWindow {
+public class MainWindowLoader {
 
     private Stage stage;
     private Inventory inv;
-    private final String WINDOW_LABEL_TEXT = "Add Part";
 
-    public AddPartWindow(Stage stage) {
+    public MainWindowLoader(Stage stage) {
         this.stage = stage;
-        AddPartController ctrl = new AddPartController(WINDOW_LABEL_TEXT);
+        MainWindowController ctrl = new MainWindowController();
         FXMLLoader loader = new FXMLLoader();
         loader.setController(ctrl);
-        loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/partWindow.fxml"));
+        loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/mainWindow.fxml"));
 
         try {
             Parent root = loader.load();
@@ -39,4 +38,6 @@ public class AddPartWindow {
             this.stage.show();
         }
     }
-}
+
+
+}//END of class
