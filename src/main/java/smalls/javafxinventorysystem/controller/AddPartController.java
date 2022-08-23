@@ -1,5 +1,7 @@
 package smalls.javafxinventorysystem.controller;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -54,7 +56,7 @@ public class AddPartController implements Initializable {
 
     private final UnaryOperator<TextFormatter.Change> stringFilter = change -> {
         String newText = change.getControlNewText();
-        if (newText.matches("([a-zA-Z\\-]*)")) {
+        if (newText.matches("([a-zA-Z\\- ']*)")) {
             return change;
         }
         return null;
@@ -74,6 +76,7 @@ public class AddPartController implements Initializable {
         toggleGroup.getToggles().addAll(inHouseRadioBtn, outsourcedRadioBtn);
         inHouseRadioBtn.setSelected(true);
         dynamicPartLabel.setText(IN_HOUSE_LABEL);
+        dynamicPartTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
         partIdTextfield.setEditable(false);
         partIdTextfield.setText(PART_ID_TEXTFIELD_TEXT);
         partWindowLabel.setText(partWindowLabelText);
@@ -87,10 +90,14 @@ public class AddPartController implements Initializable {
 
     public void onInHouseRadioClick() {
         dynamicPartLabel.setText(IN_HOUSE_LABEL);
+        dynamicPartTextfield.clear();
+        dynamicPartTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
     }
 
     public void onOutsourcedRadioClick() {
         dynamicPartLabel.setText(OUTSOURCED_LABEL);
+        dynamicPartTextfield.clear();
+        dynamicPartTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
     }
 
     public void onPartSave(ActionEvent event) {
@@ -109,16 +116,11 @@ public class AddPartController implements Initializable {
                 newPartMax = Integer.parseInt(partMaxTextfield.getText());
 
                 if (toggleGroup.getSelectedToggle() == inHouseRadioBtn) {
-                    try {
-                        int newPartMachineId = Integer.parseInt(dynamicPartTextfield.getText());
-                        p = new InHouse(
-                                newPartId, newPartName, newPartPrice, newPartInv,
-                                newPartMin, newPartMax, newPartMachineId
-                        );
-                    } catch (NumberFormatException ex) {
-                        new Alert(Alert.AlertType.ERROR, "Machine ID must be numeric").showAndWait();
-                        return;
-                    }
+                    int newPartMachineId = Integer.parseInt(dynamicPartTextfield.getText());
+                    p = new InHouse(
+                            newPartId, newPartName, newPartPrice, newPartInv,
+                            newPartMin, newPartMax, newPartMachineId
+                    );
                 } else {
                     String newPartCompanyName = dynamicPartTextfield.getText();
                     p = new Outsourced(
