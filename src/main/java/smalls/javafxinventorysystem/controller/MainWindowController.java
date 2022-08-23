@@ -77,7 +77,7 @@ public class MainWindowController implements Initializable {
 
     public void onAddPart() {
         AddPartWindowLoader win = new AddPartWindowLoader(stage);
-        win.show(inv);
+        win.show();
     }
 
     public void onModifyPart() {

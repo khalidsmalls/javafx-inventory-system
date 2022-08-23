@@ -11,8 +11,7 @@ import java.io.IOException;
 
 public class AddPartWindowLoader {
 
-    private Stage stage;
-    private Inventory inv;
+    private final Stage stage;
     private final String WINDOW_LABEL_TEXT = "Add Part";
 
     public AddPartWindowLoader(Stage stage) {
@@ -31,8 +30,7 @@ public class AddPartWindowLoader {
         }
     }
 
-    public void show(Inventory inv) {
-        this.inv = inv;
+    public void show() {
         if (this.stage.isShowing()) {
             stage.toFront();
         } else {

@@ -12,7 +12,7 @@ public class MainApplication extends Application {
         Inventory inv = Inventory.getInstance();
         inv.loadParts();
         MainWindowLoader mainWindowLoader = new MainWindowLoader(stage);
-        mainWindowLoader.show(inv);
+        mainWindowLoader.show();
     }
 
     public static void main(String[] args) {

@@ -12,7 +12,7 @@ import java.io.IOException;
 public class MainWindowLoader {
 
     private Stage stage;
-    private Inventory inv;
+    //private Inventory inv;
 
     public MainWindowLoader(Stage stage) {
         this.stage = stage;
@@ -30,8 +30,8 @@ public class MainWindowLoader {
         }
     }
 
-    public void show(Inventory inv) {
-        this.inv = inv;
+    public void show() {
+        //this.inv = inv;
         if (this.stage.isShowing()) {
             stage.toFront();
         } else {
