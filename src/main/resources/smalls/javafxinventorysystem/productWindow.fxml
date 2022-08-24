@@ -90,8 +90,8 @@
                            <top>
                               <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="529.0" BorderPane.alignment="CENTER">
                                  <children>
-                                    <TextField fx:id="partsSearchTextfield" prefHeight="24.0" prefWidth="201.0" promptText="Search by Part ID or Name" />
-                                    <Button fx:id="partsSearchBtn" mnemonicParsing="false" onAction="#onPartsSearch" text="Search">
+                                    <TextField fx:id="partSearchTextfield" prefHeight="24.0" prefWidth="201.0" promptText="Search by Part ID or Name" />
+                                    <Button fx:id="partSearchBtn" mnemonicParsing="false" onAction="#onPartSearch" text="Search">
                                        <HBox.margin>
                                           <Insets left="10.0" />
                                        </HBox.margin>

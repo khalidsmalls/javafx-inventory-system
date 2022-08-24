@@ -10,6 +10,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import smalls.javafxinventorysystem.model.*;
 import smalls.javafxinventorysystem.view.AddPartWindowLoader;
+import smalls.javafxinventorysystem.view.AddProductWindowLoader;
 import smalls.javafxinventorysystem.view.ModifyPartWindowLoader;
 
 import java.net.URL;
@@ -30,10 +31,9 @@ public class MainWindowController implements Initializable {
     @FXML private Button closeBtn;
     @FXML private TableView<Part> partTable;
     @FXML private TableView<Product> productTable;
-    private Inventory inv;
-
+    private final Inventory inv;
     private NumberFormat currencyFormat;
-    private Stage stage;
+    private final Stage stage;
 
     public MainWindowController() {
         inv = Inventory.getInstance();
@@ -95,6 +95,8 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML private void onAddProduct() {
+        AddProductWindowLoader win = new AddProductWindowLoader(stage);
+        win.show();
     }
 
     @FXML private void onModifyProduct() {
