@@ -12,6 +12,7 @@ import smalls.javafxinventorysystem.model.*;
 import smalls.javafxinventorysystem.view.AddPartWindowLoader;
 import smalls.javafxinventorysystem.view.AddProductWindowLoader;
 import smalls.javafxinventorysystem.view.ModifyPartWindowLoader;
+import smalls.javafxinventorysystem.view.ModifyProductWindowLoader;
 
 import java.net.URL;
 import java.text.NumberFormat;
@@ -88,6 +89,13 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML private void onModifyProduct() {
+        Product p = productTable.getSelectionModel().getSelectedItem();
+        if (p != null) {
+            ModifyProductWindowLoader win = new ModifyProductWindowLoader(stage, p);
+            win.show();
+        } else {
+            new Alert(Alert.AlertType.ERROR, "Please select a product").showAndWait();
+        }
     }
 
     @FXML private void onDeleteProduct() {

@@ -114,12 +114,20 @@ public class Product {
         associatedParts.add(part);
     }
 
+    public void addAssociatedParts(ObservableList<Part> parts) {
+        associatedParts.addAll(parts);
+    }
+
     /**
      * @param selectedAssociatedPart the part to remove from associated parts
      * @return true if part is removed, false if not
      */
     public boolean deleteAssociatedParts(Part selectedAssociatedPart) {
         return associatedParts.remove(selectedAssociatedPart);
+    }
+
+    public boolean deleteAssociatedParts(ObservableList<Part> selectedAssociatedParts) {
+        return associatedParts.removeAll(selectedAssociatedParts);
     }
 
     /**
