@@ -90,7 +90,7 @@
                               <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="529.0" BorderPane.alignment="CENTER">
                                  <children>
                                     <TextField fx:id="partSearchTextfield" prefHeight="24.0" prefWidth="201.0" promptText="Search by Part ID or Name" />
-                                    <Button fx:id="partSearchBtn" mnemonicParsing="false" onAction="#onPartSearch" text="Search">
+                                    <Button mnemonicParsing="false" onAction="#onPartSearch" text="Search">
                                        <HBox.margin>
                                           <Insets left="10.0" />
                                        </HBox.margin>
@@ -104,7 +104,7 @@
                            <bottom>
                               <ButtonBar prefHeight="28.0" prefWidth="529.0" BorderPane.alignment="CENTER">
                                 <buttons>
-                                  <Button fx:id="addAssocPartBtn" mnemonicParsing="false" onAction="#onAddAssocPart" text="Add" />
+                                  <Button mnemonicParsing="false" onAction="#onAddAssocPart" text="Add" />
                                 </buttons>
                                  <padding>
                                     <Insets right="30.0" />
@@ -133,7 +133,7 @@
                            <bottom>
                               <ButtonBar prefHeight="30.0" prefWidth="529.0" BorderPane.alignment="CENTER">
                                 <buttons>
-                                  <Button fx:id="removeAssocPartBtn" mnemonicParsing="false" onAction="#onRemoveAssocPart" text="Remove Associated Part" />
+                                  <Button mnemonicParsing="false" onAction="#onRemoveAssocPart" text="Remove Associated Part" />
                                 </buttons>
                                  <padding>
                                     <Insets right="30.0" />
@@ -158,7 +158,8 @@
                   </AnchorPane>
                   <ButtonBar prefHeight="33.0" prefWidth="549.0">
                     <buttons>
-                      <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#onClose" text="Close" />
+                        <Button mnemonicParsing="false" onAction="#onSave" text="Save" />
+                        <Button mnemonicParsing="false" onAction="#onClose" text="Close" />
                     </buttons>
                      <padding>
                         <Insets right="50.0" />

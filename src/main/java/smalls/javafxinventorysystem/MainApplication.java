@@ -7,11 +7,11 @@ import smalls.javafxinventorysystem.view.MainWindowLoader;
 
 public class MainApplication extends Application {
     @Override
-    public void start(Stage stage) {
+    public void start(Stage primaryStage) {
 
         Inventory inv = Inventory.getInstance();
         inv.loadParts();
-        MainWindowLoader mainWindowLoader = new MainWindowLoader(stage);
+        MainWindowLoader mainWindowLoader = new MainWindowLoader(primaryStage);
         mainWindowLoader.show();
     }
 

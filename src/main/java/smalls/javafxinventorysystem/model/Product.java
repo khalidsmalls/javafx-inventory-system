@@ -1,10 +1,11 @@
 package smalls.javafxinventorysystem.model;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class Product {
 
-    private ObservableList<Part> associatedParts;
+    private final ObservableList<Part> associatedParts;
     private int id;
     private String name;
     private double price;
@@ -19,6 +20,7 @@ public class Product {
         this.stock = stock;
         this.min = min;
         this.max = max;
+        associatedParts = FXCollections.observableArrayList();
     }
 
     /**

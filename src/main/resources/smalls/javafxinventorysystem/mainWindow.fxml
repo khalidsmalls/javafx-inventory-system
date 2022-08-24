@@ -23,7 +23,7 @@
          <bottom>
             <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
               <buttons>
-                <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#onClose" text="Close" />
+                <Button mnemonicParsing="false" onAction="#onClose" text="Close" />
               </buttons>
                <BorderPane.margin>
                   <Insets bottom="10.0" />
@@ -60,7 +60,7 @@
                                                 <Insets right="10.0" />
                                              </HBox.margin>
                                           </TextField>
-                                          <Button fx:id="partSearchBtn" mnemonicParsing="false" onAction="#onPartSearch" text="Search" />
+                                          <Button mnemonicParsing="false" onAction="#onPartSearch" text="Search" />
                                        </children>
                                        <HBox.margin>
                                           <Insets />
@@ -75,9 +75,9 @@
                            <bottom>
                               <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                 <buttons>
-                                  <Button fx:id="addPartBtn" mnemonicParsing="false" onAction="#onAddPart" text="Add" />
-                                    <Button fx:id="modifyPartBtn" mnemonicParsing="false" onAction="#onModifyPart" text="Modify" />
-                                    <Button fx:id="deletePartBtn" mnemonicParsing="false" onAction="#onDeletePart" text="Delete" />
+                                  <Button mnemonicParsing="false" onAction="#onAddPart" text="Add" />
+                                    <Button mnemonicParsing="false" onAction="#onModifyPart" text="Modify" />
+                                    <Button mnemonicParsing="false" onAction="#onDeletePart" text="Delete" />
                                 </buttons>
                                  <padding>
                                     <Insets right="40.0" />
@@ -124,7 +124,7 @@
                                                 <Insets right="10.0" />
                                              </HBox.margin>
                                           </TextField>
-                                          <Button fx:id="productSearchBtn" mnemonicParsing="false" onAction="#onProductSearch" text="Search" />
+                                          <Button mnemonicParsing="false" onAction="#onProductSearch" text="Search" />
                                        </children>
                                     </HBox>
                                  </children>
@@ -133,9 +133,9 @@
                            <bottom>
                               <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                 <buttons>
-                                  <Button fx:id="addProductBtn" mnemonicParsing="false" onAction="#onAddProduct" text="Add" />
-                                    <Button fx:id="modifyProductBtn" mnemonicParsing="false" onAction="#onModifyProduct" text="Modify" />
-                                    <Button fx:id="deleteProductBtn" mnemonicParsing="false" onAction="#onDeleteProduct" text="Delete" />
+                                  <Button mnemonicParsing="false" onAction="#onAddProduct" text="Add" />
+                                    <Button mnemonicParsing="false" onAction="#onModifyProduct" text="Modify" />
+                                    <Button mnemonicParsing="false" onAction="#onDeleteProduct" text="Delete" />
                                 </buttons>
                                  <BorderPane.margin>
                                     <Insets />

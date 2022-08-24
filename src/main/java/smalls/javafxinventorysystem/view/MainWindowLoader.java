@@ -12,8 +12,8 @@ public class MainWindowLoader {
 
     private Stage stage;
 
-    public MainWindowLoader(Stage stage) {
-        this.stage = stage;
+    public MainWindowLoader(Stage primaryStage) {
+        this.stage = primaryStage;
         MainWindowController ctrl = new MainWindowController();
         FXMLLoader loader = new FXMLLoader();
         loader.setController(ctrl);

@@ -20,15 +20,6 @@ import java.util.ResourceBundle;
 public class MainWindowController implements Initializable {
     @FXML private TextField partSearchField;
     @FXML private TextField productSearchField;
-    @FXML private Button partSearchBtn;
-    @FXML private Button productSearchBtn;
-    @FXML private Button addPartBtn;
-    @FXML private Button modifyPartBtn;
-    @FXML private Button deletePartBtn;
-    @FXML private Button addProductBtn;
-    @FXML private Button modifyProductBtn;
-    @FXML private Button deleteProductBtn;
-    @FXML private Button closeBtn;
     @FXML private TableView<Part> partTable;
     @FXML private TableView<Product> productTable;
     private final Inventory inv;
@@ -42,12 +33,9 @@ public class MainWindowController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        partTable.setItems(inv.getAllParts());
-        productTable.setItems(inv.getAllProducts());
-        currencyFormat = NumberFormat.getCurrencyInstance();
-
         initPartTable();
         initProductTable();
+        currencyFormat = NumberFormat.getCurrencyInstance();
     }
 
     @FXML private void onPartSearch() {
@@ -106,9 +94,11 @@ public class MainWindowController implements Initializable {
     }
 
    @FXML private void onClose() {
+        stage.close();
    }
 
    private void initPartTable() {
+       partTable.setItems(inv.getAllParts());
        TableColumn<Part, Integer> partIdColumn = new TableColumn<Part, Integer>("Part ID");
        partIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
        TableColumn<Part, String> partNameColumn = new TableColumn<Part, String>("Part Name");
@@ -144,6 +134,7 @@ public class MainWindowController implements Initializable {
    }//END of initPartTable
 
     private void initProductTable() {
+        productTable.setItems(inv.getAllProducts());
         TableColumn<Product, Integer> productIdColumn = new TableColumn<Product, Integer>("Product ID");
         productIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         TableColumn<Product, String> productNameColumn = new TableColumn<Product, String>("Product Name");
