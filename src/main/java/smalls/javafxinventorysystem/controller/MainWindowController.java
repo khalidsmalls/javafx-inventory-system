@@ -2,6 +2,7 @@ package smalls.javafxinventorysystem.controller;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -17,13 +18,14 @@ import smalls.javafxinventorysystem.view.ModifyProductWindowLoader;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 public class MainWindowController implements Initializable {
     @FXML private TextField partSearchField;
     @FXML private TextField productSearchField;
-    @FXML private TableView<Part> partTable;
-    @FXML private TableView<Product> productTable;
+    @FXML private TableView<Part> partsTable;
+    @FXML private TableView<Product> productsTable;
     private final Inventory inv;
     private NumberFormat currencyFormat;
     private final Stage stage;
@@ -48,19 +50,19 @@ public class MainWindowController implements Initializable {
             Part p = inv.lookupPart(id);
             ObservableList<Part> partList = FXCollections.observableArrayList();
             partList.add(p);
-            partTable.setItems(partList);
-            partTable.getSelectionModel().select(p);
+            partsTable.setItems(partList);
+            partsTable.getSelectionModel().select(p);
         } catch (Exception e) {
             isInt = false;
         }
         if (!isInt) {
             ObservableList<Part> partList = inv.lookupPart(searchString);
-            partTable.setItems(partList);
+            partsTable.setItems(partList);
             if (partList.size() == 1) {
-                partTable.getSelectionModel().select(partList.get(0));
+                partsTable.getSelectionModel().select(partList.get(0));
             }
         }
-        partTable.setPlaceholder(new Text("Part not found"));
+        partsTable.setPlaceholder(new Text("Part not found"));
     }
 
     @FXML private void onProductSearch() {
@@ -71,19 +73,19 @@ public class MainWindowController implements Initializable {
             Product p = inv.lookupProduct(id);
             ObservableList<Product> productList = FXCollections.observableArrayList();
             productList.add(p);
-            productTable.setItems(productList);
-            productTable.getSelectionModel().select(p);
+            productsTable.setItems(productList);
+            productsTable.getSelectionModel().select(p);
         } catch (Exception e) {
             isInt = false;
         }
         if (!isInt) {
             ObservableList<Product> productList = inv.lookupProduct(searchString);
-            productTable.setItems(productList);
+            productsTable.setItems(productList);
             if (productList.size() == 1) {
-                productTable.getSelectionModel().select(productList.get(0));
+                productsTable.getSelectionModel().select(productList.get(0));
             }
         }
-        productTable.setPlaceholder(new Text("Part not found"));
+        productsTable.setPlaceholder(new Text("Part not found"));
     }
 
     @FXML private void onAddPart() {
@@ -92,7 +94,7 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML private void onModifyPart() {
-        Part p = partTable.getSelectionModel().getSelectedItem();
+        Part p = partsTable.getSelectionModel().getSelectedItem();
         if (p != null) {
             ModifyPartWindowLoader win = new ModifyPartWindowLoader(stage, p);
             win.show();
@@ -102,6 +104,16 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML private void onDeletePart() {
+        try {
+            Part p = (Part) partsTable.getSelectionModel().getSelectedItem();
+            Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete " + p.getName() + "?");
+            Optional<ButtonType> result = confirmDelete.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                inv.deletePart(p);
+            }
+        } catch (Exception e) {
+            new Alert(Alert.AlertType.ERROR, "Please select a part to delete").showAndWait();
+        }
     }
 
     @FXML private void onAddProduct() {
@@ -110,7 +122,7 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML private void onModifyProduct() {
-        Product p = productTable.getSelectionModel().getSelectedItem();
+        Product p = productsTable.getSelectionModel().getSelectedItem();
         if (p != null) {
             ModifyProductWindowLoader win = new ModifyProductWindowLoader(stage, p);
             win.show();
@@ -120,14 +132,29 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML private void onDeleteProduct() {
+        try {
+            Product p = (Product)productsTable.getSelectionModel().getSelectedItem();
+            if (p.getAllAssociatedParts().size() > 0) {
+                new Alert(Alert.AlertType.ERROR, "Error: Cannot delete a product that has associated parts").showAndWait();
+                return;
+            }
+            Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete " + p.getName() + "?");
+            Optional<ButtonType> result = confirmDelete.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                inv.deleteProduct(p);
+            }
+        } catch (Exception e) {
+            new Alert(Alert.AlertType.ERROR, "Please select a part to delete").showAndWait();
+        }
     }
 
-   @FXML private void onClose() {
-        stage.close();
+   @FXML private void onClose(ActionEvent e) {
+       ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
+
    }
 
    private void initPartTable() {
-       partTable.setItems(inv.getAllParts());
+       partsTable.setItems(inv.getAllParts());
        TableColumn<Part, Integer> partIdColumn = new TableColumn<Part, Integer>("Part ID");
        partIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
        TableColumn<Part, String> partNameColumn = new TableColumn<Part, String>("Part Name");
@@ -137,12 +164,12 @@ public class MainWindowController implements Initializable {
        TableColumn<Part, Double> partPriceColumn = new TableColumn<Part, Double>("Price/Cost per Unit");
        partPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-       partTable.getColumns().setAll(Arrays.asList(partIdColumn, partNameColumn, partInvColumn, partPriceColumn));
+       partsTable.getColumns().setAll(Arrays.asList(partIdColumn, partNameColumn, partInvColumn, partPriceColumn));
 
-       partIdColumn.prefWidthProperty().bind(partTable.widthProperty().multiply(0.15));
-       partNameColumn.prefWidthProperty().bind(partTable.widthProperty().multiply(.29));
-       partInvColumn.prefWidthProperty().bind(partTable.widthProperty().multiply(.20));
-       partPriceColumn.prefWidthProperty().bind(partTable.widthProperty().multiply(.36));
+       partIdColumn.prefWidthProperty().bind(partsTable.widthProperty().multiply(0.15));
+       partNameColumn.prefWidthProperty().bind(partsTable.widthProperty().multiply(.29));
+       partInvColumn.prefWidthProperty().bind(partsTable.widthProperty().multiply(.20));
+       partPriceColumn.prefWidthProperty().bind(partsTable.widthProperty().multiply(.36));
        partIdColumn.setResizable(false);
        partNameColumn.setResizable(false);
        partInvColumn.setResizable(false);
@@ -163,7 +190,7 @@ public class MainWindowController implements Initializable {
    }//END of initPartTable
 
     private void initProductTable() {
-        productTable.setItems(inv.getAllProducts());
+        productsTable.setItems(inv.getAllProducts());
         TableColumn<Product, Integer> productIdColumn = new TableColumn<Product, Integer>("Product ID");
         productIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         TableColumn<Product, String> productNameColumn = new TableColumn<Product, String>("Product Name");
@@ -173,12 +200,12 @@ public class MainWindowController implements Initializable {
         TableColumn<Product,Double> productPriceColumn = new TableColumn<Product,Double>("Price/Cost per Unit");
         productPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-        productTable.getColumns().setAll(Arrays.asList(productIdColumn, productNameColumn, productInvColumn, productPriceColumn));
+        productsTable.getColumns().setAll(Arrays.asList(productIdColumn, productNameColumn, productInvColumn, productPriceColumn));
 
-        productIdColumn.prefWidthProperty().bind(productTable.widthProperty().multiply(0.18));
-        productNameColumn.prefWidthProperty().bind(productTable.widthProperty().multiply(.29));
-        productInvColumn.prefWidthProperty().bind(productTable.widthProperty().multiply(.20));
-        productPriceColumn.prefWidthProperty().bind(productTable.widthProperty().multiply(.33));
+        productIdColumn.prefWidthProperty().bind(productsTable.widthProperty().multiply(0.18));
+        productNameColumn.prefWidthProperty().bind(productsTable.widthProperty().multiply(.29));
+        productInvColumn.prefWidthProperty().bind(productsTable.widthProperty().multiply(.20));
+        productPriceColumn.prefWidthProperty().bind(productsTable.widthProperty().multiply(.33));
         productIdColumn.setResizable(false);
         productNameColumn.setResizable(false);
         productInvColumn.setResizable(false);

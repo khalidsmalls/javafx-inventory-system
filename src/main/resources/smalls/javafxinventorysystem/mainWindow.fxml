@@ -85,7 +85,7 @@
                               </ButtonBar>
                            </bottom>
                            <center>
-                              <TableView fx:id="partTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                              <TableView fx:id="partsTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                 <columns>
                                   <TableColumn fx:id="partIdColumn" prefWidth="68.0" text="Part ID" />
                                   <TableColumn fx:id="partNameColumn" prefWidth="129.0" text="Part Name" />
@@ -146,7 +146,7 @@
                               </ButtonBar>
                            </bottom>
                            <center>
-                              <TableView fx:id="productTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                              <TableView fx:id="productsTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                                 <columns>
                                   <TableColumn fx:id="productIdColumn" prefWidth="91.0" text="Product ID" />
                                   <TableColumn fx:id="productNameColumn" prefWidth="151.0" text="Product Name" />
