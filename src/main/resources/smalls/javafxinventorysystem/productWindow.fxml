@@ -5,19 +5,18 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-
-<AnchorPane prefHeight="471.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="540.0" prefWidth="1100.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox layoutX="400.0" layoutY="186.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <children>
             <VBox prefHeight="451.0" prefWidth="410.0">
                <children>
-                  <Label fx:id="productWindowLabel" text="Add Product">
+                  <Label fx:id="productWindowLabel">
                      <VBox.margin>
                         <Insets bottom="50.0" left="50.0" top="30.0" />
                      </VBox.margin>
                      <font>
-                        <Font size="24.0" />
+                        <Font size="30.0" />
                      </font>
                   </Label>
                   <AnchorPane prefHeight="266.0" prefWidth="390.0">
@@ -124,6 +123,9 @@
                            </center>
                         </BorderPane>
                      </children>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
                   </AnchorPane>
                   <AnchorPane prefHeight="208.0" prefWidth="549.0">
                      <children>
@@ -139,7 +141,7 @@
                               </ButtonBar>
                            </bottom>
                            <center>
-                              <TableView fx:id="assocPartsTable" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                              <TableView fx:id="assocPartsTable" prefHeight="178.0" prefWidth="529.0" BorderPane.alignment="CENTER">
                                 <columns>
                                   <TableColumn fx:id="assocPartIdCol" prefWidth="75.0" text="Part ID" />
                                   <TableColumn fx:id="assocPartNameCol" prefWidth="188.0" text="Part Name" />
@@ -150,7 +152,21 @@
                            </center>
                         </BorderPane>
                      </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
                   </AnchorPane>
+                  <ButtonBar prefHeight="33.0" prefWidth="549.0">
+                    <buttons>
+                      <Button fx:id="closeBtn" mnemonicParsing="false" onAction="#onClose" text="Close" />
+                    </buttons>
+                     <padding>
+                        <Insets right="50.0" />
+                     </padding>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
+                  </ButtonBar>
                </children>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

@@ -21,6 +21,7 @@ public class AddProductController implements Initializable {
     @FXML private Button partSearchBtn;
     @FXML private Button addAssocPartBtn;
     @FXML private Button removeAssocPartBtn;
+    @FXML private Button closeBtn;
     @FXML private TableView<Part> partsTable;
     @FXML private TableView<Part>  assocPartsTable;
     @FXML private TableColumn<Part,Integer> partIdCol;
@@ -44,6 +45,9 @@ public class AddProductController implements Initializable {
     }
 
     @FXML private void onRemoveAssocPart() {
+    }
+
+    @FXML private void onClose(){
     }
 
     @Override
