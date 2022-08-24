@@ -16,6 +16,7 @@ import smalls.javafxinventorysystem.view.ModifyProductWindowLoader;
 
 import java.net.URL;
 import java.text.NumberFormat;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class MainWindowController implements Initializable {
@@ -63,6 +64,26 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML private void onProductSearch() {
+        String searchString = productSearchField.getText();
+        boolean isInt = true;
+        try {
+            int id = Integer.parseInt(searchString);
+            Product p = inv.lookupProduct(id);
+            ObservableList<Product> productList = FXCollections.observableArrayList();
+            productList.add(p);
+            productTable.setItems(productList);
+            productTable.getSelectionModel().select(p);
+        } catch (Exception e) {
+            isInt = false;
+        }
+        if (!isInt) {
+            ObservableList<Product> productList = inv.lookupProduct(searchString);
+            productTable.setItems(productList);
+            if (productList.size() == 1) {
+                productTable.getSelectionModel().select(productList.get(0));
+            }
+        }
+        productTable.setPlaceholder(new Text("Part not found"));
     }
 
     @FXML private void onAddPart() {
@@ -116,7 +137,7 @@ public class MainWindowController implements Initializable {
        TableColumn<Part, Double> partPriceColumn = new TableColumn<Part, Double>("Price/Cost per Unit");
        partPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-       partTable.getColumns().setAll(partIdColumn, partNameColumn, partInvColumn, partPriceColumn);
+       partTable.getColumns().setAll(Arrays.asList(partIdColumn, partNameColumn, partInvColumn, partPriceColumn));
 
        partIdColumn.prefWidthProperty().bind(partTable.widthProperty().multiply(0.15));
        partNameColumn.prefWidthProperty().bind(partTable.widthProperty().multiply(.29));
@@ -152,7 +173,7 @@ public class MainWindowController implements Initializable {
         TableColumn<Product,Double> productPriceColumn = new TableColumn<Product,Double>("Price/Cost per Unit");
         productPriceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-        productTable.getColumns().setAll(productIdColumn, productNameColumn, productInvColumn, productPriceColumn);
+        productTable.getColumns().setAll(Arrays.asList(productIdColumn, productNameColumn, productInvColumn, productPriceColumn));
 
         productIdColumn.prefWidthProperty().bind(productTable.widthProperty().multiply(0.18));
         productNameColumn.prefWidthProperty().bind(productTable.widthProperty().multiply(.29));
