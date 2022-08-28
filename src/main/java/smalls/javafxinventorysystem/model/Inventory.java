@@ -19,14 +19,10 @@ public class Inventory {
     private ObservableList<Product> allProducts = FXCollections.observableArrayList();
     private final Comparator<Part> comparePartsById = (p1, p2) -> p1.getId() - p2.getId();
     private final Comparator<Product> compareProductsById = (p1, p2) -> p1.getId() - p2.getId();
-
-//    private Connection conn;
-//    private Statement stmt;
-//    private final String db_url = "jdbc:mariadb://localhost:3306/javafx_inventory_system";
-//    private final String driver = "org.mariadb.jdbc.Driver";
-//    private Properties info;
+    private Statement stmt;
 
     private Inventory() {
+        initDb();
     }
 
     public static Inventory getInstance() {
@@ -226,7 +222,7 @@ public class Inventory {
         return product;
     }
 
-    public void loadParts() {
+    public void loadPartsFromFile() {
         String[] record;
         try (Scanner inFile = new Scanner(new FileInputStream(INVENTORY_FILE))) {
             while (inFile.hasNextLine()) {
@@ -242,25 +238,24 @@ public class Inventory {
         }
     }
 
-    public void dbTest() {
-        Connection conn = null;
+    public void loadPartsFromDb() {
+        String[] record;
+
+        String query = "";
+
+    }
+
+    public void initDb() {
         try {
-            String url = "jdbc:mariadb://localhost:3306/javafx_inventory_system";
+            //private final String driver = "org.mariadb.jdbc.Driver";
             Properties info = new Properties();
             info.put("user", "khalid");
             info.put("password", "");
 
-            //load and register driver
-            //Class.forName("org.mariadb.jdbc.Driver");
-            System.out.println("loaded and registered driver");
+            //    private Statement stmt;
+            String dbUrl = "jdbc:mariadb://localhost:3306/javafx_inventory_system";
+            Connection conn = DriverManager.getConnection(dbUrl, info);
 
-            conn = DriverManager.getConnection(url, info);
-
-            if (conn != null) {
-                System.out.println("Success!");
-            }
-            assert conn != null;
-            conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

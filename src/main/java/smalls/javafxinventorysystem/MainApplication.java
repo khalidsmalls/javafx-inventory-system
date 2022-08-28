@@ -10,7 +10,7 @@ public class MainApplication extends Application {
     public void start(Stage primaryStage) {
 
         Inventory inv = Inventory.getInstance();
-        inv.loadParts();
+        inv.loadPartsFromFile();
         MainWindowLoader mainWindowLoader = new MainWindowLoader(primaryStage);
         mainWindowLoader.show();
     }
