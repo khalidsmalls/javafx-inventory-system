@@ -117,8 +117,9 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML private void onAddProduct() {
-        AddProductWindowLoader win = new AddProductWindowLoader(stage);
-        win.show();
+//        AddProductWindowLoader win = new AddProductWindowLoader(stage);
+//        win.show();
+        inv.dbTest();
     }
 
     @FXML private void onModifyProduct() {

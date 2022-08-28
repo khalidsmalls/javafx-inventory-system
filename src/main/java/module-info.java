@@ -1,6 +1,7 @@
 module smalls.javafxinventorysystem {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.sql;
 
 
     opens smalls.javafxinventorysystem to javafx.fxml;

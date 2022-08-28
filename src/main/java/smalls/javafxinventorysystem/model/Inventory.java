@@ -3,12 +3,12 @@ package smalls.javafxinventorysystem.model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import smalls.javafxinventorysystem.MainApplication;
-
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Comparator;
+import java.util.Properties;
 import java.util.Scanner;
+import java.sql.*;
 
 public class Inventory {
 
@@ -17,9 +17,14 @@ public class Inventory {
     private int nextId = 1001;
     private ObservableList<Part> allParts = FXCollections.observableArrayList();
     private ObservableList<Product> allProducts = FXCollections.observableArrayList();
-    Comparator<Part> comparePartsById = (p1, p2) -> p1.getId() - p2.getId();
-    Comparator<Product> compareProductsById = (p1, p2) -> p1.getId() - p2.getId();
+    private final Comparator<Part> comparePartsById = (p1, p2) -> p1.getId() - p2.getId();
+    private final Comparator<Product> compareProductsById = (p1, p2) -> p1.getId() - p2.getId();
 
+//    private Connection conn;
+//    private Statement stmt;
+//    private final String db_url = "jdbc:mariadb://localhost:3306/javafx_inventory_system";
+//    private final String driver = "org.mariadb.jdbc.Driver";
+//    private Properties info;
 
     private Inventory() {
     }
@@ -155,6 +160,12 @@ public class Inventory {
         return allParts;
     }
 
+
+//    public ObservableList<Part> getAllParts() {
+//
+//    }
+
+
     /**
      * @return the products list
      */
@@ -227,6 +238,30 @@ public class Inventory {
             }
         }
         catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void dbTest() {
+        Connection conn = null;
+        try {
+            String url = "jdbc:mariadb://localhost:3306/javafx_inventory_system";
+            Properties info = new Properties();
+            info.put("user", "khalid");
+            info.put("password", "");
+
+            //load and register driver
+            //Class.forName("org.mariadb.jdbc.Driver");
+            System.out.println("loaded and registered driver");
+
+            conn = DriverManager.getConnection(url, info);
+
+            if (conn != null) {
+                System.out.println("Success!");
+            }
+            assert conn != null;
+            conn.close();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
