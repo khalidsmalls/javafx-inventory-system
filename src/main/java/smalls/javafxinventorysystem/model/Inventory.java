@@ -20,6 +20,7 @@ public class Inventory {
     private final Comparator<Part> comparePartsById = (p1, p2) -> p1.getId() - p2.getId();
     private final Comparator<Product> compareProductsById = (p1, p2) -> p1.getId() - p2.getId();
     private Statement stmt;
+    private Connection conn;
 
     private Inventory() {
         initDb();
@@ -238,23 +239,73 @@ public class Inventory {
         }
     }
 
-    public void loadPartsFromDb() {
-        String[] record;
+    public void loadInHouseParts() {
+        try {
+            stmt = conn.createStatement();
+            String query = "SELECT part.part_id, name, price, inventory, min_stock, max_stock, machine_id FROM part " +
+                    "JOIN in_house ON part.part_id=in_house.part_id";
+            ResultSet result = stmt.executeQuery(query);
+            while (result.next()) {
+                String part_id = result.getString("part_id");
+                String name = result.getString("name");
+                String price = result.getString("price");
+                String inventory = result.getString("inventory");
+                String min_stock = result.getString("min_stock");
+                String max_stock = result.getString("max_stock");
+                String machine_id = result.getString("machine_id");
 
-        String query = "";
+                allParts.add(new InHouse(
+                        Integer.parseInt(part_id),
+                        name,
+                        Double.parseDouble(price),
+                        Integer.parseInt(inventory),
+                        Integer.parseInt(min_stock),
+                        Integer.parseInt(max_stock),
+                        Integer.parseInt(machine_id)));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void loadOutsourcedParts() {
+        try {
+            stmt = conn.createStatement();
+            String query = "SELECT part.part_id, name, price, inventory, min_stock, max_stock, company_name FROM " +
+                    "part JOIN outsourced ON part.part_id=outsourced.part_id";
+            ResultSet result = stmt.executeQuery(query);
+            while(result.next()) {
+                String part_id = result.getString("part_id");
+                String name = result.getString("name");
+                String price = result.getString("price");
+                String inventory = result.getString("inventory");
+                String min_stock = result.getString("min_stock");
+                String max_stock = result.getString("max_stock");
+                String company_name = result.getString("company_name");
+
+                allParts.add(new Outsourced(
+                        Integer.parseInt(part_id),
+                        name,
+                        Double.parseDouble(price),
+                        Integer.parseInt(inventory),
+                        Integer.parseInt(min_stock),
+                        Integer.parseInt(max_stock),
+                        company_name
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void initDb() {
         try {
-            //private final String driver = "org.mariadb.jdbc.Driver";
             Properties info = new Properties();
             info.put("user", "khalid");
             info.put("password", "");
 
-            //    private Statement stmt;
             String dbUrl = "jdbc:mariadb://localhost:3306/javafx_inventory_system";
-            Connection conn = DriverManager.getConnection(dbUrl, info);
+            conn = DriverManager.getConnection(dbUrl, info);
 
         } catch (SQLException e) {
             e.printStackTrace();
