@@ -50,3 +50,10 @@ CREATE TABLE product_assoc_parts (
 );
 
 
+-- to get all the parts with null
+-- values in the missing field
+-- SELECT whichever_part_table_fields, machine_id, company_name FROM
+-- part LEFT JOIN in_house ON part.part_id=in_house.part_id
+-- LEFT JOIN outsourced ON part.part_id=outsourced.part_id;
+
+
