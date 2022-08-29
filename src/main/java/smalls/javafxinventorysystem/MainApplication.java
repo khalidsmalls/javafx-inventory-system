@@ -10,7 +10,7 @@ public class MainApplication extends Application {
     public void start(Stage primaryStage) {
 
         Inventory inv = Inventory.getInstance();
-        inv.loadPartsFromDb();
+//        inv.loadPartsFromDb();
 //        inv.loadPartsFromFile();
 //        inv.loadInHouseParts();
 //        inv.loadOutsourcedParts();

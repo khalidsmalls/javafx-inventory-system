@@ -12,13 +12,13 @@ CREATE TABLE part (
 	price DECIMAL(8,2) UNSIGNED NOT NULL,
 	inventory SMALLINT UNSIGNED NOT NULL,
 	min_stock SMALLINT UNSIGNED NOT NULL,
-	max_stock SMALLINT UNSIGNED NOT NULL,
+	max_stock INT UNSIGNED NOT NULL,
 	PRIMARY KEY (part_id)
 );
 
 CREATE TABLE in_house (
 	part_id SMALLINT UNSIGNED NOT NULL,
-	machine_id SMALLINT UNSIGNED NOT NULL,
+	machine_id INT UNSIGNED NOT NULL,
 	UNIQUE (machine_id),
 	PRIMARY KEY (part_id),
 	FOREIGN KEY (part_id) REFERENCES part (part_id)
@@ -35,9 +35,9 @@ CREATE TABLE product (
     product_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(60) NOT NULL,
     price DECIMAL(8,2) UNSIGNED NOT NULL,
-    inventory SMALLINT UNSIGNED NOT NULL,
+    inventory INT UNSIGNED NOT NULL,
     min_stock SMALLINT UNSIGNED NOT NULL,
-    max_stock SMALLINT UNSIGNED NOT NULL,
+    max_stock INT UNSIGNED NOT NULL,
     PRIMARY KEY (product_id)
 );
 
