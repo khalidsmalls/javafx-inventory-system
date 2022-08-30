@@ -162,7 +162,24 @@ public class Inventory {
      * @return true if the part is removed, false if not
      */
     public boolean deletePart(Part selectedPart) {
-        return allParts.remove(selectedPart);
+        try {
+            stmt = conn.createStatement();
+            String query;
+            if (selectedPart instanceof InHouse) {
+                query = "DELETE FROM in_house WHERE part_id=" + selectedPart.getId();
+                stmt.executeUpdate(query);
+            }
+            if (selectedPart instanceof Outsourced) {
+                query = "DELETE FROM outsourced WHERE part_id=" + selectedPart.getId();
+                stmt.executeUpdate(query);
+            }
+            query = "DELETE FROM part WHERE part_id=" + selectedPart.getId();
+            stmt.executeUpdate(query);
+            return allParts.remove(selectedPart);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     /**
