@@ -15,7 +15,7 @@ public class Inventory {
     //private static final String INVENTORY_FILE = "src/main/java/smalls/javafxinventorysystem/parts.txt";
     private static Inventory inv = null;
     private int nextId = 1001;
-    private ObservableList<Part> allParts;
+    private ObservableList<Part> allParts = FXCollections.observableArrayList();
     private ObservableList<Product> allProducts = FXCollections.observableArrayList();
     private final Comparator<Part> comparePartsById = (p1, p2) -> p1.getId() - p2.getId();
     private final Comparator<Product> compareProductsById = (p1, p2) -> p1.getId() - p2.getId();
@@ -24,7 +24,6 @@ public class Inventory {
 
     private Inventory() {
         initDb();
-        this.allParts = getAllParts();
     }
 
     public static Inventory getInstance() {
@@ -61,11 +60,9 @@ public class Inventory {
                         .append(((Outsourced) newPart).getCompanyName()).append("\")");
                 stmt.executeUpdate(query.toString());
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         allParts.add(newPart);
     }
 
@@ -79,38 +76,13 @@ public class Inventory {
     }
 
     /**
-     * @return the next part_id from part table
-     */
-    public int getNextId() {
-        int nextId = -1;
-        try {
-            stmt = conn.createStatement();
-            String query = "SELECT AUTO_INCREMENT FROM " +
-                    "information_schema.TABLES " +
-                    "WHERE TABLE_SCHEMA = \"javafx_inventory_system\" " +
-                    "AND TABLE_NAME = \"part\"";
-            ResultSet result = stmt.executeQuery(query);
-
-            while (result.next()) {
-                nextId = result.getInt("AUTO_INCREMENT");
-            }
-            return nextId;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return nextId;
-    }
-
-    /**
      * @param partId the partId to look up
      * @return the part matching the id
      */
     public Part lookupPart(int partId) {
         allParts.sort(comparePartsById);
-        Part part = searchPartsById(partId);
 
-        return part;
+        return searchPartsById(partId);
     }
 
     /**
@@ -119,9 +91,8 @@ public class Inventory {
      */
     public Product lookupProduct(int productId) {
         allProducts.sort(compareProductsById);
-        Product product = searchProductsById(productId);
 
-        return product;
+        return searchProductsById(productId);
     }
 
     /**
@@ -135,10 +106,7 @@ public class Inventory {
                 return true;
             }
             String lowerCaseFilter = name.toLowerCase();
-            if (part.getName().toLowerCase().contains((lowerCaseFilter))) {
-                return true;
-            }
-            return false;
+            return part.getName().toLowerCase().contains((lowerCaseFilter));
         });
         return filteredParts;
     }
@@ -154,10 +122,7 @@ public class Inventory {
                 return true;
             }
             String lowerCaseFilter = name.toLowerCase();
-            if (product.getName().toLowerCase().contains(lowerCaseFilter)) {
-                return true;
-            }
-            return false;
+            return product.getName().toLowerCase().contains(lowerCaseFilter);
         });
         return filteredProducts;
     }
@@ -181,12 +146,7 @@ public class Inventory {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        /*
-            TODO the part passed to the modifyPartController is a
-            different instance than the one here, so there is an
-            index problem. Figure it out
-         */
-        //allParts.set(index, selectedPart);
+        allParts.set(index, selectedPart);
     }
 
     /**
@@ -217,49 +177,6 @@ public class Inventory {
      * @return the part list
      */
     public ObservableList<Part> getAllParts() {
-        allParts  = FXCollections.observableArrayList();
-        try {
-            stmt = conn.createStatement();
-            String query = "SELECT part.part_id, name, price, inventory, min_stock, max_stock," +
-                    "machine_id, company_name FROM part " +
-                    "LEFT JOIN in_house ON part.part_id=in_house.part_id " +
-                    "LEFT JOIN outsourced ON part.part_id=outsourced.part_id";
-            ResultSet result = stmt.executeQuery(query);
-            while (result.next()) {
-                String part_id = result.getString("part_id");
-                String name = result.getString("name");
-                String price = result.getString("price");
-                String inventory = result.getString("inventory");
-                String min_stock = result.getString("min_stock");
-                String max_stock = result.getString("max_stock");
-
-                if (result.getString("machine_id") != null) {
-                    String machine_id = result.getString("machine_id");
-                    allParts.add(new InHouse(
-                            Integer.parseInt(part_id),
-                            name,
-                            Double.parseDouble(price),
-                            Integer.parseInt(inventory),
-                            Integer.parseInt(min_stock),
-                            Integer.parseInt(max_stock),
-                            Integer.parseInt(machine_id)));
-                }
-                if (result.getString("company_name") != null) {
-                    String company_name = result.getString("company_name");
-                    allParts.add(new Outsourced(
-                            Integer.parseInt(part_id),
-                            name,
-                            Double.parseDouble(price),
-                            Integer.parseInt(inventory),
-                            Integer.parseInt(min_stock),
-                            Integer.parseInt(max_stock),
-                            company_name
-                    ));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         return allParts;
     }
 
@@ -337,7 +254,76 @@ public class Inventory {
         }
     }
 
-//    public void loadPartsFromFile() {
+    /**
+     * @return the next part_id from part table
+     */
+    public int getNextId() {
+        int nextId = -1;
+        try {
+            stmt = conn.createStatement();
+            String query = "SELECT AUTO_INCREMENT FROM " +
+                    "information_schema.TABLES " +
+                    "WHERE TABLE_SCHEMA = \"javafx_inventory_system\" " +
+                    "AND TABLE_NAME = \"part\"";
+            ResultSet result = stmt.executeQuery(query);
+
+            while (result.next()) {
+                nextId = result.getInt("AUTO_INCREMENT");
+            }
+            return nextId;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return nextId;
+    }
+
+    public void loadInventory() {
+        try {
+            stmt = conn.createStatement();
+            String query = "SELECT part.part_id, name, price, inventory, min_stock, max_stock," +
+                    "machine_id, company_name FROM part " +
+                    "LEFT JOIN in_house ON part.part_id=in_house.part_id " +
+                    "LEFT JOIN outsourced ON part.part_id=outsourced.part_id";
+            ResultSet result = stmt.executeQuery(query);
+            while (result.next()) {
+                String part_id = result.getString("part_id");
+                String name = result.getString("name");
+                String price = result.getString("price");
+                String inventory = result.getString("inventory");
+                String min_stock = result.getString("min_stock");
+                String max_stock = result.getString("max_stock");
+
+                if (result.getString("machine_id") != null) {
+                    String machine_id = result.getString("machine_id");
+                    allParts.add(new InHouse(
+                            Integer.parseInt(part_id),
+                            name,
+                            Double.parseDouble(price),
+                            Integer.parseInt(inventory),
+                            Integer.parseInt(min_stock),
+                            Integer.parseInt(max_stock),
+                            Integer.parseInt(machine_id)));
+                }
+                if (result.getString("company_name") != null) {
+                    String company_name = result.getString("company_name");
+                    allParts.add(new Outsourced(
+                            Integer.parseInt(part_id),
+                            name,
+                            Double.parseDouble(price),
+                            Integer.parseInt(inventory),
+                            Integer.parseInt(min_stock),
+                            Integer.parseInt(max_stock),
+                            company_name
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //    public void loadPartsFromFile() {
 //        String[] record;
 //        try (Scanner inFile = new Scanner(new FileInputStream(INVENTORY_FILE))) {
 //            while (inFile.hasNextLine()) {
@@ -352,7 +338,4 @@ public class Inventory {
 //            e.printStackTrace();
 //        }
 //    }
-
-
-
 }

@@ -243,6 +243,7 @@ public class ModifyPartController implements Initializable {
         partMinTextfield.textProperty().addListener(partMinChangeListener);
         partMaxTextfield.textProperty().addListener(partMaxChangeListener);
     }
+
 }
 
 
