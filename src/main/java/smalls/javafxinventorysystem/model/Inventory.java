@@ -3,16 +3,11 @@ package smalls.javafxinventorysystem.model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Comparator;
 import java.util.Properties;
-import java.util.Scanner;
 import java.sql.*;
 
 public class Inventory {
-
-    //private static final String INVENTORY_FILE = "src/main/java/smalls/javafxinventorysystem/parts.txt";
     private static Inventory inv = null;
     private int nextId = 1001;
     private ObservableList<Part> allParts = FXCollections.observableArrayList();
@@ -64,7 +59,7 @@ public class Inventory {
             e.printStackTrace();
         }
         allParts.add(newPart);
-    }
+    }//END of addPart
 
     /**
      *
@@ -98,7 +93,7 @@ public class Inventory {
             e.printStackTrace();
         }
         allProducts.add(newProduct);
-    }
+    }//END of addProduct
 
     /**
      * @param partId the partId to look up
@@ -204,7 +199,7 @@ public class Inventory {
         }
 
         allProducts.set(index, newProduct);
-    }
+    }//END of updateProduct
 
     /**
      * @param selectedPart the part to be deleted
@@ -236,6 +231,14 @@ public class Inventory {
      * @return true if the product is deleted, false if not
      */
     public boolean deleteProduct(Product selectedProduct) {
+        try {
+            stmt = conn.createStatement();
+            String query = "DELETE FROM product WHERE " +
+                    "product_id=" + selectedProduct.getId();
+            stmt.executeUpdate(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return allProducts.remove(selectedProduct);
     }
 
@@ -387,7 +390,7 @@ public class Inventory {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
+    }//END of loadParts
 
     public void loadProducts() {
         try {
@@ -415,19 +418,4 @@ public class Inventory {
         }
     }
 
-    //    public void loadPartsFromFile() {
-//        String[] record;
-//        try (Scanner inFile = new Scanner(new FileInputStream(INVENTORY_FILE))) {
-//            while (inFile.hasNextLine()) {
-//                record = inFile.nextLine().split(",");
-//                Part part = new InHouse(Integer.parseInt(record[0]), record[1], Double.parseDouble(record[2]),
-//                        Integer.parseInt(record[3]), Integer.parseInt(record[4]), Integer.parseInt(record[5]),
-//                        Integer.parseInt(record[6]));
-//                inv.addPart(part);
-//            }
-//        }
-//        catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//    }
-}
+}//END of class
