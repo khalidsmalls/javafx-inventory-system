@@ -24,6 +24,7 @@ public class Product {
         this.min = min;
         this.max = max;
         associatedParts = FXCollections.observableArrayList();
+        loadAssocParts();
     }
 
     /**
@@ -136,7 +137,12 @@ public class Product {
     /**
      * @return the associated parts
      */
+
     public ObservableList<Part> getAllAssociatedParts() {
+        return associatedParts;
+    }
+
+    public void loadAssocParts() {
         Statement stmt;
         Connection conn;
         try {
@@ -189,6 +195,5 @@ public class Product {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return associatedParts;
-    }
+    }//END of load assocParts
 }
