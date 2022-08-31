@@ -165,7 +165,7 @@ public class Inventory {
                     "inventory=" + selectedPart.getStock() + ", " +
                     "min_stock=" + selectedPart.getMin() + ", " +
                     "max_stock=" + selectedPart.getMax() +  " " +
-                    "WHERE part_id = " + selectedPart.getId();
+                    "WHERE part_id=" + selectedPart.getId();
             stmt.executeUpdate(query);
 
         } catch (SQLException e) {
@@ -179,6 +179,30 @@ public class Inventory {
      * @param newProduct the product to be updated
      */
     public void updateProduct(int index, Product newProduct) {
+        try {
+            stmt = conn.createStatement();
+            String query = "UPDATE product " +
+                    "SET name=\"" + newProduct.getName() + "\"," +
+                    "price=" + newProduct.getPrice() + ", " +
+                    "inventory=" + newProduct.getStock() + ", " +
+                    "min_stock=" + newProduct.getMin() + ", " +
+                    "max_stock=" + newProduct.getMax() + " " +
+                    "WHERE product_id=" + newProduct.getId();
+            stmt.executeUpdate(query);
+            if (newProduct.getAllAssociatedParts().size() > 0) {
+                query = "DELETE FROM product_assoc_parts WHERE " +
+                        "product_id=" + newProduct.getId();
+                stmt.executeUpdate(query);
+                for (Part p : newProduct.getAllAssociatedParts()) {
+                    query = "INSERT INTO product_assoc_parts (product_id, part_id) VALUES " +
+                            "(" + newProduct.getId() + ", " + p.getId() + ")";
+                    stmt.executeUpdate(query);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         allProducts.set(index, newProduct);
     }
 
