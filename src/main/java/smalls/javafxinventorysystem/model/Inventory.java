@@ -9,7 +9,6 @@ import java.sql.*;
 
 public class Inventory {
     private static Inventory inv = null;
-    private int nextId = 1001;
     private ObservableList<Part> allParts = FXCollections.observableArrayList();
     private ObservableList<Product> allProducts = FXCollections.observableArrayList();
     private final Comparator<Part> comparePartsById = (p1, p2) -> p1.getId() - p2.getId();
@@ -86,7 +85,6 @@ public class Inventory {
                 query.append("(").append(newProduct.getId()).append(", ")
                         .append(inv.getAllParts().get(inv.getAllParts().size() - 1).getId())
                                 .append(");");
-                System.out.println(query);
                 stmt.executeUpdate(query.toString());
             }
         } catch (SQLException e) {
@@ -417,5 +415,6 @@ public class Inventory {
             e.printStackTrace();
         }
     }
+
 
 }//END of class

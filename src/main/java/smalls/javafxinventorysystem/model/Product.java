@@ -3,6 +3,9 @@ package smalls.javafxinventorysystem.model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.*;
+import java.util.Properties;
+
 public class Product {
 
     private final ObservableList<Part> associatedParts;
@@ -134,6 +137,58 @@ public class Product {
      * @return the associated parts
      */
     public ObservableList<Part> getAllAssociatedParts() {
+        Statement stmt;
+        Connection conn;
+        try {
+            Properties info = new Properties();
+            info.put("user", "khalid");
+            info.put("password", "");
+
+            String dbUrl = "jdbc:mariadb://localhost:3306/javafx_inventory_system";
+            conn = DriverManager.getConnection(dbUrl, info);
+            stmt = conn.createStatement();
+            String query = "SELECT product_assoc_parts.part_id, name, price, inventory, min_stock, max_stock, machine_id, company_name " +
+                    "FROM product_assoc_parts JOIN part ON product_assoc_parts.part_id=part.part_id " +
+                    "LEFT JOIN in_house ON product_assoc_parts.part_id=in_house.part_id " +
+                    "LEFT JOIN outsourced ON product_assoc_parts.part_id=outsourced.part_id " +
+                    "WHERE product_id=" + this.getId();
+
+            ResultSet result = stmt.executeQuery(query);
+            while (result.next()) {
+                String part_id = result.getString("part_id");
+                String name = result.getString("name");
+                String price = result.getString("price");
+                String inventory = result.getString("inventory");
+                String min_stock = result.getString("min_stock");
+                String max_stock = result.getString("max_stock");
+
+                if (result.getString("machine_id") != null) {
+                    String machine_id = result.getString("machine_id");
+                    associatedParts.add(new InHouse(
+                            Integer.parseInt(part_id),
+                            name,
+                            Double.parseDouble(price),
+                            Integer.parseInt(inventory),
+                            Integer.parseInt(min_stock),
+                            Integer.parseInt(max_stock),
+                            Integer.parseInt(machine_id)));
+                }
+                if (result.getString("company_name") != null) {
+                    String company_name = result.getString("company_name");
+                    associatedParts.add(new Outsourced(
+                            Integer.parseInt(part_id),
+                            name,
+                            Double.parseDouble(price),
+                            Integer.parseInt(inventory),
+                            Integer.parseInt(min_stock),
+                            Integer.parseInt(max_stock),
+                            company_name
+                    ));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return associatedParts;
     }
 }
