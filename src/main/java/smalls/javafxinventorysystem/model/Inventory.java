@@ -71,6 +71,13 @@ public class Inventory {
      * @param newProduct the product to add
      */
     public void addProduct(Product newProduct) {
+        System.out.println(newProduct.getId());
+        System.out.println(newProduct.getName());
+        System.out.println(inv.getAllParts().get(1).getId());
+        for (Part p : newProduct.getAllAssociatedParts()) {
+            System.out.println(p.getName());
+        }
+
         try {
             stmt = conn.createStatement();
             StringBuilder query = new StringBuilder("INSERT INTO product (name, price, inventory, " +
@@ -80,7 +87,7 @@ public class Inventory {
                     .append(newProduct.getStock()).append(", ")
                     .append(newProduct.getMin()).append(", ")
                     .append(newProduct.getMax()).append(")");
-            stmt.executeUpdate(query.toString());
+            //stmt.executeUpdate(query.toString());
 
             if (newProduct.getAllAssociatedParts().size() > 0) {
                 query = new StringBuilder("INSERT INTO product_assoc_parts (product_id, part_id) VALUES ");
@@ -91,7 +98,8 @@ public class Inventory {
                 query.append("(").append(newProduct.getId()).append(", ")
                         .append(inv.getAllParts().get(inv.getAllParts().size() - 1).getId())
                                 .append(");");
-                stmt.executeUpdate(query.toString());
+                System.out.println(query);
+                //stmt.executeUpdate(query.toString());
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -320,7 +328,7 @@ public class Inventory {
         return nextId;
     }
 
-    public void loadInventory() {
+    public void loadParts() {
         try {
             stmt = conn.createStatement();
             String query = "SELECT part.part_id, name, price, inventory, min_stock, max_stock," +
@@ -360,6 +368,32 @@ public class Inventory {
                     ));
                 }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadProducts() {
+        try {
+            stmt = conn.createStatement();
+            String query = "SELECT * FROM product";
+            ResultSet result = stmt.executeQuery(query);
+            while (result.next()) {
+                String product_id = result.getString("product_id");
+                String name = result.getString("name");
+                String price = result.getString("price");
+                String inventory = result.getString("inventory");
+                String min_stock = result.getString("min_stock");
+                String max_stock = result.getString("max_stock");
+                allProducts.add(new Product(
+                        Integer.parseInt(product_id),
+                        name,
+                        Double.parseDouble(price),
+                        Integer.parseInt(inventory),
+                        Integer.parseInt(min_stock),
+                        Integer.parseInt(max_stock)));
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
