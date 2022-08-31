@@ -71,13 +71,6 @@ public class Inventory {
      * @param newProduct the product to add
      */
     public void addProduct(Product newProduct) {
-        System.out.println(newProduct.getId());
-        System.out.println(newProduct.getName());
-        System.out.println(inv.getAllParts().get(1).getId());
-        for (Part p : newProduct.getAllAssociatedParts()) {
-            System.out.println(p.getName());
-        }
-
         try {
             stmt = conn.createStatement();
             StringBuilder query = new StringBuilder("INSERT INTO product (name, price, inventory, " +
@@ -87,7 +80,7 @@ public class Inventory {
                     .append(newProduct.getStock()).append(", ")
                     .append(newProduct.getMin()).append(", ")
                     .append(newProduct.getMax()).append(")");
-            //stmt.executeUpdate(query.toString());
+            stmt.executeUpdate(query.toString());
 
             if (newProduct.getAllAssociatedParts().size() > 0) {
                 query = new StringBuilder("INSERT INTO product_assoc_parts (product_id, part_id) VALUES ");
@@ -99,13 +92,12 @@ public class Inventory {
                         .append(inv.getAllParts().get(inv.getAllParts().size() - 1).getId())
                                 .append(");");
                 System.out.println(query);
-                //stmt.executeUpdate(query.toString());
+                stmt.executeUpdate(query.toString());
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         allProducts.add(newProduct);
-        //nextId++;
     }
 
     /**
