@@ -9,11 +9,11 @@ import java.sql.*;
 
 public class Inventory {
     private static Inventory inv = null;
-    private ObservableList<Part> allParts = FXCollections.observableArrayList();
-    private ObservableList<Product> allProducts = FXCollections.observableArrayList();
+    private final ObservableList<Part> allParts = FXCollections.observableArrayList();
+    private final ObservableList<Product> allProducts = FXCollections.observableArrayList();
     private final Comparator<Part> comparePartsById = (p1, p2) -> p1.getId() - p2.getId();
     private final Comparator<Product> compareProductsById = (p1, p2) -> p1.getId() - p2.getId();
-    private Statement stmt;
+    private PreparedStatement stmt;
     private Connection conn;
 
     private Inventory() {
@@ -33,31 +33,34 @@ public class Inventory {
      */
     public void addPart(Part newPart) {
         try {
-            stmt = conn.createStatement();
-            StringBuilder query = new StringBuilder("INSERT INTO part (name, price, inventory, min_stock, max_stock) VALUES (\"")
-                    .append(newPart.getName()).append("\", ")
-                    .append(String.valueOf(newPart.getPrice())).append(", ")
-                    .append(String.valueOf(newPart.getStock())).append(", ")
-                    .append(String.valueOf(newPart.getMin())).append(", ")
-                    .append(String.valueOf(newPart.getMax())).append("); ");
-            stmt.executeUpdate(query.toString());
+            String query = "INSERT INTO part (name, price, inventory, min_stock, max_stock) " +
+                    "VALUES (?,?,?,?,?)";
+            stmt = conn.prepareStatement(query);
+            stmt.setString(1, newPart.getName());
+            stmt.setDouble(2,newPart.getPrice());
+            stmt.setInt(3, newPart.getStock());
+            stmt.setInt(4, newPart.getMin());
+            stmt.setInt(5, newPart.getMax());
+            stmt.executeQuery();
 
             if (newPart instanceof InHouse) {
-                query = new StringBuilder("INSERT INTO in_house (part_id, machine_id) VALUES (")
-                        .append(String.valueOf(newPart.getId())).append(", ")
-                        .append(String.valueOf(((InHouse) newPart).getMachineId())).append(")");
-                stmt.executeUpdate(query.toString());
+                query = "INSERT INTO in_house (part_id, machine_id) VALUES (?,?)";
+                stmt = conn.prepareStatement(query);
+                stmt.setInt(1, newPart.getId());
+                stmt.setInt(2, ((InHouse) newPart).getMachineId());
+                stmt.executeQuery();
             }
             if (newPart instanceof Outsourced) {
-                query = new StringBuilder("INSERT INTO outsourced (part_id, company_name) VALUES (")
-                        .append(String.valueOf(newPart.getId())).append(", \"")
-                        .append(((Outsourced) newPart).getCompanyName()).append("\")");
-                stmt.executeUpdate(query.toString());
+                query = "INSERT INTO outsourced (part_id, company_name) VALUES (?,?)";
+                stmt = conn.prepareStatement(query);
+                stmt.setInt(1, newPart.getId());
+                stmt.setString(2, ((Outsourced) newPart).getCompanyName());
+                stmt.executeQuery();
             }
+            allParts.add(newPart);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        allParts.add(newPart);
     }//END of addPart
 
     /**
@@ -66,31 +69,29 @@ public class Inventory {
      */
     public void addProduct(Product newProduct) {
         try {
-            stmt = conn.createStatement();
-            StringBuilder query = new StringBuilder("INSERT INTO product (name, price, inventory, " +
-                    "min_stock, max_stock) VALUES (")
-                    .append("\"").append(newProduct.getName()).append("\", ")
-                    .append(newProduct.getPrice()).append(", ")
-                    .append(newProduct.getStock()).append(", ")
-                    .append(newProduct.getMin()).append(", ")
-                    .append(newProduct.getMax()).append(")");
-            stmt.executeUpdate(query.toString());
+            String query = "INSERT INTO product (name, price, inventory, min_stock, " +
+                    "max_stock) VALUES (?,?,?,?,?)";
+            stmt = conn.prepareStatement(query);
+            stmt.setString(1, newProduct.getName());
+            stmt.setDouble(2, newProduct.getPrice());
+            stmt.setInt(3, newProduct.getStock());
+            stmt.setInt(4, newProduct.getMin());
+            stmt.setInt(5, newProduct.getMax());
+            stmt.executeQuery();
 
             if (newProduct.getAllAssociatedParts().size() > 0) {
-                query = new StringBuilder("INSERT INTO product_assoc_parts (product_id, part_id) VALUES ");
-                for (int i = 0; i < newProduct.getAllAssociatedParts().size() - 1; i++) {
-                    query.append("(").append(newProduct.getId()).append(", ")
-                            .append(inv.getAllParts().get(i).getId()).append("), ");
+                query = "INSERT INTO product_assoc_parts (product_id, part_id) VALUES (?,?)";
+                stmt = conn.prepareStatement(query);
+                for (Part p : newProduct.getAllAssociatedParts()) {
+                    stmt.setInt(1, newProduct.getId());
+                    stmt.setInt(2, p.getId());
+                    stmt.executeQuery();
                 }
-                query.append("(").append(newProduct.getId()).append(", ")
-                        .append(inv.getAllParts().get(inv.getAllParts().size() - 1).getId())
-                                .append(");");
-                stmt.executeUpdate(query.toString());
             }
+            allProducts.add(newProduct);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        allProducts.add(newProduct);
     }//END of addProduct
 
     /**
@@ -151,20 +152,37 @@ public class Inventory {
      */
     public void updatePart(int index, Part selectedPart) {
         try {
-            stmt = conn.createStatement();
-            String query = "UPDATE part " +
-                    "SET name=\"" + selectedPart.getName() + "\"," +
-                    "price=" + selectedPart.getPrice() + ", " +
-                    "inventory=" + selectedPart.getStock() + ", " +
-                    "min_stock=" + selectedPart.getMin() + ", " +
-                    "max_stock=" + selectedPart.getMax() +  " " +
-                    "WHERE part_id=" + selectedPart.getId();
-            stmt.executeUpdate(query);
+            String query = "UPDATE part SET part_id=?, name=?, price=?, inventory=?," +
+                    "min_stock=?, max_stock=? WHERE part_id=?";
+            stmt = conn.prepareStatement(query);
+            stmt.setInt(1, selectedPart.getId());
+            stmt.setString(2, selectedPart.getName());
+            stmt.setDouble(3, selectedPart.getPrice());
+            stmt.setInt(4, selectedPart.getStock());
+            stmt.setInt(5, selectedPart.getMin());
+            stmt.setInt(6, selectedPart.getMax());
+            stmt.setInt(7, selectedPart.getId());
+            stmt.executeQuery();
 
+            if (selectedPart instanceof InHouse) {
+                query = "UPDATE in_house SET machine_id=? WHERE part_id=?";
+                stmt = conn.prepareStatement(query);
+                stmt.setInt(1, ((InHouse) selectedPart).getMachineId());
+                stmt.setInt(2, selectedPart.getId());
+                stmt.executeQuery();
+                allParts.set(index, selectedPart);
+            }
+            if (selectedPart instanceof Outsourced) {
+                query = "UPDATE outsourced SET company_name=? WHERE part_id=?";
+                stmt = conn.prepareStatement(query);
+                stmt.setString(1, ((Outsourced) selectedPart).getCompanyName());
+                stmt.setInt(2, selectedPart.getId());
+                stmt.executeQuery();
+                allParts.set(index, selectedPart);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        allParts.set(index, selectedPart);
     }
 
     /**
@@ -173,30 +191,35 @@ public class Inventory {
      */
     public void updateProduct(int index, Product newProduct) {
         try {
-            stmt = conn.createStatement();
-            String query = "UPDATE product " +
-                    "SET name=\"" + newProduct.getName() + "\"," +
-                    "price=" + newProduct.getPrice() + ", " +
-                    "inventory=" + newProduct.getStock() + ", " +
-                    "min_stock=" + newProduct.getMin() + ", " +
-                    "max_stock=" + newProduct.getMax() + " " +
-                    "WHERE product_id=" + newProduct.getId();
-            stmt.executeUpdate(query);
-            if (newProduct.getAllAssociatedParts().size() > 0) {
-                query = "DELETE FROM product_assoc_parts WHERE " +
-                        "product_id=" + newProduct.getId();
-                stmt.executeUpdate(query);
-                for (Part p : newProduct.getAllAssociatedParts()) {
-                    query = "INSERT INTO product_assoc_parts (product_id, part_id) VALUES " +
-                            "(" + newProduct.getId() + ", " + p.getId() + ")";
-                    stmt.executeUpdate(query);
-                }
+            String query = "UPDATE product SET product_id=?, name=?, price=?, " +
+                    "inventory=?, min_stock=?, max_stock=? " +
+                    "WHERE product_id=?";
+            stmt = conn.prepareStatement(query);
+            stmt.setInt(1, newProduct.getId());
+            stmt.setString(2, newProduct.getName());
+            stmt.setDouble(3, newProduct.getPrice());
+            stmt.setInt(4, newProduct.getStock());
+            stmt.setInt(5, newProduct.getMin());
+            stmt.setInt(6, newProduct.getMax());
+            stmt.setInt(7, newProduct.getId());
+            stmt.executeQuery();
+
+            query = "DELETE FROM product_assoc_parts WHERE product_id=?";
+            stmt = conn.prepareStatement(query);
+            stmt.setInt(1, newProduct.getId());
+            stmt.executeQuery();
+
+            query = "INSERT INTO product_assoc_parts (product_id, part_id) VALUES (?,?)";
+            stmt = conn.prepareStatement(query);
+            for (Part p : newProduct.getAllAssociatedParts()) {
+                stmt.setInt(1, newProduct.getId());
+                stmt.setInt(2, p.getId());
+                stmt.executeQuery();
             }
+            allProducts.set(index, newProduct);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        allProducts.set(index, newProduct);
     }//END of updateProduct
 
     /**
@@ -205,18 +228,23 @@ public class Inventory {
      */
     public boolean deletePart(Part selectedPart) {
         try {
-            stmt = conn.createStatement();
             String query;
             if (selectedPart instanceof InHouse) {
-                query = "DELETE FROM in_house WHERE part_id=" + selectedPart.getId();
-                stmt.executeUpdate(query);
+                query = "DELETE FROM in_house WHERE part_id=?";
+                stmt = conn.prepareStatement(query);
+                stmt.setInt(1, selectedPart.getId());
+                stmt.executeQuery();
             }
             if (selectedPart instanceof Outsourced) {
-                query = "DELETE FROM outsourced WHERE part_id=" + selectedPart.getId();
-                stmt.executeUpdate(query);
+                query = "DELETE FROM outsourced WHERE part_id=?";
+                stmt = conn.prepareStatement(query);
+                stmt.setInt(1, selectedPart.getId());
+                stmt.executeQuery();
             }
-            query = "DELETE FROM part WHERE part_id=" + selectedPart.getId();
-            stmt.executeUpdate(query);
+            query = "DELETE FROM part WHERE part_id=?";
+            stmt = conn.prepareStatement(query);
+            stmt.setInt(1, selectedPart.getId());
+            stmt.executeQuery();
             return allParts.remove(selectedPart);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -229,26 +257,27 @@ public class Inventory {
      * @return true if the product is deleted, false if not
      */
     public boolean deleteProduct(Product selectedProduct) {
+        String query = "DELETE FROM product WHERE product_id=?";
         try {
-            stmt = conn.createStatement();
-            String query = "DELETE FROM product WHERE " +
-                    "product_id=" + selectedProduct.getId();
-            stmt.executeUpdate(query);
+            stmt = conn.prepareStatement(query);
+            stmt.setInt(1, selectedProduct.getId());
+            stmt.executeQuery();
+            return allProducts.remove(selectedProduct);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return allProducts.remove(selectedProduct);
+        return false;
     }
 
     /**
-     * @return the part list
+     * @return the part observable list
      */
     public ObservableList<Part> getAllParts() {
         return allParts;
     }
 
     /**
-     * @return the products list
+     * @return the product observable list
      */
     public ObservableList<Product> getAllProducts() {
         return allProducts;
@@ -324,16 +353,36 @@ public class Inventory {
     /**
      * @return the next part_id from part table
      */
-    public int getNextId() {
+    public int getNextPartId() {
         int nextId = -1;
         try {
-            stmt = conn.createStatement();
             String query = "SELECT AUTO_INCREMENT FROM " +
                     "information_schema.TABLES " +
                     "WHERE TABLE_SCHEMA = \"javafx_inventory_system\" " +
                     "AND TABLE_NAME = \"part\"";
-            ResultSet result = stmt.executeQuery(query);
+            stmt = conn.prepareStatement(query);
+            ResultSet result = stmt.executeQuery();
 
+            while (result.next()) {
+                nextId = result.getInt("AUTO_INCREMENT");
+            }
+            return nextId;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return nextId;
+    }
+
+    public int getNextProductId() {
+        int nextId = -1;
+        try {
+            String query = "SELECT AUTO_INCREMENT FROM " +
+                    "information_schema.TABLES " +
+                    "WHERE TABLE_SCHEMA = \"javafx_inventory_system\" " +
+                    "AND TABLE_NAME = \"product\"";
+            stmt = conn.prepareStatement(query);
+            ResultSet result = stmt.executeQuery();
             while (result.next()) {
                 nextId = result.getInt("AUTO_INCREMENT");
             }
@@ -347,12 +396,12 @@ public class Inventory {
 
     public void loadParts() {
         try {
-            stmt = conn.createStatement();
             String query = "SELECT part.part_id, name, price, inventory, min_stock, max_stock," +
                     "machine_id, company_name FROM part " +
                     "LEFT JOIN in_house ON part.part_id=in_house.part_id " +
                     "LEFT JOIN outsourced ON part.part_id=outsourced.part_id";
-            ResultSet result = stmt.executeQuery(query);
+            stmt = conn.prepareStatement(query);
+            ResultSet result = stmt.executeQuery();
             while (result.next()) {
                 String part_id = result.getString("part_id");
                 String name = result.getString("name");
@@ -392,9 +441,9 @@ public class Inventory {
 
     public void loadProducts() {
         try {
-            stmt = conn.createStatement();
             String query = "SELECT * FROM product";
-            ResultSet result = stmt.executeQuery(query);
+            stmt = conn.prepareStatement(query);
+            ResultSet result = stmt.executeQuery();
             while (result.next()) {
                 String product_id = result.getString("product_id");
                 String name = result.getString("name");

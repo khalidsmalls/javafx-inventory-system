@@ -2,7 +2,6 @@ package smalls.javafxinventorysystem.model;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import java.sql.*;
 import java.util.Properties;
 
@@ -196,4 +195,4 @@ public class Product {
             e.printStackTrace();
         }
     }//END of load assocParts
-}
+}//END of class

@@ -133,7 +133,7 @@ public class AddProductController implements Initializable {
 
         if (validateFields()) {
             if (validateInventory()) {
-                newProductId = inv.getNextId();
+                newProductId = inv.getNextProductId();
                 newProductName = productNameTextfield.getText();
                 newProductPrice = Double.parseDouble(productPriceTextfield.getText());
                 newProductInv = Integer.parseInt(productInvTextfield.getText());

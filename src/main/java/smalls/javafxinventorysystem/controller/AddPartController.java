@@ -104,7 +104,7 @@ public class AddPartController implements Initializable {
 
         if (validateFields()) {
             if (validateInventory()) {
-                newPartId = inv.getNextId();
+                newPartId = inv.getNextPartId();
                 newPartName = partNameTextfield.getText();
                 newPartPrice = Double.parseDouble(partPriceTextfield.getText());
                 newPartInv = Integer.parseInt(partInvTextfield.getText());
