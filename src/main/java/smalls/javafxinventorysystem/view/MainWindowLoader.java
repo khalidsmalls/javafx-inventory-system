@@ -10,13 +10,12 @@ import java.io.IOException;
 
 public class MainWindowLoader {
 
-    private Stage stage;
+    private final Stage stage;
 
     public MainWindowLoader(Stage primaryStage) {
         this.stage = primaryStage;
-        MainWindowController ctrl = new MainWindowController();
         FXMLLoader loader = new FXMLLoader();
-        loader.setController(ctrl);
+        loader.setController(new MainWindowController());
         loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/mainWindow.fxml"));
 
         try {

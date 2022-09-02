@@ -15,9 +15,8 @@ public class ModifyPartWindowLoader {
 
     public ModifyPartWindowLoader(Stage stage, Part part) {
         this.stage = stage;
-        ModifyPartController ctrl = new ModifyPartController(part, WINDOW_LABEL_TEXT);
         FXMLLoader loader = new FXMLLoader();
-        loader.setController(ctrl);
+        loader.setController(new ModifyPartController(part, WINDOW_LABEL_TEXT));
         loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/partWindow.fxml"));
 
         try {

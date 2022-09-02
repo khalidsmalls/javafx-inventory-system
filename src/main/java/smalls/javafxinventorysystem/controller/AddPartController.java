@@ -1,7 +1,5 @@
 package smalls.javafxinventorysystem.controller;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -34,7 +32,7 @@ public class AddPartController implements Initializable {
     private String partWindowLabelText;
     private ToggleGroup toggleGroup;
 
-    /**
+    /*
      * the following functional interfaces restrict form input to valid
      * characters using regular expressions
      */
@@ -61,9 +59,6 @@ public class AddPartController implements Initializable {
         }
         return null;
     };
-
-    public AddPartController() {
-    }
 
     public AddPartController(String partWindowLabelText) {
         this.partWindowLabelText = partWindowLabelText;

@@ -10,14 +10,13 @@ import java.io.IOException;
 
 public class AddProductWindowLoader {
 
-    private Stage stage;
+    private final Stage stage;
     private final String PRODUCT_WINDOW_LABEL_TEXT = "Add Product";
 
     public AddProductWindowLoader(Stage stage) {
         this.stage = stage;
-        AddProductController ctrl = new AddProductController(PRODUCT_WINDOW_LABEL_TEXT);
         FXMLLoader loader = new FXMLLoader();
-        loader.setController(ctrl);
+        loader.setController(new AddProductController(PRODUCT_WINDOW_LABEL_TEXT));
         loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/productWindow.fxml"));
 
         try {

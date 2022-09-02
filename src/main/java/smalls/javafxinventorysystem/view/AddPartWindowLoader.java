@@ -5,23 +5,18 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import smalls.javafxinventorysystem.controller.AddPartController;
-import smalls.javafxinventorysystem.model.Inventory;
 
 import java.io.IOException;
 
 public class AddPartWindowLoader {
 
-    private Stage stage;
+    private final Stage stage;
     private final String WINDOW_LABEL_TEXT = "Add Part";
-
-    public AddPartWindowLoader() {
-    }
 
     public AddPartWindowLoader(Stage stage) {
         this.stage = stage;
-        AddPartController ctrl = new AddPartController(WINDOW_LABEL_TEXT);
         FXMLLoader loader = new FXMLLoader();
-        loader.setController(ctrl);
+        loader.setController(new AddPartController(WINDOW_LABEL_TEXT));
         loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/partWindow.fxml"));
 
         try {

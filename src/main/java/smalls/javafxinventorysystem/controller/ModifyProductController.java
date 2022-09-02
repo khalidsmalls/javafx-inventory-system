@@ -15,6 +15,7 @@ import smalls.javafxinventorysystem.model.Inventory;
 import smalls.javafxinventorysystem.model.Part;
 import smalls.javafxinventorysystem.model.Product;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
@@ -36,18 +37,14 @@ public class ModifyProductController implements Initializable {
     @FXML private TableColumn<Part,Integer> partIdCol;
     @FXML private TableColumn<Part,Integer> partNameCol;
     @FXML private TableColumn<Part,Integer> partInvCol;
-    @FXML private TableColumn<Part,Integer> partPriceCol;
+    @FXML private TableColumn<Part,Double> partPriceCol;
     @FXML private TableColumn<Part,Integer> assocPartIdCol;
     @FXML private TableColumn<Part,Integer> assocPartNameCol;
     @FXML private TableColumn<Part,Integer> assocPartInvCol;
-    @FXML private TableColumn<Part,Integer> assocPartPriceCol;
+    @FXML private TableColumn<Part,Double> assocPartPriceCol;
+    private NumberFormat currencyFormat;
     private Inventory inv;
     private int productIndex;
-    private InvalidationListener productNameChangeListener;
-    private InvalidationListener productPriceChangeListener;
-    private InvalidationListener productInvChangeListener;
-    private InvalidationListener productMinChangeListener;
-    private InvalidationListener productMaxChangeListener;
     private boolean productNameModified;
     private boolean productPriceModified;
     private boolean productInvModified;
@@ -91,14 +88,13 @@ public class ModifyProductController implements Initializable {
         productIdTextfield.setEditable(false);
         productIdTextfield.setText(String.valueOf(product.getId()));
         productIndex = inv.getAllProducts().indexOf(product);
+        currencyFormat = NumberFormat.getCurrencyInstance();
 
         setTextFormatters();
         populateFields();
-        initModifiedPropertyBooleans();
         initPartsTable();
         initAssocPartsTable();
         initInvalidationListeners();
-        addInvalidationListeners();
     }
 
     @FXML private void onPartSearch() {
@@ -211,6 +207,20 @@ public class ModifyProductController implements Initializable {
         partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         partInvCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         partPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        //set currency format on price cell
+        partPriceCol.setCellFactory(cell -> new TableCell<Part, Double>() {
+            @Override
+            protected void updateItem(Double price, boolean empty) {
+                super.updateItem(price, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(currencyFormat.format(price));
+                }
+            }
+        });
+
     }
 
     private void initAssocPartsTable() {
@@ -220,6 +230,19 @@ public class ModifyProductController implements Initializable {
         assocPartNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         assocPartInvCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         assocPartPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        //set currency format on price cell
+        assocPartPriceCol.setCellFactory(cell -> new TableCell<Part, Double>() {
+            @Override
+            protected void updateItem(Double price, boolean empty) {
+                super.updateItem(price, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(currencyFormat.format(price));
+                }
+            }
+        });
     }
 
     private void setTextFormatters() {
@@ -260,48 +283,43 @@ public class ModifyProductController implements Initializable {
         productMaxTextfield.clear();
     }
 
-    private void initModifiedPropertyBooleans() {
+    public void initInvalidationListeners() {
         productNameModified = false;
         productPriceModified = false;
         productInvModified = false;
         productMinModified = false;
         productMaxModified = false;
-    }
-
-    public void initInvalidationListeners() {
-        productNameChangeListener = new InvalidationListener() {
+        InvalidationListener productNameChangeListener = new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
                 productNameModified = true;
             }
         };
-        productPriceChangeListener = new InvalidationListener() {
+        InvalidationListener productPriceChangeListener = new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
                 productPriceModified = true;
             }
         };
-        productInvChangeListener = new InvalidationListener() {
+        InvalidationListener productInvChangeListener = new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
                 productInvModified = true;
             }
         };
-        productMinChangeListener = new InvalidationListener() {
+        InvalidationListener productMinChangeListener = new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
                 productMinModified = true;
             }
         };
-        productMaxChangeListener = new InvalidationListener() {
+        InvalidationListener productMaxChangeListener = new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
                 productMaxModified = true;
             }
         };
-    }
 
-    public void addInvalidationListeners() {
         productNameTextfield.textProperty().addListener(productNameChangeListener);
         productPriceTextfield.textProperty().addListener(productPriceChangeListener);
         productInvTextfield.textProperty().addListener(productInvChangeListener);

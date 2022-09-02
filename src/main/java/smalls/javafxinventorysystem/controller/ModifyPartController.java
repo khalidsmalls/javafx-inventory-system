@@ -44,7 +44,7 @@ public class ModifyPartController implements Initializable {
     private boolean partMinModified;
     private boolean partMaxModified;
 
-    /**
+    /*
      * the following functional interfaces restrict form input to valid
      * characters using regular expressions
      */
@@ -93,9 +93,7 @@ public class ModifyPartController implements Initializable {
         partIndex = inv.getAllParts().indexOf(part);
         setTextFormatters();
         autoFillForm(part);
-        initModifiedPropertyBooleans();
         initInvalidationListeners();
-        addInvalidationListeners();
     }//END of initialize
 
     @FXML private void onInHouseRadioClick() {
@@ -186,14 +184,6 @@ public class ModifyPartController implements Initializable {
         dynamicPartTextfield.clear();
     }
 
-    public void initModifiedPropertyBooleans() {
-        partNameModified = false;
-        partPriceModified = false;
-        partInvModified = false;
-        partMinModified = false;
-        partMaxModified = false;
-    }
-
     public void setTextFormatters() {
         partInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
         partMaxTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
@@ -204,6 +194,11 @@ public class ModifyPartController implements Initializable {
     }
 
     public void initInvalidationListeners() {
+        partNameModified = false;
+        partPriceModified = false;
+        partInvModified = false;
+        partMinModified = false;
+        partMaxModified = false;
         partNameChangeListener = new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
@@ -234,9 +229,7 @@ public class ModifyPartController implements Initializable {
                 partMaxModified = true;
             }
         };
-    }
 
-    public void addInvalidationListeners() {
         partNameTextfield.textProperty().addListener(partNameChangeListener);
         partPriceTextfield.textProperty().addListener(partPriceChangeListener);
         partInvTextfield.textProperty().addListener(partInvChangeListener);
