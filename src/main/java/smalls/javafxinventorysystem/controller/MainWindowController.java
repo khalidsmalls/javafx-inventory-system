@@ -9,11 +9,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import smalls.javafxinventorysystem.DependencyManager;
 import smalls.javafxinventorysystem.model.*;
-import smalls.javafxinventorysystem.view.AddPartWindowLoader;
-import smalls.javafxinventorysystem.view.AddProductWindowLoader;
-import smalls.javafxinventorysystem.view.ModifyPartWindowLoader;
-import smalls.javafxinventorysystem.view.ModifyProductWindowLoader;
 
 import java.net.URL;
 import java.text.NumberFormat;
@@ -89,15 +86,13 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML private void onAddPart() {
-        AddPartWindowLoader win = new AddPartWindowLoader(stage);
-        win.show();
+        DependencyManager.loadAddPart(stage);
     }
 
     @FXML private void onModifyPart() {
         Part p = partsTable.getSelectionModel().getSelectedItem();
         if (p != null) {
-            ModifyPartWindowLoader win = new ModifyPartWindowLoader(stage, p);
-            win.show();
+            DependencyManager.loadModifyPart(stage);
         } else {
             new Alert(Alert.AlertType.ERROR, "Please select a part").showAndWait();
         }
@@ -117,15 +112,13 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML private void onAddProduct() {
-        AddProductWindowLoader win = new AddProductWindowLoader(stage);
-        win.show();
+        DependencyManager.loadAddProduct(stage);
     }
 
     @FXML private void onModifyProduct() {
         Product p = productsTable.getSelectionModel().getSelectedItem();
         if (p != null) {
-            ModifyProductWindowLoader win = new ModifyProductWindowLoader(stage, p);
-            win.show();
+            DependencyManager.loadModifyProduct(stage);
         } else {
             new Alert(Alert.AlertType.ERROR, "Please select a product").showAndWait();
         }
@@ -223,5 +216,13 @@ public class MainWindowController implements Initializable {
             }
         });
     }//END of initProductTable
+
+    public Part getSelectedPart() {
+        return (Part) partsTable.getSelectionModel().getSelectedItem();
+    }
+
+    public Product getSelectedProduct() {
+        return (Product) productsTable.getSelectionModel().getSelectedItem();
+    }
 
 }

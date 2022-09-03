@@ -72,10 +72,6 @@ public class ModifyPartController implements Initializable {
         return null;
     };
 
-
-    public ModifyPartController() {
-    }
-
     public ModifyPartController(Part part, String windowLabelText) {
         this.part = part;
         this.partWindowLabelText = windowLabelText;
@@ -155,7 +151,8 @@ public class ModifyPartController implements Initializable {
             dynamicPartTextfield.setText(String.valueOf(((InHouse) p).getMachineId()));
             dynamicPartLabel.setText(IN_HOUSE_LABEL);
             inHouseRadioBtn.setSelected(true);
-        } else {
+        }
+        if (p instanceof Outsourced) {
             dynamicPartTextfield.setText(((Outsourced) p).getCompanyName());
             dynamicPartLabel.setText(OUTSOURCED_LABEL);
             outsourcedRadioBtn.setSelected(true);
@@ -190,7 +187,12 @@ public class ModifyPartController implements Initializable {
         partMinTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
         partPriceTextfield.setTextFormatter(new TextFormatter<Double>(doubleFilter));
         partNameTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
-        dynamicPartTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
+        if (part instanceof InHouse) {
+            dynamicPartTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
+        }
+        if (part instanceof Outsourced) {
+            dynamicPartTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
+        }
     }
 
     public void initInvalidationListeners() {
