@@ -10,14 +10,13 @@ import java.io.IOException;
 
 public class ModifyPartWindowLoader {
 
-    private Stage stage;
+    private final Stage stage;
     private final String WINDOW_LABEL_TEXT = "Modify Part";
 
     public ModifyPartWindowLoader(Stage stage, Part part) {
         this.stage = stage;
-        ModifyPartController ctrl = new ModifyPartController(part, WINDOW_LABEL_TEXT);
         FXMLLoader loader = new FXMLLoader();
-        loader.setController(ctrl);
+        loader.setController(new ModifyPartController(part, WINDOW_LABEL_TEXT));
         loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/partWindow.fxml"));
 
         try {

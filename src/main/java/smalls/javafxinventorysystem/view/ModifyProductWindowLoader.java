@@ -5,20 +5,18 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import smalls.javafxinventorysystem.controller.ModifyProductController;
-import smalls.javafxinventorysystem.model.Part;
 import smalls.javafxinventorysystem.model.Product;
 
 import java.io.IOException;
 
 public class ModifyProductWindowLoader {
-    private static final String WINDOW_LABEL_TEXT = "Modify Product";
+    private final String WINDOW_LABEL_TEXT = "Modify Product";
     private final Stage stage;
 
     public ModifyProductWindowLoader(Stage stage, Product product) {
         this.stage = stage;
-        ModifyProductController ctrl = new ModifyProductController(product, WINDOW_LABEL_TEXT);
         FXMLLoader loader = new FXMLLoader();
-        loader.setController(ctrl);
+        loader.setController(new ModifyProductController(product, WINDOW_LABEL_TEXT));
         loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/productWindow.fxml"));
 
         try {

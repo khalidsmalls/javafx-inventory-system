@@ -11,6 +11,7 @@ public class MainApplication extends Application {
 
         Inventory inv = Inventory.getInstance();
         inv.loadParts();
+        inv.loadProducts();
         MainWindowLoader mainWindowLoader = new MainWindowLoader(primaryStage);
         mainWindowLoader.show();
     }

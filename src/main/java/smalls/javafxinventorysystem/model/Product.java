@@ -13,6 +13,16 @@ public class Product {
     private int min;
     private int max;
 
+    /**
+     * class constructor.
+     *
+     * @param id the new product id number
+     * @param name the new product name
+     * @param price the new product price
+     * @param stock the new product stock
+     * @param min the new product minimum stock
+     * @param max the new product maximum stock
+     */
     public Product(int id, String name, double price, int stock, int min, int max) {
         this.id = id;
         this.name = name;
@@ -24,6 +34,8 @@ public class Product {
     }
 
     /**
+     * sets the <code>id</code> of this product.
+     *
      * @param id the id to set
      */
     public void setId(int id) {
@@ -31,6 +43,8 @@ public class Product {
     }
 
     /**
+     * sets the <code>name</code> of this product.
+     *
      * @param name the name to set
      */
     public void setName(String name) {
@@ -38,6 +52,8 @@ public class Product {
     }
 
     /**
+     * sets the <code>price</code> of this product.
+     *
      * @param price the price to set
      */
     public void setPrice(double price) {
@@ -45,6 +61,8 @@ public class Product {
     }
 
     /**
+     * sets the <code>stock</code> of this product.
+     *
      * @param stock the stock to set
      */
     public void setStock(int stock) {
@@ -52,6 +70,9 @@ public class Product {
     }
 
     /**
+     * sets the <code>min</code>,
+     * minimum stock of this product.
+     *
      * @param min the min to set
      */
     public void setMin(int min) {
@@ -59,6 +80,9 @@ public class Product {
     }
 
     /**
+     * sets the <code>max</code>,
+     * maximum stock of this product.
+     *
      * @param max the max to set
      */
     public void setMax(int max) {
@@ -66,72 +90,110 @@ public class Product {
     }
 
     /**
-     * @return the id
+     * gets the <code>id</code> of this product.
+     *
+     * @return the <code>id</code>
      */
     public int getId() {
         return id;
     }
 
     /**
-     * @return the name
+     * gets the <code>name</code> of this product.
+     *
+     * @return the <code>name</code>
      */
     public String getName() {
         return name;
     }
 
     /**
-     * @return the price
+     * gets the <code>price</code> of this product.
+     *
+     * @return the <code>price</code>
      */
     public double getPrice() {
         return price;
     }
 
     /**
-     * @return the stock
+     * gets the <code>stock</code> of this product.
+     *
+     * @return the <code>stock</code>
      */
     public int getStock() {
         return stock;
     }
 
     /**
-     * @return the min
+     * gets the <code>min</code>,
+     * minimum stock of this product.
+     *
+     * @return the <code>min</code>
      */
     public int getMin() {
         return min;
     }
 
     /**
-     * @return the max
+     * gets the <code>max</code>,
+     * maximum stock of this product.
+     *
+     * @return the <code>max</code>
      */
     public int getMax() {
         return max;
     }
 
     /**
-     * @param part the part to add to associated parts
+     * adds a part to this product's <code>associatedParts</code>
+     * <code>ObservableList</code>.
+     *
+     * @param part the part to add to <code>associatedParts</code>
      */
     public void addAssociatedPart(Part part) {
         associatedParts.add(part);
     }
 
+    /**
+     * adds an <code>ObservableList</code> of parts to this product's
+     * <code>associatedParts</code> <code>ObservableList</code>.
+     *
+     * @param parts an <code>ObservableList</code> of parts to add
+     */
     public void addAssociatedParts(ObservableList<Part> parts) {
         associatedParts.addAll(parts);
     }
 
     /**
-     * @param selectedAssociatedPart the part to remove from associated parts
-     * @return true if part is removed, false if not
+     * removes a selected part from this product's <code>associatedParts</code>
+     * <code>ObservableList</code>.
+     *
+     * @param selectedAssociatedPart the part to remove from <code>associatedParts</code>>
+     * @return <code>true</code> if part is removed, <code>false</code> if not
      */
     public boolean deleteAssociatedParts(Part selectedAssociatedPart) {
         return associatedParts.remove(selectedAssociatedPart);
     }
 
+
+    /**
+     * removes selected associated parts from this products's
+     * <code>associatedParts</code> <code>ObservableList</code>.
+     *
+     * @param selectedAssociatedParts an <code>ObservableList</code> of parts to remove from
+     *                                the product's associated parts observable list
+     * @return <code>true</code> if parts are removed, <code>false</code> if not
+     */
     public boolean deleteAssociatedParts(ObservableList<Part> selectedAssociatedParts) {
         return associatedParts.removeAll(selectedAssociatedParts);
     }
 
     /**
-     * @return the associated parts
+     * returns this product's <code>ObservableList</code>
+     * of associated parts.
+     *
+     * @return the <code>associatedParts</code> <code>ObservableList</code>
      */
     public ObservableList<Part> getAllAssociatedParts() {
         return associatedParts;

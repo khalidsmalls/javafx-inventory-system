@@ -111,7 +111,7 @@ public class ModifyProductController implements Initializable {
             partList.add(p);
             partsTable.setItems(partList);
             partsTable.getSelectionModel().select(p);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             isInt = false;
         }
         if (!isInt) {

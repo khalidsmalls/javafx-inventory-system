@@ -52,7 +52,7 @@ public class MainWindowController implements Initializable {
             partList.add(p);
             partsTable.setItems(partList);
             partsTable.getSelectionModel().select(p);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             isInt = false;
         }
         if (!isInt) {
@@ -75,7 +75,7 @@ public class MainWindowController implements Initializable {
             productList.add(p);
             productsTable.setItems(productList);
             productsTable.getSelectionModel().select(p);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             isInt = false;
         }
         if (!isInt) {

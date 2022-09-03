@@ -1,6 +1,5 @@
 package smalls.javafxinventorysystem.controller;
 
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -41,7 +40,6 @@ public class AddProductController implements Initializable {
     @FXML private TableColumn<Part,Double> assocPartPriceCol;
     @FXML private ObservableList<Part> assocParts;
     private Inventory inv;
-    private Stage stage;
     private final String productWindowLabelText;
 
     //functional interfaces for restricting text input to valid characters
@@ -96,7 +94,7 @@ public class AddProductController implements Initializable {
             partList.add(p);
             partsTable.setItems(partList);
             partsTable.getSelectionModel().select(p);
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             isInt = false;
         }
         if (!isInt) {
