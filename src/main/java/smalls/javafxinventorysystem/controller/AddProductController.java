@@ -15,7 +15,6 @@ import smalls.javafxinventorysystem.model.Part;
 import smalls.javafxinventorysystem.model.Product;
 import java.net.URL;
 import java.text.NumberFormat;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
