@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import smalls.javafxinventorysystem.controller.*;
 import java.io.IOException;
+import java.util.Objects;
 
 public class DependencyManager {
 
@@ -19,6 +20,9 @@ public class DependencyManager {
         try {
             Parent root = loader.load();
             Scene scene = new Scene(root);
+            scene.getStylesheets().add(
+                    Objects.requireNonNull(DependencyManager.class.getResource("styles.css")).toExternalForm()
+            );
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
@@ -34,6 +38,9 @@ public class DependencyManager {
         try {
             Parent root = loader.load();
             Scene scene = new Scene(root);
+            scene.getStylesheets().add(
+                    Objects.requireNonNull(DependencyManager.class.getResource("styles.css")).toExternalForm()
+            );
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
@@ -49,6 +56,9 @@ public class DependencyManager {
         try {
             Parent root = loader.load();
             Scene scene = new Scene(root);
+            scene.getStylesheets().add(
+                    Objects.requireNonNull(DependencyManager.class.getResource("styles.css")).toExternalForm()
+            );
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
@@ -64,6 +74,9 @@ public class DependencyManager {
         try {
             Parent root = loader.load();
             Scene scene = new Scene(root);
+            scene.getStylesheets().add(
+                    Objects.requireNonNull(DependencyManager.class.getResource("styles.css")).toExternalForm()
+            );
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
@@ -79,6 +92,9 @@ public class DependencyManager {
         try {
             Parent root = loader.load();
             Scene scene = new Scene(root);
+            scene.getStylesheets().add(
+                    Objects.requireNonNull(DependencyManager.class.getResource("styles.css")).toExternalForm()
+            );
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
