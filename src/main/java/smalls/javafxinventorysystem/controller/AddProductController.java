@@ -89,15 +89,18 @@ public class AddProductController implements Initializable {
     }
 
     @FXML private void onPartSearch() {
+        partsTable.setPlaceholder(new Text(PART_NOT_FOUND_MSG));
         String searchString = partSearchTextfield.getText();
         boolean isInt = true;
         try {
             int id = Integer.parseInt(searchString);
             Part p = inv.lookupPart(id);
             ObservableList<Part> partList = FXCollections.observableArrayList();
-            partList.add(p);
             partsTable.setItems(partList);
-            partsTable.getSelectionModel().select(p);
+            if (p != null) {
+                partList.add(p);
+                partsTable.getSelectionModel().select(p);
+            }
         } catch (Exception e) {
             isInt = false;
         }
@@ -108,7 +111,6 @@ public class AddProductController implements Initializable {
                 partsTable.getSelectionModel().select(partList.get(0));
             }
         }
-        partsTable.setPlaceholder(new Text(PART_NOT_FOUND_MSG));
     }
 
     @FXML private void onAddAssocPart() {
