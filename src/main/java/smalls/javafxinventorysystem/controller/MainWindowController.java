@@ -40,16 +40,19 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML private void onPartSearch() {
+        partsTable.setPlaceholder(new Text("Part not found"));
         String searchString = partSearchField.getText();
         boolean isInt = true;
         try {
             int id = Integer.parseInt(searchString);
             Part p = inv.lookupPart(id);
             ObservableList<Part> partList = FXCollections.observableArrayList();
-            partList.add(p);
             partsTable.setItems(partList);
-            partsTable.getSelectionModel().select(p);
-        } catch (Exception e) {
+            if (p != null) {
+                partList.add(p);
+                partsTable.getSelectionModel().select(p);
+            }
+        } catch (NumberFormatException e) {
             isInt = false;
         }
         if (!isInt) {
@@ -59,19 +62,21 @@ public class MainWindowController implements Initializable {
                 partsTable.getSelectionModel().select(partList.get(0));
             }
         }
-        partsTable.setPlaceholder(new Text("Part not found"));
     }
 
     @FXML private void onProductSearch() {
+        productsTable.setPlaceholder(new Text("Product not found"));
         String searchString = productSearchField.getText();
         boolean isInt = true;
         try {
             int id = Integer.parseInt(searchString);
             Product p = inv.lookupProduct(id);
             ObservableList<Product> productList = FXCollections.observableArrayList();
-            productList.add(p);
             productsTable.setItems(productList);
-            productsTable.getSelectionModel().select(p);
+            if (p != null) {
+                productList.add(p);
+                productsTable.getSelectionModel().select(p);
+            }
         } catch (Exception e) {
             isInt = false;
         }
@@ -82,7 +87,6 @@ public class MainWindowController implements Initializable {
                 productsTable.getSelectionModel().select(productList.get(0));
             }
         }
-        productsTable.setPlaceholder(new Text("Part not found"));
     }
 
     @FXML private void onAddPart() {
