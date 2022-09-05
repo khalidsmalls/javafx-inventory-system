@@ -235,7 +235,7 @@ public class AddProductController implements Initializable {
     }
 
     /*
-        initialize associated parts table
+        helper method initializes associated parts table
      */
     private void initAssocPartsTable() {
         assocPartsTable.setItems(assocParts);
@@ -259,8 +259,8 @@ public class AddProductController implements Initializable {
         });
     }
 
-    /**
-     * sets filters on textFields to restrict user-entered data to proper types
+    /*
+     * helper method sets filters on textFields to restrict user-entered data to proper types
      */
     private void setTextFormatters() {
         productInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
@@ -270,9 +270,9 @@ public class AddProductController implements Initializable {
         productNameTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
     }
 
-    /**
-     * validates all fields are populated
-     * @return <code>true</code> if all fields are populated. <code>false</code> if not.
+    /*
+     * helper method validates all fields are populated
+     * return true if all fields are populated
      */
     private boolean validateFields() {
         return !(productNameTextfield.getText().equals("") || productNameTextfield.getText().length() == 0 ||
@@ -282,16 +282,19 @@ public class AddProductController implements Initializable {
                 productMinTextfield.getText().equals("") || productMinTextfield.getText().length() == 0);
     }
 
-    /**
+    /*
+     * helper method validates user-entered min stock is less than or equal to inventory
+     * and inventory is less than or equal to max stock
      *
-     * @return <code>true</code> if user-entered min stock is less than inventory and inventory is less than or
-     * equal to max stock. <code>false</code> otherwise.
      */
     private boolean validateInventory() {
         return Integer.parseInt(productMinTextfield.getText()) <= Integer.parseInt(productInvTextfield.getText()) &&
                 (Integer.parseInt(productInvTextfield.getText()) <= Integer.parseInt(productMaxTextfield.getText()));
     }
 
+    /*
+        helper method clears form fields
+     */
     private void clearFields() {
         productNameTextfield.clear();
         productPriceTextfield.clear();
