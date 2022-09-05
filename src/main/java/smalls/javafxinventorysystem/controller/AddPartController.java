@@ -33,8 +33,8 @@ public class AddPartController implements Initializable {
     private ToggleGroup toggleGroup;
 
     /*
-     * the following functional interfaces restrict form input to valid
-     * characters using regular expressions
+       the following functional interfaces restrict form input to valid
+       characters using regular expressions
      */
     private final UnaryOperator<TextFormatter.Change> integerFilter = change -> {
         String newText = change.getControlNewText();
@@ -61,7 +61,7 @@ public class AddPartController implements Initializable {
     };
 
     /**
-     * class constructor
+     * class constructor.
      *
      * @param partWindowLabelText the text to set the main window label to
      */
@@ -167,7 +167,7 @@ public class AddPartController implements Initializable {
     }//END of onPartSave
 
     /**
-     * closes window without saving part
+     * closes window without saving part.
      *
      * @param e the object fired on click which allows access to
      *          the window object so that it may be closed
@@ -177,8 +177,8 @@ public class AddPartController implements Initializable {
     }
 
     /*
-     * helper method validates all fields are populated
-     * returns true if all fields are populated
+       helper method validates all fields are populated
+       returns true if all fields are populated
      */
     private boolean validateFields() {
         return !(partNameTextfield.getText().equals("") || partNameTextfield.getText().length() == 0 ||
@@ -189,8 +189,8 @@ public class AddPartController implements Initializable {
     }
 
     /*
-     * returns true if user-entered min stock is less than or equal to inventory and inventory
-     * is less than or equal to max stock.
+        returns true if user-entered min stock is less than or equal to inventory and inventory
+        is less than or equal to max stock.
      */
     private boolean validateInventory() {
         return Integer.parseInt(partMinTextfield.getText()) <= Integer.parseInt(partInvTextfield.getText()) &&
@@ -198,7 +198,7 @@ public class AddPartController implements Initializable {
     }
 
     /*
-     * helper method clears all textFields
+        helper method clears all textFields
      */
     private void clearFields() {
         partNameTextfield.clear();
@@ -210,7 +210,7 @@ public class AddPartController implements Initializable {
     }
 
     /*
-     * helper method sets text formatters on textFields to ensure valid input
+        helper method sets text formatters on textFields to ensure valid input
      */
     private void setTextFormatters() {
         partInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));

@@ -31,7 +31,7 @@ public class MainWindowController implements Initializable {
     private final Stage stage;
 
     /**
-     * class constructor -
+     * class constructor.
      * gets inventory instance and creates new stage
      * to pass to part and product windows
      */
@@ -121,7 +121,7 @@ public class MainWindowController implements Initializable {
     }
 
     /**
-     * displays the "addPart" window
+     * displays the "addPart" window.
      * <p>
      * <code>FXMLLoader</code> instance displays <code>partWindow</code> and assigns
      * <code>AddPartController</code> to it.
@@ -259,7 +259,7 @@ public class MainWindowController implements Initializable {
     }
 
     /**
-     * closes window
+     * closes window.
      *
      * @param e allows access to the stage, so that it may be closed
      */

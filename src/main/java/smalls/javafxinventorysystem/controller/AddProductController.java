@@ -70,7 +70,7 @@ public class AddProductController implements Initializable {
     };
 
     /**
-     * class constructor
+     * class constructor.
      *
      * @param productWindowLabelText the text to set main window label to
      */
@@ -142,6 +142,7 @@ public class AddProductController implements Initializable {
 
     /**
      * removes a part from assocParts tableview.
+     *
      * <p>
      * The part is not removed from this product's associated parts list
      * until <code>onSave</code> is successfully executed.
@@ -155,6 +156,9 @@ public class AddProductController implements Initializable {
     }
 
     /**
+     * attempts to add a new <code>Product</code> to <code>allProducts</code>.
+     *
+     * <p>
      * validates all fields are populated with relevant data and that the min stock
      * entered by the user is less than or equal to the inventory value, which is less
      * than or equal to maximum stock entered. Creates a new product, adds the selected
@@ -201,7 +205,7 @@ public class AddProductController implements Initializable {
     }
 
     /**
-     * closes the product window
+     * closes the product window.
      *
      * @param e allows access to the stage, so that it may be closed
      */
@@ -260,7 +264,7 @@ public class AddProductController implements Initializable {
     }
 
     /*
-     * helper method sets filters on textFields to restrict user-entered data to proper types
+       helper method sets filters on textFields to restrict user-entered data to proper types
      */
     private void setTextFormatters() {
         productInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
@@ -271,8 +275,8 @@ public class AddProductController implements Initializable {
     }
 
     /*
-     * helper method validates all fields are populated
-     * return true if all fields are populated
+       helper method validates all fields are populated
+       return true if all fields are populated
      */
     private boolean validateFields() {
         return !(productNameTextfield.getText().equals("") || productNameTextfield.getText().length() == 0 ||
@@ -283,9 +287,8 @@ public class AddProductController implements Initializable {
     }
 
     /*
-     * helper method validates user-entered min stock is less than or equal to inventory
-     * and inventory is less than or equal to max stock
-     *
+       helper method validates user-entered min stock is less than or equal to inventory
+       and inventory is less than or equal to max stock
      */
     private boolean validateInventory() {
         return Integer.parseInt(productMinTextfield.getText()) <= Integer.parseInt(productInvTextfield.getText()) &&

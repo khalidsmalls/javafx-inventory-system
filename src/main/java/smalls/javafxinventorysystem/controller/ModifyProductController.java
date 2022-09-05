@@ -77,7 +77,7 @@ public class ModifyProductController implements Initializable {
     };
 
     /**
-     * class constructor
+     * class constructor.
      *
      * @param product the product to be modified
      * @param windowLabelText the main window label text to set
@@ -238,7 +238,7 @@ public class ModifyProductController implements Initializable {
     }
 
     /**
-     * closes window
+     * closes window.
      *
      * @param e the object used to access the stage so that it may
      *          be closed

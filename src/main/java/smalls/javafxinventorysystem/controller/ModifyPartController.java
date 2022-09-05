@@ -42,8 +42,8 @@ public class ModifyPartController implements Initializable {
     private ToggleGroup toggleGroup;
 
     /*
-     * the following functional interfaces restrict form input to valid
-     * characters using regular expressions
+       the following functional interfaces restrict form input to valid
+       characters using regular expressions
      */
     private final UnaryOperator<TextFormatter.Change> integerFilter = change -> {
         String newText = change.getControlNewText();
@@ -70,7 +70,7 @@ public class ModifyPartController implements Initializable {
     };
 
     /**
-     * class constructor
+     * class constructor.
      *
      * @param part the part to be modified
      * @param windowLabelText the main window label text to set
@@ -231,7 +231,7 @@ public class ModifyPartController implements Initializable {
     }
 
     /**
-     * closes window
+     * closes window.
      *
      * @param e event object - allows access to the stage
      *          so that it may be closed
