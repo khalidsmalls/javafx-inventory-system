@@ -13,7 +13,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import smalls.javafxinventorysystem.model.*;
-import smalls.javafxinventorysystem.view.ModifyProductWindowLoader;
 
 import java.io.IOException;
 import java.net.URL;
