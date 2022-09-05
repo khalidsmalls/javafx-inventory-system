@@ -11,7 +11,7 @@
          <top>
             <HBox prefHeight="79.0" prefWidth="980.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label fx:id="partWindowLabel" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="325.0">
+                  <Label fx:id="partWindowLabel" styleClass="form-label" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="60.0" prefWidth="325.0">
                      <HBox.margin>
                         <Insets left="120.0" top="10.0" />
                      </HBox.margin>

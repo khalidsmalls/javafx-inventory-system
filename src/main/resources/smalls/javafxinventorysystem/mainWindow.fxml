@@ -11,7 +11,7 @@
     <children>
         <BorderPane layoutX="383.0" layoutY="96.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
             <top>
-                <Label text="Inventory Management System" BorderPane.alignment="BOTTOM_LEFT">
+                <Label styleClass="form-label" text="Inventory Management System" BorderPane.alignment="BOTTOM_LEFT">
                     <BorderPane.margin>
                         <Insets left="50.0" top="30.0" />
                     </BorderPane.margin>
@@ -42,7 +42,7 @@
                                     <top>
                                         <HBox prefHeight="42.0" prefWidth="450.0" BorderPane.alignment="CENTER">
                                             <children>
-                                                <Label prefHeight="38.0" prefWidth="78.0" text="Parts">
+                                                <Label styleClass="table-label" prefHeight="38.0" prefWidth="78.0" text="Parts">
                                                     <padding>
                                                         <Insets left="20.0" top="15.0" />
                                                     </padding>
@@ -106,7 +106,7 @@
                                     <top>
                                         <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="42.0" prefWidth="490.0" BorderPane.alignment="CENTER">
                                             <children>
-                                                <Label prefHeight="38.0" prefWidth="109.0" text="Products">
+                                                <Label styleClass="table-label" prefHeight="38.0" prefWidth="109.0" text="Products">
                                                     <padding>
                                                         <Insets left="20.0" top="15.0" />
                                                     </padding>
@@ -170,4 +170,3 @@
         </BorderPane>
     </children>
 </AnchorPane>
-

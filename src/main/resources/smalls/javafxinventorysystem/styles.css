@@ -1,38 +1,58 @@
+/*
+   #F7F2D4 - lightgray
+   #FDDC22 - yellow
+   #236AB9 - blue
+   #D61A46 - hot pink
+   #091D34 - darker blue
+*/
+
 .root {
-    -fx-background-color: aliceblue;
+    -fx-background-color: #F7F2D4;
+}
+
+.form-label {
+    -fx-text-fill: #091D34;
+}
+
+.table-label {
+    -fx-text-fill: #091D34;
 }
 
 .table-view {
-    -fx-background-color: transparent;
+    -fx-background-color: #236AB9;
     -fx-border-color: black;
 }
 
 .table-view .column-header-background{
-    -fx-background-color: linear-gradient(to bottom, #1dbbdd44, #93f9b944);
+    -fx-background-color: transparent;
     -fx-background-radius: 7px 7px 0px 0px;
     -fx-background-insets: 0 11px 0 0;
     -fx-padding: 0 0 5px 0;
 }
 
 .table-view .column-header {
-    -fx-background-color: transparent;
+    -fx-background-color: #236AB9;
+    -fx-text-background-color: #091D34;
 }
 
 .table-view .table-cell{
     -fx-border-color: transparent;
     -fx-padding: 2 0 2 10px;
+
 }
 .table-row-cell: hover {
     -fx-background-color: #93f9b911;
     -fx-text-background-color: red;
 }
 .table-row-cell: odd{
-    -fx-background-color: #93f9b911;
+    -fx-background-color: #F7F2D4;
+    -fx-text-background-color: #091D34;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em;
 }
 .table-row-cell: even{
-    -fx-background-color: #1dbbdd11;
+    -fx-background-color: #091D34;
+    -fx-text-background-color: #F7F2D4;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em;
 }
@@ -61,13 +81,13 @@
 
 
 /*
-    the scrollbars
+    the scrollbars, themselves
 */
 .table-view .virtual-flow .scroll-bar:vertical .thumb{
-    -fx-background-color:  linear-gradient(to bottom, #1dbbdd44, #93f9b944);
+    -fx-background-color:  #091D34;
 }
 .table-view .virtual-flow .scroll-bar:horizontal .thumb {
-    -fx-background-color:  linear-gradient(to right, #1dbbdd44, #93f9b944);
+    -fx-background-color:  #091D34;
 }
 
 /*
@@ -75,7 +95,7 @@
  the scrollbars
 
 .table-view .column-header-background .filler {
-    -fx-background-color:;
+    -fx-background-color: transparent;
 }
 */
 
@@ -84,4 +104,12 @@
 */
 .table-view .corner {
     -fx-background-color: transparent;
+}
+
+.button {
+    -fx-background-color: #091D34;
+    -fx-border-color: #091D34;
+    -fx-text-fill: #F7F2D4;
+    -fx-border-radius: 10;
+    -fx-background-radius: 13;
 }
