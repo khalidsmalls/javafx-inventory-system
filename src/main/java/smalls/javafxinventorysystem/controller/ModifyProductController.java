@@ -43,11 +43,6 @@ public class ModifyProductController implements Initializable {
     @FXML private TableColumn<Part,Integer> assocPartPriceCol;
     private Inventory inv;
     private int productIndex;
-    private InvalidationListener productNameChangeListener;
-    private InvalidationListener productPriceChangeListener;
-    private InvalidationListener productInvChangeListener;
-    private InvalidationListener productMinChangeListener;
-    private InvalidationListener productMaxChangeListener;
     private boolean productNameModified;
     private boolean productPriceModified;
     private boolean productInvModified;
@@ -94,11 +89,8 @@ public class ModifyProductController implements Initializable {
 
         setTextFormatters();
         populateFields();
-        initModifiedPropertyBooleans();
-        initPartsTable();
-        initAssocPartsTable();
+        initTableViews();
         initInvalidationListeners();
-        addInvalidationListeners();
     }
 
     @FXML private void onPartSearch() {
@@ -206,16 +198,14 @@ public class ModifyProductController implements Initializable {
         ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
     }
 
-    private void initPartsTable() {
+    private void initTableViews() {
         partsTable.setItems(inv.getAllParts());
         partsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         partIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         partInvCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         partPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
-    }
 
-    private void initAssocPartsTable() {
         assocPartsTable.setItems(product.getAllAssociatedParts());
         assocPartsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         assocPartIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -262,48 +252,43 @@ public class ModifyProductController implements Initializable {
         productMaxTextfield.clear();
     }
 
-    private void initModifiedPropertyBooleans() {
+    public void initInvalidationListeners() {
         productNameModified = false;
         productPriceModified = false;
         productInvModified = false;
         productMinModified = false;
         productMaxModified = false;
-    }
-
-    public void initInvalidationListeners() {
-        productNameChangeListener = new InvalidationListener() {
+        InvalidationListener productNameChangeListener = new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
                 productNameModified = true;
             }
         };
-        productPriceChangeListener = new InvalidationListener() {
+        InvalidationListener productPriceChangeListener = new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
                 productPriceModified = true;
             }
         };
-        productInvChangeListener = new InvalidationListener() {
+        InvalidationListener productInvChangeListener = new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
                 productInvModified = true;
             }
         };
-        productMinChangeListener = new InvalidationListener() {
+        InvalidationListener productMinChangeListener = new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
                 productMinModified = true;
             }
         };
-        productMaxChangeListener = new InvalidationListener() {
+        InvalidationListener productMaxChangeListener = new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
                 productMaxModified = true;
             }
         };
-    }
 
-    public void addInvalidationListeners() {
         productNameTextfield.textProperty().addListener(productNameChangeListener);
         productPriceTextfield.textProperty().addListener(productPriceChangeListener);
         productInvTextfield.textProperty().addListener(productInvChangeListener);
