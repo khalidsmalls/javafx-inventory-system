@@ -39,6 +39,7 @@ public class ModifyPartController implements Initializable {
     private boolean partMinModified;
     private boolean partMaxModified;
     private boolean dynamicFieldModified;
+    private ToggleGroup toggleGroup;
 
     /**
      * the following functional interfaces restrict form input to valid
@@ -77,7 +78,7 @@ public class ModifyPartController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         partWindowLabel.setText(partWindowLabelText);
         inv = Inventory.getInstance();
-        ToggleGroup toggleGroup = new ToggleGroup();
+        toggleGroup = new ToggleGroup();
         toggleGroup.getToggles().addAll(inHouseRadioBtn, outsourcedRadioBtn);
         partIdTextfield.setEditable(false);
         partIdTextfield.setText(String.valueOf(part.getId()));
@@ -110,30 +111,12 @@ public class ModifyPartController implements Initializable {
     @FXML private void onPartSave(ActionEvent event) {
         if (validateFields()) {
             if (validateInventory()) {
-                if (partNameModified) {
-                    part.setName(partNameTextfield.getText());
+                if ((part instanceof InHouse && outsourcedRadioBtn.isSelected()) ||
+                        (part instanceof Outsourced && inHouseRadioBtn.isSelected())) {
+                    createNewPart();
+                } else {
+                    modifyPart();
                 }
-                if (partPriceModified) {
-                    part.setPrice(Double.parseDouble(partPriceTextfield.getText()));
-                }
-                if (partInvModified) {
-                    part.setStock(Integer.parseInt(partInvTextfield.getText()));
-                }
-                if (partMinModified) {
-                    part.setMin(Integer.parseInt(partMinTextfield.getText()));
-                }
-                if (partMaxModified) {
-                    part.setMax(Integer.parseInt(partMaxTextfield.getText()));
-                }
-                if (dynamicFieldModified) {
-                    if (part instanceof InHouse) {
-                        ((InHouse) part).setMachineId(Integer.parseInt(dynamicPartTextfield.getText()));
-                    }
-                    if (part instanceof Outsourced) {
-                        ((Outsourced) part).setCompanyName(dynamicPartTextfield.getText());
-                    }
-                }
-                inv.updatePart(partIndex, part);
                 clearFields();
                 ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
             } else {
@@ -145,6 +128,58 @@ public class ModifyPartController implements Initializable {
             //validate fields returned false
             new Alert(Alert.AlertType.ERROR, "Please enter a value for all fields").showAndWait();
         }
+    }
+
+    private void modifyPart() {
+        if (partNameModified) {
+            part.setName(partNameTextfield.getText());
+        }
+        if (partPriceModified) {
+            part.setPrice(Double.parseDouble(partPriceTextfield.getText()));
+        }
+        if (partInvModified) {
+            part.setStock(Integer.parseInt(partInvTextfield.getText()));
+        }
+        if (partMinModified) {
+            part.setMin(Integer.parseInt(partMinTextfield.getText()));
+        }
+        if (partMaxModified) {
+            part.setMax(Integer.parseInt(partMaxTextfield.getText()));
+        }
+        if (dynamicFieldModified) {
+            if (part instanceof InHouse) {
+                ((InHouse) part).setMachineId(Integer.parseInt(dynamicPartTextfield.getText()));
+            }
+            if (part instanceof Outsourced) {
+                ((Outsourced) part).setCompanyName(dynamicPartTextfield.getText());
+            }
+        }
+        inv.updatePart(partIndex, part);
+    }
+
+    private void createNewPart() {
+        Part updatedPart;
+        int newPartId = part.getId();
+        String newPartName = partNameTextfield.getText();
+        double newPartPrice = Double.parseDouble(partPriceTextfield.getText());
+        int newPartInv = Integer.parseInt(partInvTextfield.getText());
+        int newPartMin = Integer.parseInt(partMinTextfield.getText());
+        int newPartMax = Integer.parseInt(partMaxTextfield.getText());
+
+        if (toggleGroup.getSelectedToggle() == inHouseRadioBtn) {
+            int newPartMachineId = Integer.parseInt(dynamicPartTextfield.getText());
+            updatedPart = new InHouse(
+                    newPartId, newPartName, newPartPrice, newPartInv,
+                    newPartMin, newPartMax, newPartMachineId
+            );
+        } else {
+            String newPartCompanyName = dynamicPartTextfield.getText();
+            updatedPart = new Outsourced(
+                    newPartId, newPartName, newPartPrice, newPartInv,
+                    newPartMin, newPartMax, newPartCompanyName
+            );
+        }
+        inv.updatePart(partIndex, updatedPart);
     }
 
     @FXML private void onPartCancel(ActionEvent e) {
