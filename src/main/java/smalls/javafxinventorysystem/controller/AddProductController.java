@@ -69,6 +69,10 @@ public class AddProductController implements Initializable {
         return null;
     };
 
+    /**
+     *
+     * @param productWindowLabelText the text to set main window label to
+     */
     public AddProductController(String productWindowLabelText) {
         this.productWindowLabelText = productWindowLabelText;
     }
@@ -87,29 +91,42 @@ public class AddProductController implements Initializable {
         initAssocPartsTable();
     }
 
+    /**
+     * first, attempts to look up part by id. If this results in a <code>NumberFormatException</code>
+     * then lookup-by-name is attempted. If the part is found it is added to a new observableList
+     * which the parts table is set to. The part is then selected. Since lookup-by-name
+     * might return a list of results, parts table is set to the returned list of parts.
+     *
+     */
     @FXML private void onPartSearch() {
+        partsTable.setPlaceholder(new Text(PART_NOT_FOUND_MSG));
+        ObservableList<Part> partList = FXCollections.observableArrayList();
         String searchString = partSearchTextfield.getText();
         boolean isInt = true;
         try {
             int id = Integer.parseInt(searchString);
             Part p = inv.lookupPart(id);
-            ObservableList<Part> partList = FXCollections.observableArrayList();
-            partList.add(p);
+            if (p != null) {
+                partList.add(p);
+                partsTable.getSelectionModel().select(p);
+            }
             partsTable.setItems(partList);
-            partsTable.getSelectionModel().select(p);
         } catch (NumberFormatException e) {
             isInt = false;
         }
         if (!isInt) {
-            ObservableList<Part> partList = inv.lookupPart(searchString);
+            partList = inv.lookupPart(searchString);
             partsTable.setItems(partList);
             if (partList.size() == 1) {
                 partsTable.getSelectionModel().select(partList.get(0));
             }
         }
-        partsTable.setPlaceholder(new Text(PART_NOT_FOUND_MSG));
     }
 
+    /**
+     * adds a part to assocParts tableview. The part is not added to this
+     * product's associated parts list until <code>onSave</code> is successfully executed.
+     */
     @FXML private void onAddAssocPart() {
         if (partsTable.getSelectionModel().getSelectedItems().size() > 1) {
             assocParts.addAll(partsTable.getSelectionModel().getSelectedItems());
@@ -118,6 +135,11 @@ public class AddProductController implements Initializable {
         }
     }
 
+    /**
+     * removes a part from assocParts tableview. The part is not removed from this
+     * product's associated parts list until <code>onSave</code> is successfully
+     * executed.
+     */
     @FXML private void onRemoveAssocPart() {
         if (assocPartsTable.getSelectionModel().getSelectedItems().size() > 1) {
             assocParts.removeAll(assocPartsTable.getSelectionModel().getSelectedItems());
@@ -126,6 +148,16 @@ public class AddProductController implements Initializable {
         }
     }
 
+    /**
+     * validates all fields are populated with relevant data and that the min stock
+     * entered by the user is less than or equal to the inventory value, which is less
+     * than or equal to maximum stock entered. Creates a new product, adds the selected
+     * associated parts to the product and adds the product to inventory before closing the
+     * window.
+     *
+     * @param e allows access to the stage so that it may be closed after the
+     *          new product is saved
+     */
     @FXML private void onSave(ActionEvent e) {
         Product p = null;
         String newProductName;
@@ -162,10 +194,18 @@ public class AddProductController implements Initializable {
         }
     }
 
+    /**
+     * closes the product window
+     *
+     * @param e allows access to the stage, so that it may be closed
+     */
     @FXML private void onClose(ActionEvent e){
         ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
     }
 
+    /*
+        initialize parts table
+     */
     private void  initPartsTable() {
         partsTable.setItems(inv.getAllParts());
         partsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -188,6 +228,9 @@ public class AddProductController implements Initializable {
         });
     }
 
+    /*
+        initialize associated parts table
+     */
     private void initAssocPartsTable() {
         assocPartsTable.setItems(assocParts);
         assocPartsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -210,6 +253,9 @@ public class AddProductController implements Initializable {
         });
     }
 
+    /**
+     * sets filters on textFields to restrict user-entered data to proper types
+     */
     private void setTextFormatters() {
         productInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
         productMaxTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
@@ -218,6 +264,10 @@ public class AddProductController implements Initializable {
         productNameTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
     }
 
+    /**
+     * validates all fields are populated
+     * @return <code>true</code> if all fields are populated. <code>false</code> if not.
+     */
     private boolean validateFields() {
         return !(productNameTextfield.getText().equals("") || productNameTextfield.getText().length() == 0 ||
                 productPriceTextfield.getText().equals("") || productPriceTextfield.getText().length() == 0 ||
@@ -226,6 +276,11 @@ public class AddProductController implements Initializable {
                 productMinTextfield.getText().equals("") || productMinTextfield.getText().length() == 0);
     }
 
+    /**
+     *
+     * @return <code>true</code> if user-entered min stock is less than inventory and inventory is less than or
+     * equal to max stock. <code>false</code> otherwise.
+     */
     private boolean validateInventory() {
         return Integer.parseInt(productMinTextfield.getText()) <= Integer.parseInt(productInvTextfield.getText()) &&
                 (Integer.parseInt(productInvTextfield.getText()) <= Integer.parseInt(productMaxTextfield.getText()));

@@ -18,7 +18,7 @@ public class AddPartController implements Initializable {
     private static final String IN_HOUSE_LABEL = "Machine ID";
     private static final String OUTSOURCED_LABEL = "Company Name";
     @FXML private Label partWindowLabel;
-    @FXML private Label dynamicPartLabel;
+    @FXML private Label dynamicLabel;
     @FXML private RadioButton inHouseRadioBtn;
     @FXML private RadioButton outsourcedRadioBtn;
     @FXML private TextField partIdTextfield;
@@ -60,6 +60,10 @@ public class AddPartController implements Initializable {
         return null;
     };
 
+    /**
+     *
+     * @param partWindowLabelText the text to set the main window label to
+     */
     public AddPartController(String partWindowLabelText) {
         this.partWindowLabelText = partWindowLabelText;
     }
@@ -70,7 +74,7 @@ public class AddPartController implements Initializable {
         toggleGroup = new ToggleGroup();
         toggleGroup.getToggles().addAll(inHouseRadioBtn, outsourcedRadioBtn);
         inHouseRadioBtn.setSelected(true);
-        dynamicPartLabel.setText(IN_HOUSE_LABEL);
+        dynamicLabel.setText(IN_HOUSE_LABEL);
         dynamicPartTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
         partIdTextfield.setEditable(false);
         partIdTextfield.setText(PART_ID_TEXTFIELD_TEXT);
@@ -79,18 +83,37 @@ public class AddPartController implements Initializable {
         setTextFormatters();
     }
 
+    /**
+     * sets dynamic label text to "machine id" and sets
+     * integer filter on corresponding textField. Also
+     * clears the textField if it expects a company name.
+     *
+     */
     @FXML private void onInHouseRadioClick() {
-        dynamicPartLabel.setText(IN_HOUSE_LABEL);
+        dynamicLabel.setText(IN_HOUSE_LABEL);
         dynamicPartTextfield.clear();
         dynamicPartTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
     }
 
+    /**
+     * sets dynamic label text to "company name" and sets
+     * string filter on corresponding textField. Also
+     * clears the textField if it expects a machine id.
+     */
     @FXML private void onOutsourcedRadioClick() {
-        dynamicPartLabel.setText(OUTSOURCED_LABEL);
+        dynamicLabel.setText(OUTSOURCED_LABEL);
         dynamicPartTextfield.clear();
         dynamicPartTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
     }
 
+    /**
+     * validates all fields are populated with relevant data before
+     * creating an <code>InHouse</code> or <code>Outsourced</code>
+     * part and adding it to inventory
+     *
+     * @param event allows access to the stage, so that it may be
+     *              closed after the part is added to inventory
+     */
     @FXML private void onPartSave(ActionEvent event) {
         Part p = null;
         String newPartName;
@@ -135,10 +158,21 @@ public class AddPartController implements Initializable {
         }
     }//END of onPartSave
 
+    /**
+     * closes window without saving part
+     *
+     * @param e the object fired on click which allows access to
+     *          the window object so that it may be closed
+     */
     @FXML private void onPartCancel(ActionEvent e) {
         ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
     }
 
+    /**
+     * validates all fields are populated
+     *
+     * @return <code>true</code> if all fields are populated
+     */
     private boolean validateFields() {
         return !(partNameTextfield.getText().equals("") || partNameTextfield.getText().length() == 0 ||
                 partPriceTextfield.getText().equals("") || partPriceTextfield.getText().length() == 0 ||
@@ -147,11 +181,21 @@ public class AddPartController implements Initializable {
                 partMinTextfield.getText().equals("") || partMinTextfield.getText().length() == 0);
     }
 
+    /**
+     * validates <code>min</code> is less than or equal to <code>inv</code> and
+     * <code>inv</code> is less than or equal to <code>max</code>
+     *
+     * @return <code>true</code> if <code>min</code> is less than or equal to
+     * <code>inv</code> and <code>inv</code> is less than or equal to <code>max</code>
+     */
     private boolean validateInventory() {
         return Integer.parseInt(partMinTextfield.getText()) <= Integer.parseInt(partInvTextfield.getText()) &&
                 (Integer.parseInt(partInvTextfield.getText()) <= Integer.parseInt(partMaxTextfield.getText()));
     }
 
+    /*
+     * clears all textFields
+     */
     private void clearFields() {
         partNameTextfield.clear();
         partPriceTextfield.clear();
@@ -161,6 +205,9 @@ public class AddPartController implements Initializable {
         dynamicPartTextfield.clear();
     }
 
+    /**
+     * sets text formatters on textFields to ensure valid input
+     */
     private void setTextFormatters() {
         partInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
         partMaxTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));

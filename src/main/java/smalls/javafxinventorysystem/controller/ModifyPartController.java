@@ -19,7 +19,7 @@ public class ModifyPartController implements Initializable {
     private final String IN_HOUSE_LABEL = "Machine ID";
     private final String OUTSOURCED_LABEL = "Company Name";
     @FXML private Label partWindowLabel;
-    @FXML private Label dynamicPartLabel;
+    @FXML private Label dynamicLabel;
     @FXML private RadioButton inHouseRadioBtn;
     @FXML private RadioButton outsourcedRadioBtn;
     @FXML private TextField partIdTextfield;
@@ -30,8 +30,8 @@ public class ModifyPartController implements Initializable {
     @FXML private TextField partMinTextfield;
     @FXML private TextField dynamicPartTextfield;
     private Inventory inv;
-    private String partWindowLabelText;
-    private Part part;
+    private final String partWindowLabelText;
+    private final Part part;
     private int partIndex;
     private boolean partNameModified;
     private boolean partPriceModified;
@@ -41,7 +41,7 @@ public class ModifyPartController implements Initializable {
     private boolean dynamicFieldModified;
     private ToggleGroup toggleGroup;
 
-    /**
+    /*
      * the following functional interfaces restrict form input to valid
      * characters using regular expressions
      */
@@ -69,6 +69,12 @@ public class ModifyPartController implements Initializable {
         return null;
     };
 
+    /**
+     * class constructor
+     *
+     * @param part the part to be modified
+     * @param windowLabelText the main window label text to set
+     */
     public ModifyPartController(Part part, String windowLabelText) {
         this.part = part;
         this.partWindowLabelText = windowLabelText;
@@ -85,25 +91,36 @@ public class ModifyPartController implements Initializable {
         partIndex = inv.getAllParts().indexOf(part);
         if (part instanceof InHouse) {
             inHouseRadioBtn.setSelected(true);
-            dynamicPartLabel.setText(IN_HOUSE_LABEL);
+            dynamicLabel.setText(IN_HOUSE_LABEL);
         }
         if (part instanceof Outsourced) {
             outsourcedRadioBtn.setSelected(true);
-            dynamicPartLabel.setText(OUTSOURCED_LABEL);
+            dynamicLabel.setText(OUTSOURCED_LABEL);
         }
         setTextFormatters();
         autoFillForm(part);
         initInvalidationListeners();
     }//END of initialize
 
+    /**
+     * sets <code>dynamicLabel</code> text to "machine id" and sets
+     * integer filter on corresponding textField. Also
+     * clears the textField if it expects a company name.
+     *
+     */
     @FXML private void onInHouseRadioClick() {
-        dynamicPartLabel.setText(IN_HOUSE_LABEL);
+        dynamicLabel.setText(IN_HOUSE_LABEL);
         dynamicPartTextfield.clear();
         dynamicPartTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
     }
 
+    /**
+     * sets dynamic label text to "company name" and sets
+     * string filter on corresponding textField. Also
+     * clears the textField if it expects a machine id.
+     */
     @FXML private void onOutsourcedRadioClick() {
-        dynamicPartLabel.setText(OUTSOURCED_LABEL);
+        dynamicLabel.setText(OUTSOURCED_LABEL);
         dynamicPartTextfield.clear();
         dynamicPartTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
     }
@@ -195,12 +212,12 @@ public class ModifyPartController implements Initializable {
         partMinTextfield.setText(String.valueOf(p.getMin()));
         if (p instanceof InHouse) {
             dynamicPartTextfield.setText(String.valueOf(((InHouse) p).getMachineId()));
-            dynamicPartLabel.setText(IN_HOUSE_LABEL);
+            dynamicLabel.setText(IN_HOUSE_LABEL);
             inHouseRadioBtn.setSelected(true);
         }
         if (p instanceof Outsourced) {
             dynamicPartTextfield.setText(((Outsourced) p).getCompanyName());
-            dynamicPartLabel.setText(OUTSOURCED_LABEL);
+            dynamicLabel.setText(OUTSOURCED_LABEL);
             outsourcedRadioBtn.setSelected(true);
         }
     }

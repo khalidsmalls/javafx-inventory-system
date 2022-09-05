@@ -30,6 +30,11 @@ public class MainWindowController implements Initializable {
     private NumberFormat currencyFormat;
     private final Stage stage;
 
+    /**
+     * class constructor -
+     * gets inventory instance and creates new stage
+     * to pass to part and product windows
+     */
     public MainWindowController() {
         inv = Inventory.getInstance();
         stage = new Stage();
@@ -42,6 +47,14 @@ public class MainWindowController implements Initializable {
         currencyFormat = NumberFormat.getCurrencyInstance();
     }
 
+    /**
+     * first, attempts to lookup part by id. If this is successful the part is
+     * added as the sole member of an observable list created and set to the
+     * parts table. if unsuccessful lookup by name is attempted. If a part or
+     * parts are found that match the search string, they are added to an
+     * observable list created and set to the parts table. Otherwise,
+     * a "part not found" placeholder is displayed.
+     */
     @FXML private void onPartSearch() {
         partsTable.setPlaceholder(new Text("Part not found"));
         ObservableList<Part> partList = FXCollections.observableArrayList();
@@ -69,6 +82,14 @@ public class MainWindowController implements Initializable {
 
     }
 
+    /**
+     * first, attempts to lookup product by id. If this is successful the product is
+     * added as the sole member of an observable list created and set to the
+     * product table. if unsuccessful lookup by name is attempted. If one or more
+     * products are found that match the search string, they are added to an
+     * observable list created and set to the product table. Otherwise,
+     * a "product not found" placeholder is displayed.
+     */
     @FXML private void onProductSearch() {
         ObservableList<Product> productList = FXCollections.observableArrayList();
         productsTable.setPlaceholder(new Text("Product not found"));
@@ -95,6 +116,10 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    /**
+     * <code>FXMLLoader</code> instance displays <code>partWindow</code> and assigns
+     * <code>AddPartController</code> to it.
+     */
     @FXML private void onAddPart() {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(new AddPartController("Add Part"));
@@ -110,11 +135,15 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    /**
+     * <code>FXMLLoader</code> instance displays <code>partWindow</code> and assigns
+     * <code>ModifyPartController</code> to it.
+     */
     @FXML private void onModifyPart() {
         Part p = partsTable.getSelectionModel().getSelectedItem();
         if (p != null) {
             FXMLLoader loader = new FXMLLoader();
-            loader.setController(new ModifyPartController(p, "Modify Product"));
+            loader.setController(new ModifyPartController(p, "Modify Part"));
             loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/partWindow.fxml"));
 
             try {
@@ -130,6 +159,9 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    /**
+     * attempts to delete a selected part. prompts user for confirmation.
+     */
     @FXML private void onDeletePart() {
         try {
             Part p = (Part) partsTable.getSelectionModel().getSelectedItem();
@@ -143,6 +175,10 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    /**
+     * <code>FXMLLoader</code> instance displays <code>productWindow</code> and assigns
+     * <code>AddProductController</code> to it.
+     */
     @FXML private void onAddProduct() {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(new AddProductController("Add Product"));
@@ -158,6 +194,10 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    /**
+     * <code>FXMLLoader</code> instance displays <code>productWindow</code> and assigns
+     * <code>ModifyProductController</code> to it.
+     */
     @FXML private void onModifyProduct() {
         Product p = productsTable.getSelectionModel().getSelectedItem();
         if (p != null) {
@@ -178,6 +218,11 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    /**
+     * attempts to delete a selected product. prompts the user for confirmation.
+     * also will alert user if he/she attempts to delete a product that has
+     * associated parts and abort.
+     */
     @FXML private void onDeleteProduct() {
         try {
             Product p = (Product)productsTable.getSelectionModel().getSelectedItem();
@@ -195,11 +240,16 @@ public class MainWindowController implements Initializable {
         }
     }
 
+    /**
+     * closes window
+     * @param e allows access to the stage, so that it may be closed
+     */
    @FXML private void onClose(ActionEvent e) {
        ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
 
    }
 
+   //initialize part table
    private void initPartTable() {
        partsTable.setItems(inv.getAllParts());
        TableColumn<Part, Integer> partIdColumn = new TableColumn<Part, Integer>("Part ID");
@@ -236,6 +286,7 @@ public class MainWindowController implements Initializable {
        });
    }//END of initPartTable
 
+    //initialize product table
     private void initProductTable() {
         productsTable.setItems(inv.getAllProducts());
         TableColumn<Product, Integer> productIdColumn = new TableColumn<Product, Integer>("Product ID");
