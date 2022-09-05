@@ -103,10 +103,11 @@ public class ModifyPartController implements Initializable {
     }//END of initialize
 
     /**
+     * specifies an <code>InHouse</code> part.
+     * <p>
      * sets <code>dynamicLabel</code> text to "machine id" and sets
      * integer filter on corresponding textField. Also
      * clears the textField if it expects a company name.
-     *
      */
     @FXML private void onInHouseRadioClick() {
         dynamicLabel.setText(IN_HOUSE_LABEL);
@@ -115,6 +116,8 @@ public class ModifyPartController implements Initializable {
     }
 
     /**
+     * specifies an <code>outsourced</code> part.
+     * <p>
      * sets dynamic label text to "company name" and sets
      * string filter on corresponding textField. Also
      * clears the textField if it expects a machine id.
@@ -125,6 +128,24 @@ public class ModifyPartController implements Initializable {
         dynamicPartTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
     }
 
+    /**
+     * saves a modified part or creates a new part if the user selects
+     * the other part type, and saves the part to the same index.
+     * <p>
+     * First, validates fields are populated and that min stock
+     * entered by user is less than or equal to inventory and inventory
+     * is less than or equal to max stock using helper methods
+     * <code>validateFields</code> and <code>validateInventory</code>.
+     * <p>
+     * If user changes the part type with a radio toggle,
+     * <code>createNewPart</code> is called using the same part_id
+     * for the created part so that it may be re-inserted into the list
+     * at the same index. Otherwise, <code>modifyPart</code> helper method
+     * is called to modify the part through setters.
+     *
+     * @param event allows access to the stage, so that it may be closed
+     *              after part is saved
+     */
     @FXML private void onPartSave(ActionEvent event) {
         if (validateFields()) {
             if (validateInventory()) {
@@ -147,6 +168,8 @@ public class ModifyPartController implements Initializable {
         }
     }
 
+    // onPartSave helper method
+    // modifies part using setters
     private void modifyPart() {
         if (partNameModified) {
             part.setName(partNameTextfield.getText());
@@ -174,8 +197,13 @@ public class ModifyPartController implements Initializable {
         inv.updatePart(partIndex, part);
     }
 
+    /*
+        onPartSave helper method.
+        user changed part type from in-house to outsourced
+        or outsourced to in-house.
+    */
     private void createNewPart() {
-        Part updatedPart;
+        Part updatedPart = null;
         int newPartId = part.getId();
         String newPartName = partNameTextfield.getText();
         double newPartPrice = Double.parseDouble(partPriceTextfield.getText());
@@ -189,20 +217,33 @@ public class ModifyPartController implements Initializable {
                     newPartId, newPartName, newPartPrice, newPartInv,
                     newPartMin, newPartMax, newPartMachineId
             );
-        } else {
+        }
+        if (toggleGroup.getSelectedToggle() == outsourcedRadioBtn) {
             String newPartCompanyName = dynamicPartTextfield.getText();
             updatedPart = new Outsourced(
                     newPartId, newPartName, newPartPrice, newPartInv,
                     newPartMin, newPartMax, newPartCompanyName
             );
         }
-        inv.updatePart(partIndex, updatedPart);
+        if (updatedPart != null) {
+            inv.updatePart(partIndex, updatedPart);
+        }
     }
 
+    /**
+     * closes window
+     *
+     * @param e event object - allows access to the stage
+     *          so that it may be closed
+     */
     @FXML private void onPartCancel(ActionEvent e) {
         ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
     }
 
+    /*
+        helper method used to populate textFields on
+        initialization with part data to be modified.
+     */
     private void autoFillForm(Part p) {
         partNameTextfield.setText(p.getName());
         partIdTextfield.setText(String.valueOf(p.getId()));
@@ -222,6 +263,9 @@ public class ModifyPartController implements Initializable {
         }
     }
 
+    /*
+        validates all fields are populated
+     */
     public boolean validateFields() {
         return !(partNameTextfield.getText().equals("") || partNameTextfield.getText().length() == 0 ||
                 partPriceTextfield.getText().equals("") || partPriceTextfield.getText().length() == 0 ||
@@ -230,11 +274,18 @@ public class ModifyPartController implements Initializable {
                 partMinTextfield.getText().equals("") || partMinTextfield.getText().length() == 0);
     }
 
+    /*
+        validates user-entered min stock is less that or equal to inventory and inventory is
+        less than or equal to max stock entered by user.
+     */
     public boolean validateInventory() {
         return Integer.parseInt(partMinTextfield.getText()) <= Integer.parseInt(partInvTextfield.getText()) &&
                 (Integer.parseInt(partInvTextfield.getText()) <= Integer.parseInt(partMaxTextfield.getText()));
     }
 
+    /*
+        clears all textfields
+     */
     private void clearFields() {
         partNameTextfield.clear();
         partPriceTextfield.clear();
@@ -244,6 +295,10 @@ public class ModifyPartController implements Initializable {
         dynamicPartTextfield.clear();
     }
 
+    /*
+        sets regex filters on textFields to restrict user input to valid
+        data
+     */
     public void setTextFormatters() {
         partInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
         partMaxTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
@@ -259,6 +314,13 @@ public class ModifyPartController implements Initializable {
 
     }
 
+    /*
+        initializes invalidation listeners and adds them to textFields.
+        this helper method is called during initialization, however, the
+        invalidation listeners are of interest to the modifyPart helper
+        method called by onPartSave and used to flag the fields that the user
+        has modified.
+     */
     public void initInvalidationListeners() {
         partNameModified = false;
         partPriceModified = false;

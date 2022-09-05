@@ -61,6 +61,7 @@ public class AddPartController implements Initializable {
     };
 
     /**
+     * class constructor
      *
      * @param partWindowLabelText the text to set the main window label to
      */
@@ -84,10 +85,11 @@ public class AddPartController implements Initializable {
     }
 
     /**
+     * specifies an <code>InHouse</code> part.
+     * <p>
      * sets dynamic label text to "machine id" and sets
      * integer filter on corresponding textField. Also
      * clears the textField if it expects a company name.
-     *
      */
     @FXML private void onInHouseRadioClick() {
         dynamicLabel.setText(IN_HOUSE_LABEL);
@@ -96,6 +98,8 @@ public class AddPartController implements Initializable {
     }
 
     /**
+     * specifies and <code>outsourced</code> part.
+     * <p>
      * sets dynamic label text to "company name" and sets
      * string filter on corresponding textField. Also
      * clears the textField if it expects a machine id.
@@ -107,9 +111,13 @@ public class AddPartController implements Initializable {
     }
 
     /**
-     * validates all fields are populated with relevant data before
+     * attempts to add a <code>Part</code> to <code>allParts</code>.
+     * <p>
+     * validates all fields are populated with relevant data and
+     * that user-entered min stock is less than or equal to inventory
+     * and inventory is less than or equal to max stock before
      * creating an <code>InHouse</code> or <code>Outsourced</code>
-     * part and adding it to inventory
+     * part and adding it to <code>allParts</code>.
      *
      * @param event allows access to the stage, so that it may be
      *              closed after the part is added to inventory
@@ -168,10 +176,9 @@ public class AddPartController implements Initializable {
         ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
     }
 
-    /**
-     * validates all fields are populated
-     *
-     * @return <code>true</code> if all fields are populated
+    /*
+     * helper method validates all fields are populated
+     * returns true if all fields are populated
      */
     private boolean validateFields() {
         return !(partNameTextfield.getText().equals("") || partNameTextfield.getText().length() == 0 ||
@@ -181,12 +188,9 @@ public class AddPartController implements Initializable {
                 partMinTextfield.getText().equals("") || partMinTextfield.getText().length() == 0);
     }
 
-    /**
-     * validates <code>min</code> is less than or equal to <code>inv</code> and
-     * <code>inv</code> is less than or equal to <code>max</code>
-     *
-     * @return <code>true</code> if <code>min</code> is less than or equal to
-     * <code>inv</code> and <code>inv</code> is less than or equal to <code>max</code>
+    /*
+     * returns true if user-entered min stock is less than or equal to inventory and inventory
+     * is less than or equal to max stock.
      */
     private boolean validateInventory() {
         return Integer.parseInt(partMinTextfield.getText()) <= Integer.parseInt(partInvTextfield.getText()) &&
@@ -194,7 +198,7 @@ public class AddPartController implements Initializable {
     }
 
     /*
-     * clears all textFields
+     * helper method clears all textFields
      */
     private void clearFields() {
         partNameTextfield.clear();
@@ -205,8 +209,8 @@ public class AddPartController implements Initializable {
         dynamicPartTextfield.clear();
     }
 
-    /**
-     * sets text formatters on textFields to ensure valid input
+    /*
+     * helper method sets text formatters on textFields to ensure valid input
      */
     private void setTextFormatters() {
         partInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));

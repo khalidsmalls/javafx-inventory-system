@@ -76,6 +76,12 @@ public class ModifyProductController implements Initializable {
         return null;
     };
 
+    /**
+     * class constructor
+     *
+     * @param product the product to be modified
+     * @param windowLabelText the main window label text to set
+     */
     public ModifyProductController(Product product, String windowLabelText) {
         this.product = product;
         this.windowLabelText = windowLabelText;
@@ -96,6 +102,16 @@ public class ModifyProductController implements Initializable {
         initInvalidationListeners();
     }
 
+    /**
+     * searches for a <code>Part</code> by id number or name.
+     * <p>
+     * first, attempts to lookup part by id. If this is successful the part is
+     * added as the sole member of an observable list created and set to the
+     * parts table. if unsuccessful lookup by name is attempted. If a part or
+     * parts are found that match the search string, they are added to an
+     * observable list created and set to the parts table. Otherwise,
+     * a "part not found" placeholder is displayed.
+     */
     @FXML private void onPartSearch() {
         String searchString = partSearchTextfield.getText();
         boolean isInt = true;
@@ -121,6 +137,12 @@ public class ModifyProductController implements Initializable {
         partsTable.setPlaceholder(new Text(PART_NOT_FOUND_MSG));
     }
 
+    /**
+     * adds a part to <code>assocPartsTable</code> <code>Tableview</code>.
+     * <p>
+     * The part is not added to this
+     * product's associated parts list until <code>onSave</code> method is successfully executed.
+     */
     @FXML private void onAddAssocPart() {
         if (partsTable.getSelectionModel().getSelectedItems().size() > 1) {
             product.addAssociatedParts(partsTable.getSelectionModel().getSelectedItems());
@@ -129,6 +151,14 @@ public class ModifyProductController implements Initializable {
         }
     }
 
+    /**
+     * removes one or more associated parts from the <code>assocPartsTable</code>
+     * <code>TableView</code>.
+     * <p>
+     * Prompts the user for confirmation before removing parts,
+     * however, the updated parts are not saved until the <code>onSave</code> method is successfully
+     * executed.
+     */
     @FXML private void onRemoveAssocPart() {
         if (assocPartsTable.getSelectionModel().getSelectedItems().size() > 1) {
             //user selected multiple associated parts
@@ -164,6 +194,16 @@ public class ModifyProductController implements Initializable {
         }
     }//END of onRemoveAssocPart
 
+    /**
+     * saves a modified product.
+     * <p>
+     * modifies fields with setters,
+     * always saves product with same <code>id</code>
+     * at same index in <code>allProducts</code> list.
+     *
+     * @param event the object that allows access to the stage so that
+     *              it may be closed after the product is saved
+     */
     @FXML private void onSave(ActionEvent event) {
         if (validateFields()) {
             if(validateInventory()) {
@@ -197,10 +237,19 @@ public class ModifyProductController implements Initializable {
         }
     }
 
+    /**
+     * closes window
+     *
+     * @param e the object used to access the stage so that it may
+     *          be closed
+     */
     @FXML private void onClose(ActionEvent e) {
         ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
     }
 
+    /*
+        helper method initializes both tableviews
+     */
     private void initTableViews() {
         partsTable.setItems(inv.getAllParts());
         partsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -243,6 +292,9 @@ public class ModifyProductController implements Initializable {
         });
     }
 
+    /*
+        helper method sets text formatters on textfields to ensure valid input
+     */
     private void setTextFormatters() {
         productInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
         productMaxTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
@@ -251,6 +303,9 @@ public class ModifyProductController implements Initializable {
         productNameTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
     }
 
+    /*
+        helper method populates textFields with product information on initialization
+     */
     private void populateFields() {
         productIdTextfield.setText(String.valueOf(product.getId()));
         productNameTextfield.setText(product.getName());
@@ -260,6 +315,9 @@ public class ModifyProductController implements Initializable {
         productMinTextfield.setText(String.valueOf(product.getMin()));
     }
 
+    /*
+        helper method validates textFields are populated with data
+     */
     private boolean validateFields() {
         return !(productNameTextfield.getText().equals("") || productNameTextfield.getText().length() == 0 ||
                 productPriceTextfield.getText().equals("") || productPriceTextfield.getText().length() == 0 ||
@@ -268,11 +326,18 @@ public class ModifyProductController implements Initializable {
                 productMinTextfield.getText().equals("") || productMinTextfield.getText().length() == 0);
     }
 
+    /*
+        helper method validates user entered min stock is less than or equal to inventory and inventory is
+        less than or equal to max stock
+     */
     private boolean validateInventory() {
         return Integer.parseInt(productMinTextfield.getText()) <= Integer.parseInt(productInvTextfield.getText()) &&
                 (Integer.parseInt(productInvTextfield.getText()) <= Integer.parseInt(productMaxTextfield.getText()));
     }
 
+    /*
+        helper method clears all textFields
+     */
     private void clearFields() {
         productNameTextfield.clear();
         productPriceTextfield.clear();
@@ -281,6 +346,12 @@ public class ModifyProductController implements Initializable {
         productMaxTextfield.clear();
     }
 
+    /*
+        initializes invalidation listeners and adds them to textFields.
+        this helper method is called during initialization, however, the
+        invalidation listeners are of interest to the onSave method and
+        used to flag the fields that the user has modified.
+     */
     public void initInvalidationListeners() {
         productNameModified = false;
         productPriceModified = false;

@@ -70,6 +70,7 @@ public class AddProductController implements Initializable {
     };
 
     /**
+     * class constructor
      *
      * @param productWindowLabelText the text to set main window label to
      */
@@ -92,6 +93,8 @@ public class AddProductController implements Initializable {
     }
 
     /**
+     * Searches for a part by id number or name.
+     * <p>
      * first, attempts to look up part by id. If this results in a <code>NumberFormatException</code>
      * then lookup-by-name is attempted. If the part is found it is added to a new observableList
      * which the parts table is set to. The part is then selected. Since lookup-by-name
@@ -124,8 +127,10 @@ public class AddProductController implements Initializable {
     }
 
     /**
-     * adds a part to assocParts tableview. The part is not added to this
-     * product's associated parts list until <code>onSave</code> is successfully executed.
+     * adds a part to assocParts tableview.
+     * <p>
+     * The part is not added to this product's associated parts
+     * list until <code>onSave</code> is successfully executed.
      */
     @FXML private void onAddAssocPart() {
         if (partsTable.getSelectionModel().getSelectedItems().size() > 1) {
@@ -136,9 +141,10 @@ public class AddProductController implements Initializable {
     }
 
     /**
-     * removes a part from assocParts tableview. The part is not removed from this
-     * product's associated parts list until <code>onSave</code> is successfully
-     * executed.
+     * removes a part from assocParts tableview.
+     * <p>
+     * The part is not removed from this product's associated parts list
+     * until <code>onSave</code> is successfully executed.
      */
     @FXML private void onRemoveAssocPart() {
         if (assocPartsTable.getSelectionModel().getSelectedItems().size() > 1) {

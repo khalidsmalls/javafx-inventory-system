@@ -48,6 +48,8 @@ public class MainWindowController implements Initializable {
     }
 
     /**
+     * searches for a part by id number or name.
+     * <p>
      * first, attempts to lookup part by id. If this is successful the part is
      * added as the sole member of an observable list created and set to the
      * parts table. if unsuccessful lookup by name is attempted. If a part or
@@ -83,6 +85,8 @@ public class MainWindowController implements Initializable {
     }
 
     /**
+     * searches for a product by id number or name.
+     * <p>
      * first, attempts to lookup product by id. If this is successful the product is
      * added as the sole member of an observable list created and set to the
      * product table. if unsuccessful lookup by name is attempted. If one or more
@@ -117,6 +121,8 @@ public class MainWindowController implements Initializable {
     }
 
     /**
+     * displays the "addPart" window
+     * <p>
      * <code>FXMLLoader</code> instance displays <code>partWindow</code> and assigns
      * <code>AddPartController</code> to it.
      */
@@ -136,6 +142,8 @@ public class MainWindowController implements Initializable {
     }
 
     /**
+     * displays the "modifyPart" window.
+     * <p>
      * <code>FXMLLoader</code> instance displays <code>partWindow</code> and assigns
      * <code>ModifyPartController</code> to it.
      */
@@ -160,7 +168,11 @@ public class MainWindowController implements Initializable {
     }
 
     /**
-     * attempts to delete a selected part. prompts user for confirmation.
+     * attempts to delete a selected <code>Part</code>.
+     * <p>
+     * prompts user for confirmation before deleting part.
+     * prompts user if he/she failed to select a part to
+     * be deleted.
      */
     @FXML private void onDeletePart() {
         try {
@@ -176,6 +188,8 @@ public class MainWindowController implements Initializable {
     }
 
     /**
+     * displays the "addProduct" window.
+     * <p>
      * <code>FXMLLoader</code> instance displays <code>productWindow</code> and assigns
      * <code>AddProductController</code> to it.
      */
@@ -195,6 +209,8 @@ public class MainWindowController implements Initializable {
     }
 
     /**
+     * displays the "modifyProduct" window.
+     * <p>
      * <code>FXMLLoader</code> instance displays <code>productWindow</code> and assigns
      * <code>ModifyProductController</code> to it.
      */
@@ -219,7 +235,9 @@ public class MainWindowController implements Initializable {
     }
 
     /**
-     * attempts to delete a selected product. prompts the user for confirmation.
+     * attempts to delete the selected product.
+     * <p>
+     * prompts the user for confirmation.
      * also will alert user if he/she attempts to delete a product that has
      * associated parts and abort.
      */
@@ -242,6 +260,7 @@ public class MainWindowController implements Initializable {
 
     /**
      * closes window
+     *
      * @param e allows access to the stage, so that it may be closed
      */
    @FXML private void onClose(ActionEvent e) {
