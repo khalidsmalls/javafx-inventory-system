@@ -108,9 +108,11 @@ public class ModifyProductController implements Initializable {
             int id = Integer.parseInt(searchString);
             Part p = inv.lookupPart(id);
             ObservableList<Part> partList = FXCollections.observableArrayList();
-            partList.add(p);
+            if (p != null) {
+                partList.add(p);
+                partsTable.getSelectionModel().select(p);
+            }
             partsTable.setItems(partList);
-            partsTable.getSelectionModel().select(p);
         } catch (NumberFormatException e) {
             isInt = false;
         }
