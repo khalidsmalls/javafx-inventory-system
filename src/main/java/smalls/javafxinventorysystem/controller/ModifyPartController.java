@@ -33,16 +33,12 @@ public class ModifyPartController implements Initializable {
     private String partWindowLabelText;
     private Part part;
     private int partIndex;
-    private InvalidationListener partNameChangeListener;
-    private InvalidationListener partPriceChangeListener;
-    private InvalidationListener partInvChangeListener;
-    private InvalidationListener partMinChangeListener;
-    private InvalidationListener partMaxChangeListener;
     private boolean partNameModified;
     private boolean partPriceModified;
     private boolean partInvModified;
     private boolean partMinModified;
     private boolean partMaxModified;
+    private boolean dynamicFieldModified;
 
     /**
      * the following functional interfaces restrict form input to valid
@@ -72,10 +68,6 @@ public class ModifyPartController implements Initializable {
         return null;
     };
 
-
-    public ModifyPartController() {
-    }
-
     public ModifyPartController(Part part, String windowLabelText) {
         this.part = part;
         this.partWindowLabelText = windowLabelText;
@@ -87,15 +79,20 @@ public class ModifyPartController implements Initializable {
         inv = Inventory.getInstance();
         ToggleGroup toggleGroup = new ToggleGroup();
         toggleGroup.getToggles().addAll(inHouseRadioBtn, outsourcedRadioBtn);
-        inHouseRadioBtn.setSelected(true);
         partIdTextfield.setEditable(false);
         partIdTextfield.setText(String.valueOf(part.getId()));
         partIndex = inv.getAllParts().indexOf(part);
+        if (part instanceof InHouse) {
+            inHouseRadioBtn.setSelected(true);
+            dynamicPartLabel.setText(IN_HOUSE_LABEL);
+        }
+        if (part instanceof Outsourced) {
+            outsourcedRadioBtn.setSelected(true);
+            dynamicPartLabel.setText(OUTSOURCED_LABEL);
+        }
         setTextFormatters();
         autoFillForm(part);
-        initModifiedPropertyBooleans();
         initInvalidationListeners();
-        addInvalidationListeners();
     }//END of initialize
 
     @FXML private void onInHouseRadioClick() {
@@ -128,6 +125,14 @@ public class ModifyPartController implements Initializable {
                 if (partMaxModified) {
                     part.setMax(Integer.parseInt(partMaxTextfield.getText()));
                 }
+                if (dynamicFieldModified) {
+                    if (part instanceof InHouse) {
+                        ((InHouse) part).setMachineId(Integer.parseInt(dynamicPartTextfield.getText()));
+                    }
+                    if (part instanceof Outsourced) {
+                        ((Outsourced) part).setCompanyName(dynamicPartTextfield.getText());
+                    }
+                }
                 inv.updatePart(partIndex, part);
                 clearFields();
                 ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
@@ -157,7 +162,8 @@ public class ModifyPartController implements Initializable {
             dynamicPartTextfield.setText(String.valueOf(((InHouse) p).getMachineId()));
             dynamicPartLabel.setText(IN_HOUSE_LABEL);
             inHouseRadioBtn.setSelected(true);
-        } else {
+        }
+        if (p instanceof Outsourced) {
             dynamicPartTextfield.setText(((Outsourced) p).getCompanyName());
             dynamicPartLabel.setText(OUTSOURCED_LABEL);
             outsourcedRadioBtn.setSelected(true);
@@ -186,63 +192,73 @@ public class ModifyPartController implements Initializable {
         dynamicPartTextfield.clear();
     }
 
-    public void initModifiedPropertyBooleans() {
-        partNameModified = false;
-        partPriceModified = false;
-        partInvModified = false;
-        partMinModified = false;
-        partMaxModified = false;
-    }
-
     public void setTextFormatters() {
         partInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
         partMaxTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
         partMinTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
         partPriceTextfield.setTextFormatter(new TextFormatter<Double>(doubleFilter));
         partNameTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
-        dynamicPartTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
+        if (part instanceof InHouse) {
+            dynamicPartTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
+        }
+        if (part instanceof Outsourced) {
+            dynamicPartTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
+        }
+
     }
 
     public void initInvalidationListeners() {
-        partNameChangeListener = new InvalidationListener() {
+        partNameModified = false;
+        partPriceModified = false;
+        partInvModified = false;
+        partMinModified = false;
+        partMaxModified = false;
+        dynamicFieldModified = false;
+        InvalidationListener partNameChangeListener = new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
                 partNameModified = true;
             }
         };
-        partPriceChangeListener = new InvalidationListener() {
+        InvalidationListener partPriceChangeListener = new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
                 partPriceModified = true;
             }
         };
-        partInvChangeListener = new InvalidationListener() {
+        InvalidationListener partInvChangeListener = new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
                 partInvModified = true;
             }
         };
-        partMinChangeListener = new InvalidationListener() {
+        InvalidationListener partMinChangeListener = new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
                 partMinModified = true;
             }
         };
-        partMaxChangeListener = new InvalidationListener() {
+        InvalidationListener partMaxChangeListener = new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
                 partMaxModified = true;
             }
         };
-    }
+        InvalidationListener dynamicFieldChangeListener = new InvalidationListener() {
+            @Override
+            public void invalidated(Observable observable) {
+                dynamicFieldModified = true;
+            }
+        };
 
-    public void addInvalidationListeners() {
         partNameTextfield.textProperty().addListener(partNameChangeListener);
         partPriceTextfield.textProperty().addListener(partPriceChangeListener);
         partInvTextfield.textProperty().addListener(partInvChangeListener);
         partMinTextfield.textProperty().addListener(partMinChangeListener);
         partMaxTextfield.textProperty().addListener(partMaxChangeListener);
+        dynamicPartTextfield.textProperty().addListener(dynamicFieldChangeListener);
     }
+
 }
 
 

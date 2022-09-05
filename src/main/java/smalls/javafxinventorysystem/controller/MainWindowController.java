@@ -4,17 +4,19 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import smalls.javafxinventorysystem.model.*;
-import smalls.javafxinventorysystem.view.AddPartWindowLoader;
 import smalls.javafxinventorysystem.view.AddProductWindowLoader;
-import smalls.javafxinventorysystem.view.ModifyPartWindowLoader;
 import smalls.javafxinventorysystem.view.ModifyProductWindowLoader;
 
+import java.io.IOException;
 import java.net.URL;
 import java.text.NumberFormat;
 import java.util.Arrays;
@@ -43,61 +45,88 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML private void onPartSearch() {
+        partsTable.setPlaceholder(new Text("Part not found"));
+        ObservableList<Part> partList = FXCollections.observableArrayList();
         String searchString = partSearchField.getText();
         boolean isInt = true;
         try {
             int id = Integer.parseInt(searchString);
             Part p = inv.lookupPart(id);
-            ObservableList<Part> partList = FXCollections.observableArrayList();
-            partList.add(p);
+            if (p != null) {
+                partList.add(p);
+                partsTable.getSelectionModel().select(p);
+            }
             partsTable.setItems(partList);
-            partsTable.getSelectionModel().select(p);
+
         } catch (NumberFormatException e) {
             isInt = false;
         }
         if (!isInt) {
-            ObservableList<Part> partList = inv.lookupPart(searchString);
+            partList = inv.lookupPart(searchString);
             partsTable.setItems(partList);
             if (partList.size() == 1) {
                 partsTable.getSelectionModel().select(partList.get(0));
             }
         }
-        partsTable.setPlaceholder(new Text("Part not found"));
+
     }
 
     @FXML private void onProductSearch() {
+        ObservableList<Product> productList = FXCollections.observableArrayList();
+        productsTable.setPlaceholder(new Text("Product not found"));
         String searchString = productSearchField.getText();
         boolean isInt = true;
         try {
             int id = Integer.parseInt(searchString);
             Product p = inv.lookupProduct(id);
-            ObservableList<Product> productList = FXCollections.observableArrayList();
-            productList.add(p);
+            if (p != null) {
+                productList.add(p);
+                productsTable.getSelectionModel().select(p);
+            }
             productsTable.setItems(productList);
-            productsTable.getSelectionModel().select(p);
+
         } catch (NumberFormatException e) {
             isInt = false;
         }
         if (!isInt) {
-            ObservableList<Product> productList = inv.lookupProduct(searchString);
+            productList = inv.lookupProduct(searchString);
             productsTable.setItems(productList);
             if (productList.size() == 1) {
                 productsTable.getSelectionModel().select(productList.get(0));
             }
         }
-        productsTable.setPlaceholder(new Text("Part not found"));
     }
 
     @FXML private void onAddPart() {
-        AddPartWindowLoader win = new AddPartWindowLoader(stage);
-        win.show();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setController(new AddPartController("Add Part"));
+        loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/partWindow.fxml"));
+
+        try {
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            new Alert(Alert.AlertType.ERROR, "There was a problem loading the window").showAndWait();
+        }
     }
 
     @FXML private void onModifyPart() {
         Part p = partsTable.getSelectionModel().getSelectedItem();
         if (p != null) {
-            ModifyPartWindowLoader win = new ModifyPartWindowLoader(stage, p);
-            win.show();
+            FXMLLoader loader = new FXMLLoader();
+            loader.setController(new ModifyPartController(p, "Modify Product"));
+            loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/partWindow.fxml"));
+
+            try {
+                Parent root = loader.load();
+                Scene scene = new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
             new Alert(Alert.AlertType.ERROR, "Please select a part").showAndWait();
         }
