@@ -13,6 +13,7 @@ import smalls.javafxinventorysystem.model.Inventory;
 import smalls.javafxinventorysystem.model.Part;
 import smalls.javafxinventorysystem.model.Product;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
@@ -41,6 +42,7 @@ public class AddProductController implements Initializable {
     @FXML private ObservableList<Part> assocParts;
     private Inventory inv;
     private final String productWindowLabelText;
+    private NumberFormat currencyFormat;
 
     //functional interfaces for restricting text input to valid characters
     private final UnaryOperator<TextFormatter.Change> integerFilter = change -> {
@@ -78,6 +80,7 @@ public class AddProductController implements Initializable {
         assocParts = FXCollections.observableArrayList();
         productIdTextfield.setEditable(false);
         productIdTextfield.setText(PRODUCT_ID_FIELD_TEXT);
+        currencyFormat = NumberFormat.getCurrencyInstance();
 
         setTextFormatters();
         initPartsTable();
@@ -170,6 +173,19 @@ public class AddProductController implements Initializable {
         partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         partInvCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         partPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        //set currency format on price cell
+        partPriceCol.setCellFactory(cell -> new TableCell<Part, Double>() {
+            @Override
+            protected void updateItem(Double price, boolean empty) {
+                super.updateItem(price, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(currencyFormat.format(price));
+                }
+            }
+        });
     }
 
     private void initAssocPartsTable() {
@@ -179,6 +195,19 @@ public class AddProductController implements Initializable {
         assocPartNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         assocPartInvCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         assocPartPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        //set currency format on price cell
+        assocPartPriceCol.setCellFactory(cell -> new TableCell<Part, Double>() {
+            @Override
+            protected void updateItem(Double price, boolean empty) {
+                super.updateItem(price, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(currencyFormat.format(price));
+                }
+            }
+        });
     }
 
     private void setTextFormatters() {

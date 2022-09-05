@@ -13,7 +13,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import smalls.javafxinventorysystem.model.*;
-import smalls.javafxinventorysystem.view.AddProductWindowLoader;
 import smalls.javafxinventorysystem.view.ModifyProductWindowLoader;
 
 import java.io.IOException;
@@ -146,15 +145,35 @@ public class MainWindowController implements Initializable {
     }
 
     @FXML private void onAddProduct() {
-        AddProductWindowLoader win = new AddProductWindowLoader(stage);
-        win.show();
+        FXMLLoader loader = new FXMLLoader();
+        loader.setController(new AddProductController("Add Product"));
+        loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/productWindow.fxml"));
+
+        try {
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML private void onModifyProduct() {
         Product p = productsTable.getSelectionModel().getSelectedItem();
         if (p != null) {
-            ModifyProductWindowLoader win = new ModifyProductWindowLoader(stage, p);
-            win.show();
+            FXMLLoader loader = new FXMLLoader();
+            loader.setController(new ModifyProductController(p, "Modify Product"));
+            loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/productWindow.fxml"));
+
+            try {
+                Parent root = loader.load();
+                Scene scene = new Scene(root);
+                this.stage.setScene(scene);
+                stage.show();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
             new Alert(Alert.AlertType.ERROR, "Please select a product").showAndWait();
         }

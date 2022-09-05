@@ -15,6 +15,7 @@ import smalls.javafxinventorysystem.model.Inventory;
 import smalls.javafxinventorysystem.model.Part;
 import smalls.javafxinventorysystem.model.Product;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
@@ -36,11 +37,11 @@ public class ModifyProductController implements Initializable {
     @FXML private TableColumn<Part,Integer> partIdCol;
     @FXML private TableColumn<Part,Integer> partNameCol;
     @FXML private TableColumn<Part,Integer> partInvCol;
-    @FXML private TableColumn<Part,Integer> partPriceCol;
+    @FXML private TableColumn<Part,Double> partPriceCol;
     @FXML private TableColumn<Part,Integer> assocPartIdCol;
     @FXML private TableColumn<Part,Integer> assocPartNameCol;
     @FXML private TableColumn<Part,Integer> assocPartInvCol;
-    @FXML private TableColumn<Part,Integer> assocPartPriceCol;
+    @FXML private TableColumn<Part,Double> assocPartPriceCol;
     private Inventory inv;
     private int productIndex;
     private boolean productNameModified;
@@ -48,6 +49,7 @@ public class ModifyProductController implements Initializable {
     private boolean productInvModified;
     private boolean productMinModified;
     private boolean productMaxModified;
+    private NumberFormat currencyFormat;
 
     //functional interfaces for restricting text input to valid characters
     private final UnaryOperator<TextFormatter.Change> integerFilter = change -> {
@@ -86,6 +88,7 @@ public class ModifyProductController implements Initializable {
         productIdTextfield.setEditable(false);
         productIdTextfield.setText(String.valueOf(product.getId()));
         productIndex = inv.getAllProducts().indexOf(product);
+        currencyFormat = NumberFormat.getCurrencyInstance();
 
         setTextFormatters();
         populateFields();
@@ -212,6 +215,32 @@ public class ModifyProductController implements Initializable {
         assocPartNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         assocPartInvCol.setCellValueFactory(new PropertyValueFactory<>("stock"));
         assocPartPriceCol.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        //set currency format on price cell
+        partPriceCol.setCellFactory(cell -> new TableCell<Part, Double>() {
+            @Override
+            protected void updateItem(Double price, boolean empty) {
+                super.updateItem(price, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(currencyFormat.format(price));
+                }
+            }
+        });
+
+        //set currency format on price cell
+        assocPartPriceCol.setCellFactory(cell -> new TableCell<Part, Double>() {
+            @Override
+            protected void updateItem(Double price, boolean empty) {
+                super.updateItem(price, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    setText(currencyFormat.format(price));
+                }
+            }
+        });
     }
 
     private void setTextFormatters() {
