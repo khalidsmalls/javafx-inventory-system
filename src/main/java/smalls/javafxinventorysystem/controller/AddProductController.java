@@ -17,6 +17,11 @@ import java.text.NumberFormat;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
+
+/**
+ * adds a new <code>Product</code> to the
+ * <code>allProducts</code> <code>ObservableList</code>.
+ */
 public class AddProductController implements Initializable {
 
     private static final String PRODUCT_ID_FIELD_TEXT = "Auto Gen- Disabled";
@@ -78,6 +83,16 @@ public class AddProductController implements Initializable {
         this.productWindowLabelText = productWindowLabelText;
     }
 
+    /**
+     * sets main window label text,
+     * gets inventory singleton object,
+     * sets product id textField non-editable,
+     * sets text formatters, initializes part
+     * and associated part tableviews.
+     *
+     * @param url not used
+     * @param resourceBundle not used at this time
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         productWindowLabel.setText(productWindowLabelText);
@@ -212,8 +227,8 @@ public class AddProductController implements Initializable {
         ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
     }
 
-    /*
-        initialize parts table
+    /**
+     * initializes parts tableview
      */
     private void  initPartsTable() {
         partsTable.setItems(inv.getAllParts());
@@ -237,8 +252,8 @@ public class AddProductController implements Initializable {
         });
     }
 
-    /*
-        helper method initializes associated parts table
+    /**
+     * initializes associated parts tableview
      */
     private void initAssocPartsTable() {
         assocPartsTable.setItems(assocParts);
@@ -262,8 +277,9 @@ public class AddProductController implements Initializable {
         });
     }
 
-    /*
-       helper method sets filters on textFields to restrict user-entered data to proper types
+    /**
+     * helper method sets filters on textFields to restrict user-entered data to proper types
+     *
      */
     private void setTextFormatters() {
         productInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
@@ -273,9 +289,12 @@ public class AddProductController implements Initializable {
         productNameTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
     }
 
-    /*
-       helper method validates all fields are populated
-       return true if all fields are populated
+    /**
+     *  helper method validates all fields are populated
+     *        return true if all fields are populated
+     *
+     * @return <code>true</code> if all fields are populated,
+     *          <code>false</code> otherwise.
      */
     private boolean validateFields() {
         return !(productNameTextfield.getText().equals("") || productNameTextfield.getText().length() == 0 ||
@@ -285,17 +304,20 @@ public class AddProductController implements Initializable {
                 productMinTextfield.getText().equals("") || productMinTextfield.getText().length() == 0);
     }
 
-    /*
-       helper method validates user-entered min stock is less than or equal to inventory
-       and inventory is less than or equal to max stock
+    /**
+     * helper method validates user-entered min stock is less than or equal to inventory
+     *        and inventory is less than or equal to max stock
+     *
+     * @return <code>true</code> if min is less than or equal to inventory and inventory is
+     *          less than or equal to max stock. <code>false</code> if not.
      */
     private boolean validateInventory() {
         return Integer.parseInt(productMinTextfield.getText()) <= Integer.parseInt(productInvTextfield.getText()) &&
                 (Integer.parseInt(productInvTextfield.getText()) <= Integer.parseInt(productMaxTextfield.getText()));
     }
 
-    /*
-        helper method clears form fields
+    /**
+     * helper method clears all form fields
      */
     private void clearFields() {
         productNameTextfield.clear();

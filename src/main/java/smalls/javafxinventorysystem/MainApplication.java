@@ -20,6 +20,11 @@ import java.io.IOException;
 public class MainApplication extends Application {
     Stage stage;
 
+    /**
+     * application start method.
+     *
+     * @param primaryStage the stage to build the main app window on
+     */
     @Override
     public void start(Stage primaryStage) {
 
@@ -41,6 +46,11 @@ public class MainApplication extends Application {
         }
     }
 
+    /**
+     * main method, launches application.
+     *
+     * @param args the arguments passed to the main method
+     */
     public static void main(String[] args) {
         launch();
     }

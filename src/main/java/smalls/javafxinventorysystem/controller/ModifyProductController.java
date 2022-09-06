@@ -20,6 +20,12 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
+
+/**
+ * attempts to modify a selected product
+ *
+ * @author Khalid Smalls
+ */
 public class ModifyProductController implements Initializable {
     private final Product product;
     private final String windowLabelText;
@@ -87,6 +93,15 @@ public class ModifyProductController implements Initializable {
         this.windowLabelText = windowLabelText;
     }
 
+    /**
+     * initializes product id textField as non-editable,
+     * sets window label text, gets product index, populates
+     * textFields with product data, initializes tableviews and
+     * sets invalidation listeners on textFields.
+     *
+     * @param url not used
+     * @param resourceBundle not used
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         productWindowLabel.setText(windowLabelText);
@@ -292,8 +307,8 @@ public class ModifyProductController implements Initializable {
         });
     }
 
-    /*
-        helper method sets text formatters on textfields to ensure valid input
+    /**
+     * helper method sets text formatters on textfields to ensure valid input
      */
     private void setTextFormatters() {
         productInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
@@ -303,8 +318,8 @@ public class ModifyProductController implements Initializable {
         productNameTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
     }
 
-    /*
-        helper method populates textFields with product information on initialization
+    /**
+     * helper method populates textFields with product information on initialization
      */
     private void populateFields() {
         productIdTextfield.setText(String.valueOf(product.getId()));
@@ -315,8 +330,11 @@ public class ModifyProductController implements Initializable {
         productMinTextfield.setText(String.valueOf(product.getMin()));
     }
 
-    /*
-        helper method validates textFields are populated with data
+    /**
+     *  helper method validates textFields are populated with data
+     *
+     * @return <code>true</code> if all textFields are populated with data,
+     *         <code>false</code> if not.
      */
     private boolean validateFields() {
         return !(productNameTextfield.getText().equals("") || productNameTextfield.getText().length() == 0 ||
@@ -326,17 +344,19 @@ public class ModifyProductController implements Initializable {
                 productMinTextfield.getText().equals("") || productMinTextfield.getText().length() == 0);
     }
 
-    /*
-        helper method validates user entered min stock is less than or equal to inventory and inventory is
-        less than or equal to max stock
+    /**
+     * helper method validates user entered min stock is less than or equal to inventory and inventory is
+     *         less than or equal to max stock
+     * @return <code>true</code> if min is less than or equal to inventory and inventory is less
+     *         than or equal to max. <code>false</code> otherwise.
      */
     private boolean validateInventory() {
         return Integer.parseInt(productMinTextfield.getText()) <= Integer.parseInt(productInvTextfield.getText()) &&
                 (Integer.parseInt(productInvTextfield.getText()) <= Integer.parseInt(productMaxTextfield.getText()));
     }
 
-    /*
-        helper method clears all textFields
+    /**
+     * helper method for clearing all textFields
      */
     private void clearFields() {
         productNameTextfield.clear();
@@ -346,11 +366,11 @@ public class ModifyProductController implements Initializable {
         productMaxTextfield.clear();
     }
 
-    /*
-        initializes invalidation listeners and adds them to textFields.
-        this helper method is called during initialization, however, the
-        invalidation listeners are of interest to the onSave method and
-        used to flag the fields that the user has modified.
+    /**
+     * initializes invalidation listeners and adds them to textFields.
+     * this helper method is called during initialization, however, the
+     * invalidation listeners are of interest to the onSave method and
+     * used to flag the fields that the user has modified.
      */
     public void initInvalidationListeners() {
         productNameModified = false;

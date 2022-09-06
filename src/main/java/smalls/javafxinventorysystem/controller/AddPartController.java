@@ -13,6 +13,13 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
+
+/**
+ *  adds an <code>InHouse</code> or <code>Outsourced</code>
+ *  part to <code>allParts</code> <code>ObservableList</code>.
+ *
+ * @author Khalid Smalls
+ */
 public class AddPartController implements Initializable {
     private static final String PART_ID_TEXTFIELD_TEXT = "Auto Gen- Disabled";
     private static final String IN_HOUSE_LABEL = "Machine ID";
@@ -32,10 +39,9 @@ public class AddPartController implements Initializable {
     private String partWindowLabelText;
     private ToggleGroup toggleGroup;
 
-    /*
-       the following functional interfaces restrict form input to valid
-       characters using regular expressions
-     */
+
+//       the following functional interfaces restrict form input to valid
+//       characters using regular expressions
     private final UnaryOperator<TextFormatter.Change> integerFilter = change -> {
         String newText = change.getControlNewText();
         if (newText.matches("([1-9][0-9]*)?")) {
@@ -69,6 +75,17 @@ public class AddPartController implements Initializable {
         this.partWindowLabelText = partWindowLabelText;
     }
 
+    /**
+     * initializes radio toggle buttons,
+     * sets selected toggle to in-house.
+     * sets dynamic label to machine-ic.
+     * sets part textField non-editable,
+     * sets main window label, and sets
+     * text formatters on textFields.
+     *
+     * @param url not used
+     * @param resourceBundle not used at this time
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         inv = Inventory.getInstance();
@@ -176,9 +193,11 @@ public class AddPartController implements Initializable {
         ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
     }
 
-    /*
-       helper method validates all fields are populated
-       returns true if all fields are populated
+    /**
+     * helper method validates all fields are populated when user
+     * clicks save button.
+     *
+     * @return <code>true</code> if all fields are populated, <code>false</code> if not
      */
     private boolean validateFields() {
         return !(partNameTextfield.getText().equals("") || partNameTextfield.getText().length() == 0 ||
@@ -188,17 +207,20 @@ public class AddPartController implements Initializable {
                 partMinTextfield.getText().equals("") || partMinTextfield.getText().length() == 0);
     }
 
-    /*
-        returns true if user-entered min stock is less than or equal to inventory and inventory
-        is less than or equal to max stock.
+    /**
+     * returns true if user-entered min stock is less than or equal to inventory and inventory
+     *         is less than or equal to max stock.
+     *
+     * @return <code>true</code> if min is less than or equal to inventory and inventory is less than
+     *          or equal to stock, <code>false</code> otherwise.
      */
     private boolean validateInventory() {
         return Integer.parseInt(partMinTextfield.getText()) <= Integer.parseInt(partInvTextfield.getText()) &&
                 (Integer.parseInt(partInvTextfield.getText()) <= Integer.parseInt(partMaxTextfield.getText()));
     }
 
-    /*
-        helper method clears all textFields
+    /**
+     * helper method clears all textFields
      */
     private void clearFields() {
         partNameTextfield.clear();
@@ -209,8 +231,8 @@ public class AddPartController implements Initializable {
         dynamicPartTextfield.clear();
     }
 
-    /*
-        helper method sets text formatters on textFields to ensure valid input
+    /**
+     *  helper method sets text formatters on textFields to ensure valid user input
      */
     private void setTextFormatters() {
         partInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));

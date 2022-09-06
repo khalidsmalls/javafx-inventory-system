@@ -15,6 +15,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
+/**
+ * attempts to modify a selected part
+ *
+ * @author Khalid Smalls
+ */
 public class ModifyPartController implements Initializable {
     private final String IN_HOUSE_LABEL = "Machine ID";
     private final String OUTSOURCED_LABEL = "Company Name";
@@ -80,6 +85,17 @@ public class ModifyPartController implements Initializable {
         this.partWindowLabelText = windowLabelText;
     }
 
+    /**
+     * initializes radio toggles, gets
+     * inventory instance, part index,
+     * initializes part id textfield as non-editable,
+     * sets text formatters on textfields,
+     * populates textFields with part data,
+     * sets invalidation listeners on textFields
+     *
+     * @param url not used
+     * @param resourceBundle not used
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         partWindowLabel.setText(partWindowLabelText);
@@ -168,8 +184,10 @@ public class ModifyPartController implements Initializable {
         }
     }
 
-    // onPartSave helper method
-    // modifies part using setters
+    /**
+     * onPartSave helper method,
+     * modifies part through setters.
+     */
     private void modifyPart() {
         if (partNameModified) {
             part.setName(partNameTextfield.getText());
@@ -197,11 +215,13 @@ public class ModifyPartController implements Initializable {
         inv.updatePart(partIndex, part);
     }
 
-    /*
-        onPartSave helper method.
-        user changed part type from in-house to outsourced
-        or outsourced to in-house.
-    */
+    /**
+     *   onPartSave helper method.
+     *
+     *   user changed part type from in-house to outsourced
+     *   or outsourced to in-house, so a new part is
+     *   created.
+     */
     private void createNewPart() {
         Part updatedPart = null;
         int newPartId = part.getId();
@@ -240,9 +260,12 @@ public class ModifyPartController implements Initializable {
         ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
     }
 
-    /*
-        helper method used to populate textFields on
-        initialization with part data to be modified.
+    /**
+     *  helper method used to populate textFields on
+     *  initialization with part data to be modified.
+     *
+     * @param p the part whose attributes will populate
+     *          the form fields
      */
     private void autoFillForm(Part p) {
         partNameTextfield.setText(p.getName());
@@ -263,8 +286,10 @@ public class ModifyPartController implements Initializable {
         }
     }
 
-    /*
-        validates all fields are populated
+    /**
+     * validates all fields are populated.
+     *
+     * @return <code>true</code> if all fields are populated. <code>false</code> if not.
      */
     public boolean validateFields() {
         return !(partNameTextfield.getText().equals("") || partNameTextfield.getText().length() == 0 ||
@@ -274,17 +299,20 @@ public class ModifyPartController implements Initializable {
                 partMinTextfield.getText().equals("") || partMinTextfield.getText().length() == 0);
     }
 
-    /*
-        validates user-entered min stock is less that or equal to inventory and inventory is
-        less than or equal to max stock entered by user.
+    /**
+     * validates user-entered min stock is less that or equal to inventory and inventory is
+     *  less than or equal to max stock entered by user.
+     *
+     * @return <code>true</code> if min is less than or equal to inventory and inventory is
+     * less than or equal to max. <code>false</code> if not.
      */
     public boolean validateInventory() {
         return Integer.parseInt(partMinTextfield.getText()) <= Integer.parseInt(partInvTextfield.getText()) &&
                 (Integer.parseInt(partInvTextfield.getText()) <= Integer.parseInt(partMaxTextfield.getText()));
     }
 
-    /*
-        helper method clears all textfields
+    /**
+     * helper method clears all textFields
      */
     private void clearFields() {
         partNameTextfield.clear();
@@ -295,9 +323,9 @@ public class ModifyPartController implements Initializable {
         dynamicPartTextfield.clear();
     }
 
-    /*
-        helper method sets regex filters on textFields to restrict user input to valid
-        data
+    /**
+     * helper method sets regex filters on textFields to restrict user input to valid
+     * data
      */
     public void setTextFormatters() {
         partInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
@@ -314,12 +342,12 @@ public class ModifyPartController implements Initializable {
 
     }
 
-    /*
-        helper method initializes invalidation listeners and adds them to textFields.
-        this helper method is called during initialization, however, the
-        invalidation listeners are of interest to the modifyPart helper
-        method called by onPartSave and used to flag the fields that the user
-        has modified.
+    /**
+     * helper method initializes invalidation listeners and adds them to textFields.
+     * this helper method is called during initialization, however, the
+     * invalidation listeners are of interest to the modifyPart helper
+     * method called by onPartSave and used to flag the fields that the user
+     * has modified.
      */
     public void initInvalidationListeners() {
         partNameModified = false;

@@ -21,6 +21,14 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+/**
+ * mainWindowController effectively serves as
+ * "main app".
+ * provides a stage to display part and product
+ * windows. Passes data to other windows.
+ *
+ * @author Khalid Smalls
+ */
 public class MainWindowController implements Initializable {
     @FXML private TextField partSearchField;
     @FXML private TextField productSearchField;
@@ -41,6 +49,12 @@ public class MainWindowController implements Initializable {
         stage = new Stage();
     }
 
+    /**
+     * initializes tableviews and currency formatter.
+     *
+     * @param url not used
+     * @param resourceBundle not used
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initPartTable();
@@ -269,7 +283,9 @@ public class MainWindowController implements Initializable {
 
    }
 
-   //initialize part table
+    /**
+     * helper method initializes part table.
+     */
    private void initPartTable() {
        partsTable.setItems(inv.getAllParts());
        TableColumn<Part, Integer> partIdColumn = new TableColumn<Part, Integer>("Part ID");
@@ -306,7 +322,9 @@ public class MainWindowController implements Initializable {
        });
    }//END of initPartTable
 
-    //initialize product table
+    /**
+     * helper method initializes product table.
+     */
     private void initProductTable() {
         productsTable.setItems(inv.getAllProducts());
         TableColumn<Product, Integer> productIdColumn = new TableColumn<Product, Integer>("Product ID");
