@@ -8,11 +8,15 @@ import java.io.FileNotFoundException;
 import java.util.Comparator;
 import java.util.Scanner;
 
+/**
+ *
+ */
 public class Inventory {
 
     private static final String INVENTORY_FILE = "src/main/java/smalls/javafxinventorysystem/parts.txt";
     private static final String PRODUCT_INVENTORY = "src/main/java/smalls/javafxinventorysystem/products.txt";
-    private static int nextId = 1001;
+    private static int nextPartId = 1000;
+    private static int nextProductId = 1001;
     private static final ObservableList<Part> allParts = FXCollections.observableArrayList();
     private static final ObservableList<Product> allProducts = FXCollections.observableArrayList();
     private static final Comparator<Part> comparePartsById = (p1, p2) -> p1.getId() - p2.getId();
@@ -27,7 +31,7 @@ public class Inventory {
      */
     public static void addPart(Part newPart) {
         allParts.add(newPart);
-        nextId++;
+        nextPartId += 2;
     }
 
     /**
@@ -38,18 +42,26 @@ public class Inventory {
      */
     public static  void addProduct(Product newProduct) {
         allProducts.add(newProduct);
-        nextId++;
+        nextProductId += 2;
     }
 
     /**
-     * returns <code>nextId</code> to be
-     * assigned to the next part or product.
+     * returns <code>nextPartId</code> to be
+     * assigned to the next part.
      *
      * @return the <code>nextId</code>
      */
-    public static int getNextId() {
-        return nextId;
+    public static int getNextPartId() {
+        return nextPartId;
     }
+
+    /**
+     * returns <code>nextProductId</code> to be
+     * assigned to the next product.
+     *
+     * @return
+     */
+    public static int getNextProductId() { return nextProductId; }
 
     /**
      * searches for a part by <code>id</code>.

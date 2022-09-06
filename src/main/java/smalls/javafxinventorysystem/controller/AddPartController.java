@@ -15,8 +15,9 @@ import java.util.function.UnaryOperator;
 
 
 /**
- *  adds an <code>InHouse</code> or <code>Outsourced</code>
- *  part to <code>allParts</code> <code>ObservableList</code>.
+ *  Responsible for the functionality that adds an
+ *  <code>InHouse</code> or <code>Outsourced</code>
+ *  part to the <code>allParts</code> <code>ObservableList</code>.
  *
  * @author Khalid Smalls
  */
@@ -35,7 +36,7 @@ public class AddPartController implements Initializable {
     @FXML private TextField partMaxTextfield;
     @FXML private TextField partMinTextfield;
     @FXML private TextField dynamicPartTextfield;
-    private String partWindowLabelText;
+    private final String partWindowLabelText;
     private ToggleGroup toggleGroup;
 
 
@@ -75,9 +76,13 @@ public class AddPartController implements Initializable {
     }
 
     /**
+     * allows for customization of  nodes after
+     * the scene graph is constructed, but before
+     * the scene is displayed.
+     * <p>
      * initializes radio toggle buttons,
      * sets selected toggle to in-house.
-     * sets dynamic label to machine-ic.
+     * sets dynamic label to machine-id.
      * sets part textField non-editable,
      * sets main window label, and sets
      * text formatters on textFields.
@@ -113,7 +118,7 @@ public class AddPartController implements Initializable {
     }
 
     /**
-     * specifies and <code>outsourced</code> part.
+     * specifies an <code>outsourced</code> part.
      * <p>
      * sets dynamic label text to "company name" and sets
      * string filter on corresponding textField. Also
@@ -126,7 +131,8 @@ public class AddPartController implements Initializable {
     }
 
     /**
-     * attempts to add a <code>Part</code> to <code>allParts</code>.
+     * attempts to add a <code>Part</code> to the
+     * <code>allParts</code> <code>ObservableList</code>.
      * <p>
      * validates all fields are populated with relevant data and
      * that user-entered min stock is less than or equal to inventory
@@ -134,8 +140,8 @@ public class AddPartController implements Initializable {
      * creating an <code>InHouse</code> or <code>Outsourced</code>
      * part and adding it to <code>allParts</code>.
      *
-     * @param event allows access to the stage, so that it may be
-     *              closed after the part is added to inventory
+     * @param event  object that allows access to the stage, so that
+     *               it may be closed after the part is added to inventory
      */
     @FXML private void onPartSave(ActionEvent event) {
         Part p = null;
@@ -145,7 +151,7 @@ public class AddPartController implements Initializable {
 
         if (validateFields()) {
             if (validateInventory()) {
-                newPartId = Inventory.getNextId();
+                newPartId = Inventory.getNextPartId();
                 newPartName = partNameTextfield.getText();
                 newPartPrice = Double.parseDouble(partPriceTextfield.getText());
                 newPartInv = Integer.parseInt(partInvTextfield.getText());
@@ -184,11 +190,11 @@ public class AddPartController implements Initializable {
     /**
      * closes window without saving part.
      *
-     * @param e the object fired on click which allows access to
+     * @param event the object fired on click which allows access to
      *          the window object so that it may be closed
      */
-    @FXML private void onPartCancel(ActionEvent e) {
-        ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
+    @FXML private void onPartCancel(ActionEvent event) {
+        ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
     }
 
     /**
@@ -206,11 +212,11 @@ public class AddPartController implements Initializable {
     }
 
     /**
-     * returns true if user-entered min stock is less than or equal to inventory and inventory
-     *         is less than or equal to max stock.
-     *
+     * validates the user entered an inventory value that is greater than or equal to min stock
+     * and less than or equal to max stock.
+     * <p>
      * @return <code>true</code> if min is less than or equal to inventory and inventory is less than
-     *          or equal to stock, <code>false</code> otherwise.
+     *          or equal to max, <code>false</code> otherwise.
      */
     private boolean validateInventory() {
         return Integer.parseInt(partMinTextfield.getText()) <= Integer.parseInt(partInvTextfield.getText()) &&
@@ -218,7 +224,7 @@ public class AddPartController implements Initializable {
     }
 
     /**
-     * helper method clears all textFields
+     * helper method clears all textFields.
      */
     private void clearFields() {
         partNameTextfield.clear();
@@ -230,7 +236,7 @@ public class AddPartController implements Initializable {
     }
 
     /**
-     *  helper method sets text formatters on textFields to ensure valid user input
+     *  helper method sets text formatters on textFields to ensure valid user input.
      */
     private void setTextFormatters() {
         partInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));

@@ -1,7 +1,16 @@
 package smalls.javafxinventorysystem.model;
 
+/**
+ * subclass of <code>Part</code>.
+ * adds the <code>machineId</code> attribute,
+ * with getters and setters, to the parent class.
+ */
 public class InHouse extends Part {
 
+    /**
+     * identifies this <code>InHouse</code> part
+     * as unique.
+     */
     private int machineId;
 
 

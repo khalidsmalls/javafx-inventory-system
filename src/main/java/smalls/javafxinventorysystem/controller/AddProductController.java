@@ -19,8 +19,10 @@ import java.util.function.UnaryOperator;
 
 
 /**
- * adds a new <code>Product</code> to the
+ * Responsible for functionality that adds a new <code>Product</code> to the
  * <code>allProducts</code> <code>ObservableList</code>.
+ *
+ * @author Khalid Smalls
  */
 public class AddProductController implements Initializable {
 
@@ -76,6 +78,8 @@ public class AddProductController implements Initializable {
     /**
      * class constructor.
      *
+     * gets "Add Product" label text from the caller
+     *
      * @param productWindowLabelText the text to set main window label to
      */
     public AddProductController(String productWindowLabelText) {
@@ -83,8 +87,10 @@ public class AddProductController implements Initializable {
     }
 
     /**
+     * allows for customization of nodes after the scene graph is constructed,
+     * but before the scene is displayed.
+     * <p>
      * sets main window label text,
-     * gets inventory singleton object,
      * sets product id textField non-editable,
      * sets text formatters, initializes part
      * and associated part tableviews.
@@ -145,6 +151,10 @@ public class AddProductController implements Initializable {
      * list until <code>onSave</code> is successfully executed.
      */
     @FXML private void onAddAssocPart() {
+        if (partsTable.getSelectionModel().getSelectedItem() == null) {
+            new Alert(Alert.AlertType.ERROR, "Please select a part").showAndWait();
+            return;
+        }
         if (partsTable.getSelectionModel().getSelectedItems().size() > 1) {
             assocParts.addAll(partsTable.getSelectionModel().getSelectedItems());
         } else {
@@ -154,7 +164,6 @@ public class AddProductController implements Initializable {
 
     /**
      * removes a part from assocParts tableview.
-     *
      * <p>
      * The part is not removed from this product's associated parts list
      * until <code>onSave</code> is successfully executed.
@@ -168,8 +177,8 @@ public class AddProductController implements Initializable {
     }
 
     /**
-     * attempts to add a new <code>Product</code> to <code>allProducts</code>.
-     *
+     * attempts to add a new <code>Product</code> to the <code>allProducts</code>
+     * <code>ObservableList</code>.
      * <p>
      * validates all fields are populated with relevant data and that the min stock
      * entered by the user is less than or equal to the inventory value, which is less
@@ -188,7 +197,7 @@ public class AddProductController implements Initializable {
 
         if (validateFields()) {
             if (validateInventory()) {
-                newProductId = Inventory.getNextId();
+                newProductId = Inventory.getNextProductId();
                 newProductName = productNameTextfield.getText();
                 newProductPrice = Double.parseDouble(productPriceTextfield.getText());
                 newProductInv = Integer.parseInt(productInvTextfield.getText());
@@ -219,10 +228,10 @@ public class AddProductController implements Initializable {
     /**
      * closes the product window.
      *
-     * @param e allows access to the stage, so that it may be closed
+     * @param event allows access to the stage, so that it may be closed
      */
-    @FXML private void onClose(ActionEvent e){
-        ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
+    @FXML private void onClose(ActionEvent event){
+        ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
     }
 
     /**
@@ -277,7 +286,6 @@ public class AddProductController implements Initializable {
 
     /**
      * helper method sets filters on textFields to restrict user-entered data to proper types
-     *
      */
     private void setTextFormatters() {
         productInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
@@ -288,8 +296,7 @@ public class AddProductController implements Initializable {
     }
 
     /**
-     *  helper method validates all fields are populated
-     *        return true if all fields are populated
+     *  helper method validates all fields are populated.
      *
      * @return <code>true</code> if all fields are populated,
      *          <code>false</code> otherwise.
@@ -303,11 +310,11 @@ public class AddProductController implements Initializable {
     }
 
     /**
-     * helper method validates user-entered min stock is less than or equal to inventory
-     *        and inventory is less than or equal to max stock
-     *
-     * @return <code>true</code> if min is less than or equal to inventory and inventory is
-     *          less than or equal to max stock. <code>false</code> if not.
+     * validates the user entered an inventory value that is greater than or equal to min stock
+     * and less than or equal to max stock.
+     * <p>
+     * @return <code>true</code> if min is less than or equal to inventory and inventory is less than
+     *          or equal to max, <code>false</code> otherwise.
      */
     private boolean validateInventory() {
         return Integer.parseInt(productMinTextfield.getText()) <= Integer.parseInt(productInvTextfield.getText()) &&

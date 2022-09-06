@@ -22,10 +22,10 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
- * mainWindowController effectively serves as
- * "main app".
- * provides a stage to display part and product
- * windows. Passes data to other windows.
+ * displays full inventory of parts and products.
+ * <p>
+ * Responsible for functionality allowing the end user to
+ * search for, view, add, modify and delete parts and products.
  *
  * @author Khalid Smalls
  */
@@ -40,14 +40,17 @@ public class MainWindowController implements Initializable {
     /**
      * class constructor.
      * <p>
-     * gets inventory instance and creates new stage
-     * to pass to part and product windows
+     * creates a new stage to pass to part and product windows
+     * at the appropriate time.
      */
     public MainWindowController() {
         stage = new Stage();
     }
 
     /**
+     * allows for customization of nodes after the scene graph is constructed,
+     * but before the scene is displayed.
+     * <p>
      * initializes tableviews and currency formatter.
      *
      * @param url not used
@@ -65,10 +68,21 @@ public class MainWindowController implements Initializable {
      * <p>
      * first, attempts to lookup part by id. If this is successful the part is
      * added as the sole member of an observable list created and set to the
-     * parts table. if unsuccessful lookup by name is attempted. If a part or
-     * parts are found that match the search string, they are added to an
-     * observable list created and set to the parts table. Otherwise,
+     * parts table, then selected. if unsuccessful lookup by name is attempted.
+     * If a part or parts are found that match the search string, they are added
+     * to an observable list created and set to the parts table. Otherwise,
      * a "part not found" placeholder is displayed.
+     *
+     * RUNTIME_ERROR - IllegalArgumentException - thrown when the partsTable
+     *                 is passed a null value to the setItems() method. The updateItem
+     *                 functional interface in the initPartTable method is where
+     *                 the error originated due to not being able to format null
+     *                 to a number. It was fixed by adding the "if(p != null)"
+     *                 check around the two lines adding the part to the new
+     *                 observable list and selecting it. This error also had to
+     *                 be corrected for the product search method in this class
+     *                 as well as the part search methods in the add and modify
+     *                 product window controllers.
      */
     @FXML private void onPartSearch() {
         partsTable.setPlaceholder(new Text("Part not found"));
@@ -102,10 +116,10 @@ public class MainWindowController implements Initializable {
      * <p>
      * first, attempts to lookup product by id. If this is successful the product is
      * added as the sole member of an observable list created and set to the
-     * product table. if unsuccessful lookup by name is attempted. If one or more
-     * products are found that match the search string, they are added to an
-     * observable list created and set to the product table. Otherwise,
-     * a "product not found" placeholder is displayed.
+     * product table, then selected. if unsuccessful lookup by name is attempted.
+     * If one or more products are found that match the search string, they are added
+     * to an observable list created and set to the product table. Otherwise,
+     * a "Product not found" placeholder is displayed.
      */
     @FXML private void onProductSearch() {
         ObservableList<Product> productList = FXCollections.observableArrayList();
@@ -137,12 +151,13 @@ public class MainWindowController implements Initializable {
      * displays the "addPart" window.
      * <p>
      * <code>FXMLLoader</code> instance displays <code>partWindow</code> and assigns
-     * <code>AddPartController</code> to it.
+     * <code>AddPartController</code> to it. Also, passes <code>partWindowLabelText</code>
+     * to the <code>AddPartController</code>.
      */
     @FXML private void onAddPart() {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(new AddPartController("Add Part"));
-        loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/partWindow.fxml"));
+        loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/view/partWindow.fxml"));
 
         try {
             Parent root = loader.load();
@@ -158,14 +173,15 @@ public class MainWindowController implements Initializable {
      * displays the "modifyPart" window.
      * <p>
      * <code>FXMLLoader</code> instance displays <code>partWindow</code> and assigns
-     * <code>ModifyPartController</code> to it.
+     * <code>ModifyPartController</code> to it. Also, passes <code>windowLabelText</code>
+     * and the <code>Part</code> to be modified to <code>ModifyPartController</code>.
      */
     @FXML private void onModifyPart() {
         Part p = partsTable.getSelectionModel().getSelectedItem();
         if (p != null) {
             FXMLLoader loader = new FXMLLoader();
             loader.setController(new ModifyPartController(p, "Modify Part"));
-            loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/partWindow.fxml"));
+            loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/view/partWindow.fxml"));
 
             try {
                 Parent root = loader.load();
@@ -204,12 +220,13 @@ public class MainWindowController implements Initializable {
      * displays the "addProduct" window.
      * <p>
      * <code>FXMLLoader</code> instance displays <code>productWindow</code> and assigns
-     * <code>AddProductController</code> to it.
+     * <code>AddProductController</code> to it. Also, passes <code>productWindowLabelText</code>
+     * to <code>AddProductController</code>.
      */
     @FXML private void onAddProduct() {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(new AddProductController("Add Product"));
-        loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/productWindow.fxml"));
+        loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/view/productWindow.fxml"));
 
         try {
             Parent root = loader.load();
@@ -225,14 +242,15 @@ public class MainWindowController implements Initializable {
      * displays the "modifyProduct" window.
      * <p>
      * <code>FXMLLoader</code> instance displays <code>productWindow</code> and assigns
-     * <code>ModifyProductController</code> to it.
+     * <code>ModifyProductController</code> to it. Also, passes <code>productWindowLabelText</code>
+     * and the <code>Product</code> to be modified to <code><ModifyProductController</code>.
      */
     @FXML private void onModifyProduct() {
         Product p = productsTable.getSelectionModel().getSelectedItem();
         if (p != null) {
             FXMLLoader loader = new FXMLLoader();
             loader.setController(new ModifyProductController(p, "Modify Product"));
-            loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/productWindow.fxml"));
+            loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/view/productWindow.fxml"));
 
             try {
                 Parent root = loader.load();
@@ -251,8 +269,8 @@ public class MainWindowController implements Initializable {
      * attempts to delete the selected product.
      * <p>
      * prompts the user for confirmation.
-     * also will alert user if he/she attempts to delete a product that has
-     * associated parts and abort.
+     * also will alert user if he/she attempts to
+     * delete a product that has associated parts and abort.
      */
     @FXML private void onDeleteProduct() {
         try {
@@ -273,12 +291,17 @@ public class MainWindowController implements Initializable {
 
     /**
      * closes main window, exits program.
+     * <p>
+     * prompts user before exiting.
      *
-     * @param e allows access to the stage, so that it may be closed
+     * @param event allows access to the stage, so that it may be closed
      */
-   @FXML private void onClose(ActionEvent e) {
-       ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
-
+   @FXML private void onClose(ActionEvent event) {
+       Alert confirmClose = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you wish to close the program?");
+       Optional<ButtonType> result = confirmClose.showAndWait();
+       if (result.isPresent() && result.get() == ButtonType.OK) {
+           ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+       }
    }
 
     /**

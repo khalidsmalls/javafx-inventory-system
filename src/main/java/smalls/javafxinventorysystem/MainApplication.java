@@ -12,8 +12,19 @@ import smalls.javafxinventorysystem.model.Inventory;
 import java.io.IOException;
 
 /**
- * loads the main application window of my
- * C482 javafx inventory system project
+ * loads the main application window of this
+ * C482 javafx inventory system project.
+ * <p>
+ * FUTURE_ENHANCEMENT - 1. a class or framework that could encapsulate the fxmlLoader logic
+ *                         as well as handling dependencies passed to windows. For example,
+ *                         assigning a controller, loading the fxml file, and passing the
+ *                         selected product to the modify product window. In a more advanced
+ *                         application a controllerFactory might be used to set up custom
+ *                         controllers for fxml files.
+ *                      2. providing persistent storage with a database would be a clear and
+ *                         obvious enhancement.
+ *
+ * @see MainWindowController - for descriptionn of RUNTIME_ERROR above onPartSearch method
  *
  * @author Khalid Smalls
  */
@@ -22,6 +33,10 @@ public class MainApplication extends Application {
 
     /**
      * application start method.
+     * <p>
+     * responsible for loading and displaying <code>mainWindow</code> as well
+     * as setting its controller. Would likely load parts and products from
+     * somewhere else if this program had persistent storage capability.
      *
      * @param primaryStage the stage to build the main app window on
      */
@@ -32,7 +47,7 @@ public class MainApplication extends Application {
         stage = primaryStage;
         FXMLLoader loader = new FXMLLoader();
         loader.setController(new MainWindowController());
-        loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/mainWindow.fxml"));
+        loader.setLocation(getClass().getResource("/smalls/javafxinventorysystem/view/mainWindow.fxml"));
 
         try {
             Parent root = loader.load();

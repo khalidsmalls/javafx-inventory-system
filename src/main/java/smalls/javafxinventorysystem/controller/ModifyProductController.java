@@ -22,13 +22,14 @@ import java.util.function.UnaryOperator;
 
 
 /**
- * attempts to modify a selected product
+ * responsible for the functionality that allows an end-user
+ * to modify an existing <code>Product</code>.
  *
  * @author Khalid Smalls
  */
 public class ModifyProductController implements Initializable {
     private final Product product;
-    private final String windowLabelText;
+    private final String productWindowLabelText;
     private final String PART_NOT_FOUND_MSG = "Part not found";
     @FXML private Label productWindowLabel;
     @FXML private TextField productIdTextfield;
@@ -83,16 +84,22 @@ public class ModifyProductController implements Initializable {
 
     /**
      * class constructor.
+     * <p>
+     *  gets <code>Product</code> to be modified and
+     *  <code>productWindowLabelText</code> from caller.
      *
      * @param product the product to be modified
-     * @param windowLabelText the main window label text to set
+     * @param productWindowLabelText the main window label text to set
      */
-    public ModifyProductController(Product product, String windowLabelText) {
+    public ModifyProductController(Product product, String productWindowLabelText) {
         this.product = product;
-        this.windowLabelText = windowLabelText;
+        this.productWindowLabelText = productWindowLabelText;
     }
 
     /**
+     * allows for customization of nodes after the scene graph is constructed,
+     * but before the scene is displayed.
+     * <p>
      * initializes product id textField as non-editable,
      * sets window label text, gets product index, populates
      * textFields with product data, initializes tableviews and
@@ -103,7 +110,7 @@ public class ModifyProductController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        productWindowLabel.setText(windowLabelText);
+        productWindowLabel.setText(productWindowLabelText);
         productIdTextfield.setEditable(false);
         productIdTextfield.setText(String.valueOf(product.getId()));
         productIndex = Inventory.getAllProducts().indexOf(product);
@@ -157,6 +164,10 @@ public class ModifyProductController implements Initializable {
      * product's associated parts list until <code>onSave</code> method is successfully executed.
      */
     @FXML private void onAddAssocPart() {
+        if (partsTable.getSelectionModel().getSelectedItem() == null) {
+            new Alert(Alert.AlertType.ERROR, "Please select a part").showAndWait();
+            return;
+        }
         if (partsTable.getSelectionModel().getSelectedItems().size() > 1) {
             product.addAssociatedParts(partsTable.getSelectionModel().getSelectedItems());
         } else {
@@ -253,15 +264,15 @@ public class ModifyProductController implements Initializable {
     /**
      * closes window.
      *
-     * @param e the object used to access the stage so that it may
+     * @param event the object used to access the stage so that it may
      *          be closed
      */
-    @FXML private void onClose(ActionEvent e) {
-        ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
+    @FXML private void onClose(ActionEvent event) {
+        ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
     }
 
-    /*
-        helper method initializes both tableviews
+    /**
+     * helper method initializes both tableviews.
      */
     private void initTableViews() {
         partsTable.setItems(Inventory.getAllParts());
@@ -306,7 +317,7 @@ public class ModifyProductController implements Initializable {
     }
 
     /**
-     * helper method sets text formatters on textfields to ensure valid input
+     * helper method sets text formatters on textfields to ensure valid input.
      */
     private void setTextFormatters() {
         productInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
@@ -317,7 +328,7 @@ public class ModifyProductController implements Initializable {
     }
 
     /**
-     * helper method populates textFields with product information on initialization
+     * helper method populates textFields with product information on initialization.
      */
     private void populateFields() {
         productIdTextfield.setText(String.valueOf(product.getId()));
@@ -329,7 +340,7 @@ public class ModifyProductController implements Initializable {
     }
 
     /**
-     *  helper method validates textFields are populated with data
+     *  helper method validates textFields are populated with data.
      *
      * @return <code>true</code> if all textFields are populated with data,
      *         <code>false</code> if not.
@@ -344,7 +355,8 @@ public class ModifyProductController implements Initializable {
 
     /**
      * helper method validates user entered min stock is less than or equal to inventory and inventory is
-     *         less than or equal to max stock
+     *         less than or equal to max stock.
+     * <p>
      * @return <code>true</code> if min is less than or equal to inventory and inventory is less
      *         than or equal to max. <code>false</code> otherwise.
      */
@@ -354,7 +366,7 @@ public class ModifyProductController implements Initializable {
     }
 
     /**
-     * helper method for clearing all textFields
+     * helper method for clearing all textFields.
      */
     private void clearFields() {
         productNameTextfield.clear();
@@ -366,6 +378,7 @@ public class ModifyProductController implements Initializable {
 
     /**
      * initializes invalidation listeners and adds them to textFields.
+     * <p>
      * this helper method is called during initialization, however, the
      * invalidation listeners are of interest to the onSave method and
      * used to flag the fields that the user has modified.

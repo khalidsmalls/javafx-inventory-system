@@ -16,7 +16,8 @@ import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
 /**
- * attempts to modify a selected part
+ * Responsible for funcionality that allows end-user
+ * to modify an existing <code>Part</code>.
  *
  * @author Khalid Smalls
  */
@@ -45,10 +46,8 @@ public class ModifyPartController implements Initializable {
     private boolean dynamicFieldModified;
     private ToggleGroup toggleGroup;
 
-    /*
-       the following functional interfaces restrict form input to valid
-       characters using regular expressions
-     */
+//       the following functional interfaces restrict form input to valid
+//       characters using regular expressions
     private final UnaryOperator<TextFormatter.Change> integerFilter = change -> {
         String newText = change.getControlNewText();
         if (newText.matches("([1-9][0-9]*)?")) {
@@ -75,6 +74,9 @@ public class ModifyPartController implements Initializable {
 
     /**
      * class constructor.
+     * <p>
+     * gets the <code>Part</code> to be modified and <code>partWindowLabelText</code>
+     * from the caller.
      *
      * @param part the part to be modified
      * @param windowLabelText the main window label text to set
@@ -85,6 +87,9 @@ public class ModifyPartController implements Initializable {
     }
 
     /**
+     * allows for customization of nodes after the
+     * scene graph is constructed, but before the scene is displayed.
+     * <p>
      * initializes radio toggles, gets
      * inventory instance, part index,
      * initializes part id textfield as non-editable,
@@ -215,7 +220,7 @@ public class ModifyPartController implements Initializable {
 
     /**
      *   onPartSave helper method.
-     *
+     *   <p>
      *   user changed part type from in-house to outsourced
      *   or outsourced to in-house, so a new part is
      *   created.
@@ -251,11 +256,11 @@ public class ModifyPartController implements Initializable {
     /**
      * closes window.
      *
-     * @param e event object - allows access to the stage
+     * @param event event object - allows access to the stage
      *          so that it may be closed
      */
-    @FXML private void onPartCancel(ActionEvent e) {
-        ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
+    @FXML private void onPartCancel(ActionEvent event) {
+        ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
     }
 
     /**
