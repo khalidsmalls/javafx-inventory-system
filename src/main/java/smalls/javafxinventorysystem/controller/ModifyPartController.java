@@ -284,7 +284,7 @@ public class ModifyPartController implements Initializable {
     }
 
     /*
-        clears all textfields
+        helper method clears all textfields
      */
     private void clearFields() {
         partNameTextfield.clear();
@@ -296,7 +296,7 @@ public class ModifyPartController implements Initializable {
     }
 
     /*
-        sets regex filters on textFields to restrict user input to valid
+        helper method sets regex filters on textFields to restrict user input to valid
         data
      */
     public void setTextFormatters() {
@@ -315,7 +315,7 @@ public class ModifyPartController implements Initializable {
     }
 
     /*
-        initializes invalidation listeners and adds them to textFields.
+        helper method initializes invalidation listeners and adds them to textFields.
         this helper method is called during initialization, however, the
         invalidation listeners are of interest to the modifyPart helper
         method called by onPartSave and used to flag the fields that the user

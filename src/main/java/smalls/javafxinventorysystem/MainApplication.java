@@ -11,6 +11,12 @@ import smalls.javafxinventorysystem.model.Inventory;
 
 import java.io.IOException;
 
+/**
+ * loads the main application window of my
+ * C482 javafx inventory system project
+ *
+ * @author Khalid Smalls
+ */
 public class MainApplication extends Application {
     Stage stage;
 

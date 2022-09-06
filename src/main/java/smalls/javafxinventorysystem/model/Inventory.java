@@ -22,13 +22,13 @@ public class Inventory {
 
     /**
      * <code>Inventory</code> class private singleton class
-     * constructor
+     * constructor.
      */
     private Inventory() {
     }
 
     /**
-     * returns the <code>Inventory</code> class instance
+     * returns the <code>Inventory</code> class instance.
      *
      * @return the singleton <code>Inventory</code> class
      * instance
@@ -53,7 +53,7 @@ public class Inventory {
 
     /**
      * adds a product to the <code>allProducts</code>
-     * <code>ObservableList</code>
+     * <code>ObservableList</code>.
      *
      * @param newProduct the product to add
      */
@@ -86,7 +86,7 @@ public class Inventory {
     }
 
     /**
-     * searches for a product by <code>id</code>.
+     * searches for a <code>Product</code> by <code>id</code>.
      *
      * @param productId the <code>productId</code> to look up
      * @return the <code>Product</code> matching the <code>id</code>
@@ -100,6 +100,7 @@ public class Inventory {
 
     /**
      * searches for a <code>Part</code> by name.
+     *
      * returns a <code>FilteredList</code>
      * of parts whose name contains the search string.
      *
@@ -123,6 +124,7 @@ public class Inventory {
 
     /**
      * searches for a <code>Product</code> by name.
+     *
      * returns a <code>FilteredList</code>
      * of products whose name contains the search string.
      *
@@ -157,7 +159,7 @@ public class Inventory {
 
     /**
      * replaces the <code>Product</code> at <code>index</code>
-     * of <code>allProducts</code> array with <code>newProduct</code>
+     * of <code>allProducts</code> array with <code>newProduct</code>.
      *
      * @param index the index of the <code>Product</code> to be updated
      * @param newProduct the updated <code>Product</code>
@@ -168,7 +170,7 @@ public class Inventory {
 
     /**
      * removes <code>selectedPart</code> from <code>allParts</code>
-     * <code>ObservableList</code>
+     * <code>ObservableList</code>.
      *
      * @param selectedPart the <code>Part</code> to be deleted
      * @return <code>true</code> if the part is removed, <code>false</code> if not
@@ -179,7 +181,7 @@ public class Inventory {
 
     /**
      * removes <code>selectedProduct</code> from <code>allProducts</code>
-     * <code>ObservableList</code>
+     * <code>ObservableList</code>.
      *
      * @param selectedProduct the <code>Product</code> to be deleted
      * @return <code>true</code> if the <code>Product</code> is deleted, <code>false</code> if not
@@ -198,7 +200,7 @@ public class Inventory {
     }
 
     /**
-     * gets the <code>Product</code> ObservableList
+     * gets the <code>Product</code> ObservableList.
      *
      * @return the <code>allProducts</code> <code>ObservableList</code>
      */
@@ -208,7 +210,7 @@ public class Inventory {
 
     /**
      * binary search helper method called by
-     * lookup-part-by-id method
+     * lookup-part-by-id method.
      *
      * @param id the <code>id</code> to be searched for
      * @param <T> generic type parameter representing <code>InHouse</code> or
@@ -237,7 +239,7 @@ public class Inventory {
 
     /**
      * binary search helper method called by
-     * lookup-product-by-id method
+     * lookup-product-by-id method.
      *
      * @param id the <code>id</code> to be searched for
      * @return the product matching the id

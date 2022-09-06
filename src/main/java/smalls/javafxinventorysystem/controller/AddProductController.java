@@ -99,7 +99,6 @@ public class AddProductController implements Initializable {
      * then lookup-by-name is attempted. If the part is found it is added to a new observableList
      * which the parts table is set to. The part is then selected. Since lookup-by-name
      * might return a list of results, parts table is set to the returned list of parts.
-     *
      */
     @FXML private void onPartSearch() {
         partsTable.setPlaceholder(new Text(PART_NOT_FOUND_MSG));

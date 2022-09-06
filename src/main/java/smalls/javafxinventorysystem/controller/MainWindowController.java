@@ -32,6 +32,7 @@ public class MainWindowController implements Initializable {
 
     /**
      * class constructor.
+     * <p>
      * gets inventory instance and creates new stage
      * to pass to part and product windows
      */
@@ -160,7 +161,7 @@ public class MainWindowController implements Initializable {
                 stage.setScene(scene);
                 stage.show();
             } catch (IOException e) {
-                e.printStackTrace();
+                new Alert(Alert.AlertType.ERROR, "There was a problem loading the window").showAndWait();
             }
         } else {
             new Alert(Alert.AlertType.ERROR, "Please select a part").showAndWait();
@@ -204,7 +205,7 @@ public class MainWindowController implements Initializable {
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "There was a problem loading the window");
         }
     }
 
@@ -227,7 +228,7 @@ public class MainWindowController implements Initializable {
                 this.stage.setScene(scene);
                 stage.show();
             } catch (IOException e) {
-                e.printStackTrace();
+                new Alert(Alert.AlertType.ERROR, "There was a problem loading the window").showAndWait();
             }
         } else {
             new Alert(Alert.AlertType.ERROR, "Please select a product").showAndWait();
@@ -259,7 +260,7 @@ public class MainWindowController implements Initializable {
     }
 
     /**
-     * closes window.
+     * closes main window, exits program.
      *
      * @param e allows access to the stage, so that it may be closed
      */

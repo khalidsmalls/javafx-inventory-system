@@ -61,7 +61,7 @@ public class AddPartController implements Initializable {
     };
 
     /**
-     * class constructor.
+     * class constructor. Gets window label text from caller.
      *
      * @param partWindowLabelText the text to set the main window label to
      */

@@ -5,7 +5,8 @@ public class Outsourced extends Part {
     private String companyName;
 
     /**
-     * class constructor. The <code>companyName</code> field
+     * class constructor.
+     * The <code>companyName</code> field
      * makes this class unique from the parent and sibling,
      * <code>InHouse</code> class.
      *
@@ -23,7 +24,7 @@ public class Outsourced extends Part {
     }
 
     /**
-     * sets the <code>companyName</code> of this part
+     * sets the <code>companyName</code> of this part.
      *
      * @param companyName the companyName to set
      */

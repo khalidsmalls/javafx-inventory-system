@@ -6,7 +6,9 @@ public class InHouse extends Part {
 
 
     /**
-     * class constructor. The <code>machineId</code>
+     * class constructor.
+     * <p>
+     * The <code>machineId</code>
      * field makes this class unique from the parent and
      * sibling, <code>Outsourced</code>, class.
      *
@@ -24,7 +26,7 @@ public class InHouse extends Part {
     }
 
     /**
-     * sets the <code>machineId</code> of this part
+     * sets the <code>machineId</code> of this part.
      *
      * @param machineId the machineId to set
      */
@@ -33,7 +35,7 @@ public class InHouse extends Part {
     }
 
     /**
-     * gets the <code>machineId</code> of this part
+     * gets the <code>machineId</code> of this part.
      *
      * @return the machineId
      */
