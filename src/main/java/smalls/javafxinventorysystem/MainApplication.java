@@ -27,10 +27,8 @@ public class MainApplication extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-
-        Inventory inv = Inventory.getInstance();
-        inv.loadParts();
-        inv.loadProducts();
+        Inventory.loadParts();
+        Inventory.loadProducts();
         stage = primaryStage;
         FXMLLoader loader = new FXMLLoader();
         loader.setController(new MainWindowController());

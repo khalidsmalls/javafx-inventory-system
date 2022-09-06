@@ -45,7 +45,6 @@ public class AddProductController implements Initializable {
     @FXML private TableColumn<Part,Integer> assocPartInvCol;
     @FXML private TableColumn<Part,Double> assocPartPriceCol;
     @FXML private ObservableList<Part> assocParts;
-    private Inventory inv;
     private final String productWindowLabelText;
     private NumberFormat currencyFormat;
 
@@ -96,7 +95,6 @@ public class AddProductController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         productWindowLabel.setText(productWindowLabelText);
-        inv = Inventory.getInstance();
         assocParts = FXCollections.observableArrayList();
         productIdTextfield.setEditable(false);
         productIdTextfield.setText(PRODUCT_ID_FIELD_TEXT);
@@ -122,7 +120,7 @@ public class AddProductController implements Initializable {
         boolean isInt = true;
         try {
             int id = Integer.parseInt(searchString);
-            Part p = inv.lookupPart(id);
+            Part p = Inventory.lookupPart(id);
             if (p != null) {
                 partList.add(p);
                 partsTable.getSelectionModel().select(p);
@@ -132,7 +130,7 @@ public class AddProductController implements Initializable {
             isInt = false;
         }
         if (!isInt) {
-            partList = inv.lookupPart(searchString);
+            partList = Inventory.lookupPart(searchString);
             partsTable.setItems(partList);
             if (partList.size() == 1) {
                 partsTable.getSelectionModel().select(partList.get(0));
@@ -190,7 +188,7 @@ public class AddProductController implements Initializable {
 
         if (validateFields()) {
             if (validateInventory()) {
-                newProductId = inv.getNextId();
+                newProductId = Inventory.getNextId();
                 newProductName = productNameTextfield.getText();
                 newProductPrice = Double.parseDouble(productPriceTextfield.getText());
                 newProductInv = Integer.parseInt(productInvTextfield.getText());
@@ -204,7 +202,7 @@ public class AddProductController implements Initializable {
                         p.addAssociatedPart(part);
                     }
                 }
-                inv.addProduct(p);
+                Inventory.addProduct(p);
                 clearFields();
                 ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
             } else {
@@ -231,7 +229,7 @@ public class AddProductController implements Initializable {
      * initializes parts tableview
      */
     private void  initPartsTable() {
-        partsTable.setItems(inv.getAllParts());
+        partsTable.setItems(Inventory.getAllParts());
         partsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         partIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));

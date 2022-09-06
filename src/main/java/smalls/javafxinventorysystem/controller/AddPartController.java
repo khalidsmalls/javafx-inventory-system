@@ -35,7 +35,6 @@ public class AddPartController implements Initializable {
     @FXML private TextField partMaxTextfield;
     @FXML private TextField partMinTextfield;
     @FXML private TextField dynamicPartTextfield;
-    private Inventory inv;
     private String partWindowLabelText;
     private ToggleGroup toggleGroup;
 
@@ -88,7 +87,6 @@ public class AddPartController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        inv = Inventory.getInstance();
         toggleGroup = new ToggleGroup();
         toggleGroup.getToggles().addAll(inHouseRadioBtn, outsourcedRadioBtn);
         inHouseRadioBtn.setSelected(true);
@@ -147,7 +145,7 @@ public class AddPartController implements Initializable {
 
         if (validateFields()) {
             if (validateInventory()) {
-                newPartId = inv.getNextId();
+                newPartId = Inventory.getNextId();
                 newPartName = partNameTextfield.getText();
                 newPartPrice = Double.parseDouble(partPriceTextfield.getText());
                 newPartInv = Integer.parseInt(partInvTextfield.getText());
@@ -168,7 +166,7 @@ public class AddPartController implements Initializable {
                     );
                 }
 
-                inv.addPart(p);
+                Inventory.addPart(p);
                 clearFields();
                 ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
 

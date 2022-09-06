@@ -48,7 +48,6 @@ public class ModifyProductController implements Initializable {
     @FXML private TableColumn<Part,Integer> assocPartNameCol;
     @FXML private TableColumn<Part,Integer> assocPartInvCol;
     @FXML private TableColumn<Part,Double> assocPartPriceCol;
-    private Inventory inv;
     private int productIndex;
     private boolean productNameModified;
     private boolean productPriceModified;
@@ -105,10 +104,9 @@ public class ModifyProductController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         productWindowLabel.setText(windowLabelText);
-        inv = Inventory.getInstance();
         productIdTextfield.setEditable(false);
         productIdTextfield.setText(String.valueOf(product.getId()));
-        productIndex = inv.getAllProducts().indexOf(product);
+        productIndex = Inventory.getAllProducts().indexOf(product);
         currencyFormat = NumberFormat.getCurrencyInstance();
 
         setTextFormatters();
@@ -132,7 +130,7 @@ public class ModifyProductController implements Initializable {
         boolean isInt = true;
         try {
             int id = Integer.parseInt(searchString);
-            Part p = inv.lookupPart(id);
+            Part p = Inventory.lookupPart(id);
             ObservableList<Part> partList = FXCollections.observableArrayList();
             if (p != null) {
                 partList.add(p);
@@ -143,7 +141,7 @@ public class ModifyProductController implements Initializable {
             isInt = false;
         }
         if (!isInt) {
-            ObservableList<Part> partList = inv.lookupPart(searchString);
+            ObservableList<Part> partList = Inventory.lookupPart(searchString);
             partsTable.setItems(partList);
             if (partList.size() == 1) {
                 partsTable.getSelectionModel().select(partList.get(0));
@@ -237,7 +235,7 @@ public class ModifyProductController implements Initializable {
                 if (productMaxModified) {
                     product.setMax(Integer.parseInt(productMaxTextfield.getText()));
                 }
-                inv.updateProduct(productIndex, product);
+                Inventory.updateProduct(productIndex, product);
                 clearFields();
                 ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
 
@@ -266,7 +264,7 @@ public class ModifyProductController implements Initializable {
         helper method initializes both tableviews
      */
     private void initTableViews() {
-        partsTable.setItems(inv.getAllParts());
+        partsTable.setItems(Inventory.getAllParts());
         partsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         partIdCol.setCellValueFactory(new PropertyValueFactory<>("id"));
         partNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));

@@ -34,7 +34,6 @@ public class ModifyPartController implements Initializable {
     @FXML private TextField partMaxTextfield;
     @FXML private TextField partMinTextfield;
     @FXML private TextField dynamicPartTextfield;
-    private Inventory inv;
     private final String partWindowLabelText;
     private final Part part;
     private int partIndex;
@@ -99,12 +98,11 @@ public class ModifyPartController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         partWindowLabel.setText(partWindowLabelText);
-        inv = Inventory.getInstance();
         toggleGroup = new ToggleGroup();
         toggleGroup.getToggles().addAll(inHouseRadioBtn, outsourcedRadioBtn);
         partIdTextfield.setEditable(false);
         partIdTextfield.setText(String.valueOf(part.getId()));
-        partIndex = inv.getAllParts().indexOf(part);
+        partIndex = Inventory.getAllParts().indexOf(part);
         if (part instanceof InHouse) {
             inHouseRadioBtn.setSelected(true);
             dynamicLabel.setText(IN_HOUSE_LABEL);
@@ -212,7 +210,7 @@ public class ModifyPartController implements Initializable {
                 ((Outsourced) part).setCompanyName(dynamicPartTextfield.getText());
             }
         }
-        inv.updatePart(partIndex, part);
+        Inventory.updatePart(partIndex, part);
     }
 
     /**
@@ -246,7 +244,7 @@ public class ModifyPartController implements Initializable {
             );
         }
         if (updatedPart != null) {
-            inv.updatePart(partIndex, updatedPart);
+            Inventory.updatePart(partIndex, updatedPart);
         }
     }
 

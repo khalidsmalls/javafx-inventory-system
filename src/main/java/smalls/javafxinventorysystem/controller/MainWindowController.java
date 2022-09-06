@@ -34,7 +34,6 @@ public class MainWindowController implements Initializable {
     @FXML private TextField productSearchField;
     @FXML private TableView<Part> partsTable;
     @FXML private TableView<Product> productsTable;
-    private final Inventory inv;
     private NumberFormat currencyFormat;
     private final Stage stage;
 
@@ -45,7 +44,6 @@ public class MainWindowController implements Initializable {
      * to pass to part and product windows
      */
     public MainWindowController() {
-        inv = Inventory.getInstance();
         stage = new Stage();
     }
 
@@ -79,7 +77,7 @@ public class MainWindowController implements Initializable {
         boolean isInt = true;
         try {
             int id = Integer.parseInt(searchString);
-            Part p = inv.lookupPart(id);
+            Part p = Inventory.lookupPart(id);
             if (p != null) {
                 partList.add(p);
                 partsTable.getSelectionModel().select(p);
@@ -90,7 +88,7 @@ public class MainWindowController implements Initializable {
             isInt = false;
         }
         if (!isInt) {
-            partList = inv.lookupPart(searchString);
+            partList = Inventory.lookupPart(searchString);
             partsTable.setItems(partList);
             if (partList.size() == 1) {
                 partsTable.getSelectionModel().select(partList.get(0));
@@ -116,7 +114,7 @@ public class MainWindowController implements Initializable {
         boolean isInt = true;
         try {
             int id = Integer.parseInt(searchString);
-            Product p = inv.lookupProduct(id);
+            Product p = Inventory.lookupProduct(id);
             if (p != null) {
                 productList.add(p);
                 productsTable.getSelectionModel().select(p);
@@ -127,7 +125,7 @@ public class MainWindowController implements Initializable {
             isInt = false;
         }
         if (!isInt) {
-            productList = inv.lookupProduct(searchString);
+            productList = Inventory.lookupProduct(searchString);
             productsTable.setItems(productList);
             if (productList.size() == 1) {
                 productsTable.getSelectionModel().select(productList.get(0));
@@ -195,7 +193,7 @@ public class MainWindowController implements Initializable {
             Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete " + p.getName() + "?");
             Optional<ButtonType> result = confirmDelete.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                inv.deletePart(p);
+                Inventory.deletePart(p);
             }
         } catch (Exception e) {
             new Alert(Alert.AlertType.ERROR, "Please select a part to delete").showAndWait();
@@ -266,7 +264,7 @@ public class MainWindowController implements Initializable {
             Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete " + p.getName() + "?");
             Optional<ButtonType> result = confirmDelete.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                inv.deleteProduct(p);
+                Inventory.deleteProduct(p);
             }
         } catch (Exception e) {
             new Alert(Alert.AlertType.ERROR, "Please select a part to delete").showAndWait();
@@ -287,7 +285,7 @@ public class MainWindowController implements Initializable {
      * helper method initializes part table.
      */
    private void initPartTable() {
-       partsTable.setItems(inv.getAllParts());
+       partsTable.setItems(Inventory.getAllParts());
        TableColumn<Part, Integer> partIdColumn = new TableColumn<Part, Integer>("Part ID");
        partIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
        TableColumn<Part, String> partNameColumn = new TableColumn<Part, String>("Part Name");
@@ -326,7 +324,7 @@ public class MainWindowController implements Initializable {
      * helper method initializes product table.
      */
     private void initProductTable() {
-        productsTable.setItems(inv.getAllProducts());
+        productsTable.setItems(Inventory.getAllProducts());
         TableColumn<Product, Integer> productIdColumn = new TableColumn<Product, Integer>("Product ID");
         productIdColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         TableColumn<Product, String> productNameColumn = new TableColumn<Product, String>("Product Name");
