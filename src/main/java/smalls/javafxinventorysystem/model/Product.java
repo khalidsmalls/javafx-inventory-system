@@ -3,6 +3,16 @@ package smalls.javafxinventorysystem.model;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+/**
+ * Product objects are composed of parts, although
+ * there is no inheritance relationship between the
+ * two.
+ * <p>
+ * The class members are similar with the exception
+ * of an associated parts list, an <code>ObservableList</code>,
+ * added to the <code>Product</code> class to track the
+ * product's associated parts.
+ */
 public class Product {
 
     private final ObservableList<Part> associatedParts;

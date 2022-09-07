@@ -1,5 +1,12 @@
 package smalls.javafxinventorysystem.model;
 
+/**
+ * subclass of <code>Part</code>.
+ * <p>
+ * adds the <code>company_name</code>
+ * attribute, with getters and setters,
+ * to the parent class.
+ */
 public class Outsourced extends Part {
 
     private String companyName;

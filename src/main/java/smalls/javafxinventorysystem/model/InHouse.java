@@ -2,6 +2,7 @@ package smalls.javafxinventorysystem.model;
 
 /**
  * subclass of <code>Part</code>.
+ * <p>
  * adds the <code>machineId</code> attribute,
  * with getters and setters, to the parent class.
  */

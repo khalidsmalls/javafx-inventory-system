@@ -9,7 +9,11 @@ import java.util.Comparator;
 import java.util.Scanner;
 
 /**
- *
+ * static <code>Inventory</code> object maintains the
+ * <code>Part</code> and <code>Product</code> observable lists.
+ * <p>
+ * has static methods available to search for, add, modify,
+ * and delete parts and products.
  */
 public class Inventory {
 
