@@ -5,6 +5,8 @@ package smalls.javafxinventorysystem.model;
  * <p>
  * adds the <code>machineId</code> attribute,
  * with getters and setters, to the parent class.
+ *
+ * @author Khalid Smalls
  */
 public class InHouse extends Part {
 

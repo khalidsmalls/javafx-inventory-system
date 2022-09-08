@@ -170,12 +170,12 @@ public class ModifyPartController implements Initializable {
             if (validateInventory()) {
                 if ((part instanceof InHouse && outsourcedRadioBtn.isSelected()) ||
                         (part instanceof Outsourced && inHouseRadioBtn.isSelected())) {
-                    createNewPart();
+                    createNewPart(event);
                 } else {
-                    modifyPart();
+                    modifyPart(event);
                 }
-                clearFields();
-                ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+//                clearFields();
+//                ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
             } else {
                 //validate inventory returned false
                 new Alert(Alert.AlertType.ERROR, "Inventory must be greater than or equal to Minimum and " +
@@ -191,7 +191,7 @@ public class ModifyPartController implements Initializable {
      * onPartSave helper method,
      * modifies part through setters.
      */
-    private void modifyPart() {
+    private void modifyPart(ActionEvent event) {
         if (partNameModified) {
             part.setName(partNameTextfield.getText());
         }
@@ -209,13 +209,24 @@ public class ModifyPartController implements Initializable {
         }
         if (dynamicFieldModified) {
             if (part instanceof InHouse) {
-                ((InHouse) part).setMachineId(Integer.parseInt(dynamicPartTextfield.getText()));
+                try {
+                    ((InHouse) part).setMachineId(Integer.parseInt(dynamicPartTextfield.getText()));
+                } catch (NumberFormatException e) {
+                    new Alert(Alert.AlertType.ERROR, "Please enter a machine id").showAndWait();
+                    return;
+                }
             }
             if (part instanceof Outsourced) {
+                if (dynamicPartTextfield.getText().equals("")) {
+                    new Alert(Alert.AlertType.ERROR, "Please enter a company name").showAndWait();
+                    return;
+                }
                 ((Outsourced) part).setCompanyName(dynamicPartTextfield.getText());
             }
         }
         Inventory.updatePart(partIndex, part);
+        clearFields();
+        ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
     }
 
     /**
@@ -225,7 +236,7 @@ public class ModifyPartController implements Initializable {
      *   or outsourced to in-house, so a new part is
      *   created.
      */
-    private void createNewPart() {
+    private void createNewPart(ActionEvent event) {
         Part updatedPart = null;
         int newPartId = part.getId();
         String newPartName = partNameTextfield.getText();
@@ -235,7 +246,13 @@ public class ModifyPartController implements Initializable {
         int newPartMax = Integer.parseInt(partMaxTextfield.getText());
 
         if (toggleGroup.getSelectedToggle() == inHouseRadioBtn) {
-            int newPartMachineId = Integer.parseInt(dynamicPartTextfield.getText());
+            int newPartMachineId = 0;
+            try {
+                newPartMachineId = Integer.parseInt(dynamicPartTextfield.getText());
+            } catch (NumberFormatException e) {
+                new Alert(Alert.AlertType.ERROR, "Please enter a machine id").showAndWait();
+                return;
+            }
             updatedPart = new InHouse(
                     newPartId, newPartName, newPartPrice, newPartInv,
                     newPartMin, newPartMax, newPartMachineId
@@ -243,6 +260,10 @@ public class ModifyPartController implements Initializable {
         }
         if (toggleGroup.getSelectedToggle() == outsourcedRadioBtn) {
             String newPartCompanyName = dynamicPartTextfield.getText();
+            if (newPartCompanyName.equals("")) {
+                new Alert(Alert.AlertType.ERROR, "Please enter a company name").showAndWait();
+                return;
+            }
             updatedPart = new Outsourced(
                     newPartId, newPartName, newPartPrice, newPartInv,
                     newPartMin, newPartMax, newPartCompanyName
@@ -250,8 +271,10 @@ public class ModifyPartController implements Initializable {
         }
         if (updatedPart != null) {
             Inventory.updatePart(partIndex, updatedPart);
+            clearFields();
+            ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
         }
-    }
+    }//END of create new part
 
     /**
      * closes window.
@@ -290,9 +313,9 @@ public class ModifyPartController implements Initializable {
     }
 
     /**
-     * validates all fields are populated.
+     * validates all fields except dynamic textfield are populated.
      *
-     * @return <code>true</code> if all fields are populated. <code>false</code> if not.
+     * @return <code>true</code> if fields are populated. <code>false</code> if not.
      */
     public boolean validateFields() {
         return !(partNameTextfield.getText().equals("") || partNameTextfield.getText().length() == 0 ||

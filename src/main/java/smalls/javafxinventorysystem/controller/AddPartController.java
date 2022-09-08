@@ -10,12 +10,13 @@ import smalls.javafxinventorysystem.model.Inventory;
 import smalls.javafxinventorysystem.model.Outsourced;
 import smalls.javafxinventorysystem.model.Part;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
 
 /**
- *  Responsible for the functionality that adds an
+ *  Responsible for functionality that adds an
  *  <code>InHouse</code> or <code>Outsourced</code>
  *  part to the <code>allParts</code> <code>ObservableList</code>.
  *
@@ -67,7 +68,9 @@ public class AddPartController implements Initializable {
     };
 
     /**
-     * class constructor. Gets window label text from caller.
+     * class constructor.
+     * <p>
+     * Gets window label text from caller.
      *
      * @param partWindowLabelText the text to set the main window label to
      */
@@ -88,7 +91,7 @@ public class AddPartController implements Initializable {
      * text formatters on textFields.
      *
      * @param url not used
-     * @param resourceBundle not used at this time
+     * @param resourceBundle not used
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -159,20 +162,31 @@ public class AddPartController implements Initializable {
                 newPartMax = Integer.parseInt(partMaxTextfield.getText());
 
                 if (toggleGroup.getSelectedToggle() == inHouseRadioBtn) {
-                    int newPartMachineId = Integer.parseInt(dynamicPartTextfield.getText());
+                    int newPartMachineId;
+                    try {
+                        newPartMachineId = Integer.parseInt(dynamicPartTextfield.getText());
+                    } catch (NumberFormatException e) {
+                        new Alert(Alert.AlertType.ERROR, "Please enter a machine id").showAndWait();
+                        return;
+                    }
                     p = new InHouse(
                             newPartId, newPartName, newPartPrice, newPartInv,
                             newPartMin, newPartMax, newPartMachineId
                     );
-                } else {
+                    Inventory.addPart(p);
+                }
+                if (toggleGroup.getSelectedToggle() == outsourcedRadioBtn) {
                     String newPartCompanyName = dynamicPartTextfield.getText();
+                    if (newPartCompanyName.equals("")) {
+                        new Alert(Alert.AlertType.ERROR, "Please enter a company name").showAndWait();
+                        return;
+                    }
                     p = new Outsourced(
                             newPartId, newPartName, newPartPrice, newPartInv,
                             newPartMin, newPartMax, newPartCompanyName
                     );
+                    Inventory.addPart(p);
                 }
-
-                Inventory.addPart(p);
                 clearFields();
                 ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
 
@@ -212,8 +226,8 @@ public class AddPartController implements Initializable {
     }
 
     /**
-     * validates the user entered an inventory value that is greater than or equal to min stock
-     * and less than or equal to max stock.
+     * helper method validates the user entered an inventory value that is greater than or
+     * equal to min stock and less than or equal to max stock.
      * <p>
      * @return <code>true</code> if min is less than or equal to inventory and inventory is less than
      *          or equal to max, <code>false</code> otherwise.

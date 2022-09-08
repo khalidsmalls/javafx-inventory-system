@@ -24,8 +24,10 @@ import java.util.ResourceBundle;
 /**
  * displays full inventory of parts and products.
  * <p>
- * Responsible for functionality allowing the end user to
- * search for, view, add, modify and delete parts and products.
+ * allows the user to view all parts and products,
+ * delete parts and products, and close the program.
+ * also allows the user to open windows to add and
+ * modify parts and products.
  *
  * @author Khalid Smalls
  */
@@ -150,7 +152,7 @@ public class MainWindowController implements Initializable {
     /**
      * displays the "addPart" window.
      * <p>
-     * <code>FXMLLoader</code> instance displays <code>partWindow</code> and assigns
+     * <code>FXMLLoader</code> displays <code>partWindow</code> and assigns
      * <code>AddPartController</code> to it. Also, passes <code>partWindowLabelText</code>
      * to the <code>AddPartController</code>.
      */
@@ -172,7 +174,7 @@ public class MainWindowController implements Initializable {
     /**
      * displays the "modifyPart" window.
      * <p>
-     * <code>FXMLLoader</code> instance displays <code>partWindow</code> and assigns
+     * <code>FXMLLoader</code> displays <code>partWindow</code> and assigns
      * <code>ModifyPartController</code> to it. Also, passes <code>windowLabelText</code>
      * and the <code>Part</code> to be modified to <code>ModifyPartController</code>.
      */
@@ -209,7 +211,9 @@ public class MainWindowController implements Initializable {
             Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete " + p.getName() + "?");
             Optional<ButtonType> result = confirmDelete.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                Inventory.deletePart(p);
+                if (!Inventory.deletePart(p)) {
+                    new Alert(Alert.AlertType.ERROR, "There was a problem deleting the selected part").showAndWait();
+                }
             }
         } catch (Exception e) {
             new Alert(Alert.AlertType.ERROR, "Please select a part to delete").showAndWait();
@@ -219,7 +223,7 @@ public class MainWindowController implements Initializable {
     /**
      * displays the "addProduct" window.
      * <p>
-     * <code>FXMLLoader</code> instance displays <code>productWindow</code> and assigns
+     * <code>FXMLLoader</code> displays <code>productWindow</code> and assigns
      * <code>AddProductController</code> to it. Also, passes <code>productWindowLabelText</code>
      * to <code>AddProductController</code>.
      */
@@ -241,7 +245,7 @@ public class MainWindowController implements Initializable {
     /**
      * displays the "modifyProduct" window.
      * <p>
-     * <code>FXMLLoader</code> instance displays <code>productWindow</code> and assigns
+     * <code>FXMLLoader</code> displays <code>productWindow</code> and assigns
      * <code>ModifyProductController</code> to it. Also, passes <code>productWindowLabelText</code>
      * and the <code>Product</code> to be modified to <code><ModifyProductController</code>.
      */
@@ -282,7 +286,9 @@ public class MainWindowController implements Initializable {
             Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to delete " + p.getName() + "?");
             Optional<ButtonType> result = confirmDelete.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                Inventory.deleteProduct(p);
+                if (!Inventory.deleteProduct(p)) {
+                    new Alert(Alert.AlertType.ERROR, "There was a problem deleting the selected product").showAndWait();
+                }
             }
         } catch (Exception e) {
             new Alert(Alert.AlertType.ERROR, "Please select a part to delete").showAndWait();

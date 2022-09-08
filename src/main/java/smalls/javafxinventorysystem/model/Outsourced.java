@@ -6,6 +6,8 @@ package smalls.javafxinventorysystem.model;
  * adds the <code>company_name</code>
  * attribute, with getters and setters,
  * to the parent class.
+ *
+ * @author Khalid Smalls
  */
 public class Outsourced extends Part {
 

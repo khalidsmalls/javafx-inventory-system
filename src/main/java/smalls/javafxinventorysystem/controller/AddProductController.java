@@ -77,8 +77,8 @@ public class AddProductController implements Initializable {
 
     /**
      * class constructor.
-     *
-     * gets "Add Product" label text from the caller
+     * <p>
+     * gets <code>productWindowLabelText</code> from the caller
      *
      * @param productWindowLabelText the text to set main window label to
      */
@@ -96,7 +96,7 @@ public class AddProductController implements Initializable {
      * and associated part tableviews.
      *
      * @param url not used
-     * @param resourceBundle not used at this time
+     * @param resourceBundle not used
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -145,7 +145,8 @@ public class AddProductController implements Initializable {
     }
 
     /**
-     * adds a part to assocParts tableview.
+     * attempts to add a part or parts to
+     * <code>assocPartsTable</code> tableview.
      * <p>
      * The part is not added to this product's associated parts
      * list until <code>onSave</code> is successfully executed.
@@ -156,6 +157,7 @@ public class AddProductController implements Initializable {
             return;
         }
         if (partsTable.getSelectionModel().getSelectedItems().size() > 1) {
+            //user selected more than one part
             assocParts.addAll(partsTable.getSelectionModel().getSelectedItems());
         } else {
             assocParts.add(partsTable.getSelectionModel().getSelectedItem());
@@ -163,13 +165,17 @@ public class AddProductController implements Initializable {
     }
 
     /**
-     * removes a part from assocParts tableview.
+     * removes a part or parts from <code>assocPartsTable</code> tableview.
      * <p>
      * The part is not removed from this product's associated parts list
      * until <code>onSave</code> is successfully executed.
      */
     @FXML private void onRemoveAssocPart() {
+        if (partsTable.getSelectionModel().getSelectedItem() == null) {
+            return;
+        }
         if (assocPartsTable.getSelectionModel().getSelectedItems().size() > 1) {
+            //user selected more than one part
             assocParts.removeAll(assocPartsTable.getSelectionModel().getSelectedItems());
         } else {
             assocParts.remove(assocPartsTable.getSelectionModel().getSelectedItem());
@@ -310,8 +316,8 @@ public class AddProductController implements Initializable {
     }
 
     /**
-     * validates the user entered an inventory value that is greater than or equal to min stock
-     * and less than or equal to max stock.
+     * helper method validates the user entered an inventory value that is
+     * greater than or equal to min stock and less than or equal to max stock.
      * <p>
      * @return <code>true</code> if min is less than or equal to inventory and inventory is less than
      *          or equal to max, <code>false</code> otherwise.

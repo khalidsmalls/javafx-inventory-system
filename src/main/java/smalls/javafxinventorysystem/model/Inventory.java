@@ -9,27 +9,57 @@ import java.util.Comparator;
 import java.util.Scanner;
 
 /**
- * static <code>Inventory</code> object maintains the
+ * static <code>Inventory</code> class maintains the
  * <code>Part</code> and <code>Product</code> observable lists.
  * <p>
  * has static methods available to search for, add, modify,
  * and delete parts and products.
+ *
+ * @author Khalid Smalls
  */
 public class Inventory {
 
     private static final String INVENTORY_FILE = "src/main/java/smalls/javafxinventorysystem/parts.txt";
     private static final String PRODUCT_INVENTORY = "src/main/java/smalls/javafxinventorysystem/products.txt";
+
+    /**
+     * part id's start at 1000 and incremenet by two
+     * so they will always be even integers.
+     */
     private static int nextPartId = 1000;
+
+    /**
+     * product id's start at 1001 and increment by two
+     * so they will always be odd integers.
+     */
     private static int nextProductId = 1001;
+
+    /**
+     * <code>ObservableList</code> of <code>InHouse</code>
+     * and <code>Outsourced</code> part objects.
+     */
     private static final ObservableList<Part> allParts = FXCollections.observableArrayList();
+
+    /**
+     * <code>ObservableList</code> of <code>Product</code> objects.
+     */
     private static final ObservableList<Product> allProducts = FXCollections.observableArrayList();
+
+    /**
+     * functional interface used to compare parts by id number.
+     */
     private static final Comparator<Part> comparePartsById = (p1, p2) -> p1.getId() - p2.getId();
+
+    /**
+     * functional interface used to compare products by id number.
+     */
     private static final Comparator<Product> compareProductsById = (p1, p2) -> p1.getId() - p2.getId();
 
 
     /**
      * adds a part to the <code>allParts</code>
-     * <code>ObservableList</code>.
+     * <code>ObservableList</code> and increments
+     * <code>nextPartId</code> by two.
      *
      * @param newPart the part to add
      */
@@ -40,7 +70,8 @@ public class Inventory {
 
     /**
      * adds a product to the <code>allProducts</code>
-     * <code>ObservableList</code>.
+     * <code>ObservableList</code> and increments
+     * <code>nextProductId</code> by two.
      *
      * @param newProduct the product to add
      */
@@ -53,7 +84,7 @@ public class Inventory {
      * returns <code>nextPartId</code> to be
      * assigned to the next part.
      *
-     * @return the <code>nextId</code>
+     * @return the <code>nextPartId</code>
      */
     public static int getNextPartId() {
         return nextPartId;
@@ -63,7 +94,7 @@ public class Inventory {
      * returns <code>nextProductId</code> to be
      * assigned to the next product.
      *
-     * @return
+     * @return the <code>nextProductId</code>
      */
     public static int getNextProductId() { return nextProductId; }
 
@@ -75,27 +106,25 @@ public class Inventory {
      */
     public static Part lookupPart(int partId) {
         allParts.sort(comparePartsById);
-        Part part = searchPartsById(partId);
 
-        return part;
+        return searchPartsById(partId);
     }
 
     /**
      * searches for a <code>Product</code> by <code>id</code>.
      *
-     * @param productId the <code>productId</code> to look up
+     * @param productId the <code>id</code> to look up
      * @return the <code>Product</code> matching the <code>id</code>
      */
     public static Product lookupProduct(int productId) {
         allProducts.sort(compareProductsById);
-        Product product = searchProductsById(productId);
 
-        return product;
+        return searchProductsById(productId);
     }
 
     /**
      * searches for a <code>Part</code> by name.
-     *
+     * <p>
      * returns a <code>FilteredList</code>
      * of parts whose name contains the search string.
      *
@@ -108,11 +137,7 @@ public class Inventory {
             if (name == null || name.isEmpty()) {
                 return true;
             }
-            String lowerCaseFilter = name.toLowerCase();
-            if (part.getName().toLowerCase().contains((lowerCaseFilter))) {
-                return true;
-            }
-            return false;
+            return part.getName().toLowerCase().contains((name.toLowerCase()));
         });
         return filteredParts;
     }
@@ -132,11 +157,7 @@ public class Inventory {
             if (name == null || name.isEmpty()) {
                 return true;
             }
-            String lowerCaseFilter = name.toLowerCase();
-            if (product.getName().toLowerCase().contains(lowerCaseFilter)) {
-                return true;
-            }
-            return false;
+            return product.getName().toLowerCase().contains(name.toLowerCase());
         });
         return filteredProducts;
     }
@@ -205,7 +226,7 @@ public class Inventory {
 
     /**
      * binary search helper method called by
-     * lookup-part-by-id method.
+     * lookupPart-by-id method.
      *
      * @param id the <code>id</code> to be searched for
      * @param <T> generic type parameter representing <code>InHouse</code> or
@@ -234,7 +255,7 @@ public class Inventory {
 
     /**
      * binary search helper method called by
-     * lookup-product-by-id method.
+     * lookupProduct-by-id method.
      *
      * @param id the <code>id</code> to be searched for
      * @return the product matching the id

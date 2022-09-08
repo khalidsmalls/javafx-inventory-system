@@ -202,7 +202,9 @@ public class ModifyProductController implements Initializable {
             Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION, parts.toString());
             Optional<ButtonType> result = confirmDelete.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                product.deleteAssociatedParts(assocPartsTable.getSelectionModel().getSelectedItems());
+                if (!product.deleteAssociatedParts(assocPartsTable.getSelectionModel().getSelectedItems())) {
+                    new Alert(Alert.AlertType.ERROR, "There was a problem deleting the selected parts").showAndWait();
+                }
             }
         } else if (assocPartsTable.getSelectionModel().getSelectedItems().size() == 1) {
             //single selection
@@ -210,7 +212,9 @@ public class ModifyProductController implements Initializable {
             Alert confirmDelete = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to remove " + p.getName() + "?");
             Optional<ButtonType> result = confirmDelete.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                product.deleteAssociatedParts(assocPartsTable.getSelectionModel().getSelectedItems());
+                if (!product.deleteAssociatedParts(assocPartsTable.getSelectionModel().getSelectedItem())) {
+                    new Alert(Alert.AlertType.ERROR, "There was a problem deleting the selected part");
+                }
             }
         } else {
             //user did not select an assoc part to remove

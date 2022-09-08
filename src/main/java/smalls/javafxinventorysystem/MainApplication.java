@@ -15,6 +15,9 @@ import java.io.IOException;
  * loads the main application window of this
  * C482 javafx inventory system project.
  * <p>
+ * Javadoc for this program is included in the top level directory
+ * in the javadoc folder.
+ * <p>
  * FUTURE_ENHANCEMENT - 1. a class or framework that could encapsulate the fxmlLoader logic
  *                         as well as handling dependencies passed to windows. For example,
  *                         assigning a controller, loading the fxml file, and passing the

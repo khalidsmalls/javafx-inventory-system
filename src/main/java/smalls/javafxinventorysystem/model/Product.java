@@ -4,14 +4,15 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- * Product objects are composed of parts, although
- * there is no inheritance relationship between the
- * two.
+ * Product class, similar to <code>Part</code>,
+ * with the addition of a list of associated parts.
  * <p>
  * The class members are similar with the exception
  * of an associated parts list, an <code>ObservableList</code>,
  * added to the <code>Product</code> class to track the
  * product's associated parts.
+ *
+ * @author Khalid Smalls
  */
 public class Product {
 
@@ -186,9 +187,8 @@ public class Product {
         return associatedParts.remove(selectedAssociatedPart);
     }
 
-
     /**
-     * removes selected associated parts from this products's
+     * removes selected associated parts from this product's
      * <code>associatedParts</code> <code>ObservableList</code>.
      *
      * @param selectedAssociatedParts an <code>ObservableList</code> of parts to remove from
