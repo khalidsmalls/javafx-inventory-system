@@ -43,6 +43,7 @@ public class ModifyPartController implements Initializable {
     private boolean partInvModified;
     private boolean partMinModified;
     private boolean partMaxModified;
+    private ToggleGroup toggleGroup;
 
     /*
      * the following functional interfaces restrict form input to valid
@@ -81,7 +82,7 @@ public class ModifyPartController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         partWindowLabel.setText(partWindowLabelText);
         inv = Inventory.getInstance();
-        ToggleGroup toggleGroup = new ToggleGroup();
+        toggleGroup = new ToggleGroup();
         toggleGroup.getToggles().addAll(inHouseRadioBtn, outsourcedRadioBtn);
         inHouseRadioBtn.setSelected(true);
         partIdTextfield.setEditable(false);
@@ -135,6 +136,46 @@ public class ModifyPartController implements Initializable {
             new Alert(Alert.AlertType.ERROR, "Please enter a value for all fields").showAndWait();
         }
     }
+
+    private void createNewPart(ActionEvent event) {
+        Part updatedPart = null;
+        int newPartId = part.getId();
+        String newPartName = partNameTextfield.getText();
+        double newPartPrice = Double.parseDouble(partPriceTextfield.getText());
+        int newPartInv = Integer.parseInt(partInvTextfield.getText());
+        int newPartMin = Integer.parseInt(partMinTextfield.getText());
+        int newPartMax = Integer.parseInt(partMaxTextfield.getText());
+
+        if (toggleGroup.getSelectedToggle() == inHouseRadioBtn) {
+            int newPartMachineId = 0;
+            try {
+                newPartMachineId = Integer.parseInt(dynamicPartTextfield.getText());
+            } catch (NumberFormatException e) {
+                new Alert(Alert.AlertType.ERROR, "Please enter a machine id").showAndWait();
+                return;
+            }
+            updatedPart = new InHouse(
+                    newPartId, newPartName, newPartPrice, newPartInv,
+                    newPartMin, newPartMax, newPartMachineId
+            );
+        }
+        if (toggleGroup.getSelectedToggle() == outsourcedRadioBtn) {
+            String newPartCompanyName = dynamicPartTextfield.getText();
+            if (newPartCompanyName.equals("")) {
+                new Alert(Alert.AlertType.ERROR, "Please enter a company name").showAndWait();
+                return;
+            }
+            updatedPart = new Outsourced(
+                    newPartId, newPartName, newPartPrice, newPartInv,
+                    newPartMin, newPartMax, newPartCompanyName
+            );
+        }
+        if (updatedPart != null) {
+            inv.updatePart(partIndex, updatedPart);
+            clearFields();
+            ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+        }
+    }//END of create new part
 
     @FXML private void onPartCancel(ActionEvent e) {
         ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
