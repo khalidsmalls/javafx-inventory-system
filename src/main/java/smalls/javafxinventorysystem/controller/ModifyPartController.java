@@ -183,8 +183,6 @@ public class ModifyPartController implements Initializable {
                 } else {
                     modifyPart(event);
                 }
-//                clearFields();
-//                ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
             } else {
                 //validate inventory returned false
                 new Alert(Alert.AlertType.ERROR, "Inventory must be greater than or equal to Minimum and " +
