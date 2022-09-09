@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import smalls.javafxinventorysystem.controller.*;
 import java.io.IOException;
 import java.util.Objects;
@@ -14,7 +15,7 @@ public class DependencyManager {
 
     public static void loadMainWindow(Stage stage) {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(DependencyManager.class.getResource("mainWindow.fxml"));
+        loader.setLocation(DependencyManager.class.getResource("view/mainWindow.fxml"));
         loader.setController(mainAppCtrl);
 
         try {
@@ -32,7 +33,7 @@ public class DependencyManager {
 
     public static void loadAddPart(Stage stage) {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(DependencyManager.class.getResource("partWindow.fxml"));
+        loader.setLocation(DependencyManager.class.getResource("view/partWindow.fxml"));
         loader.setController(new AddPartController("Add Part"));
 
         try {
@@ -50,7 +51,7 @@ public class DependencyManager {
 
     public static void loadModifyPart(Stage stage) {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(DependencyManager.class.getResource("partWindow.fxml"));
+        loader.setLocation(DependencyManager.class.getResource("view/partWindow.fxml"));
         loader.setController(new ModifyPartController(mainAppCtrl.getSelectedPart(), "Modify Part"));
 
         try {
@@ -68,7 +69,7 @@ public class DependencyManager {
 
     public static void loadAddProduct(Stage stage) {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(DependencyManager.class.getResource("productWindow.fxml"));
+        loader.setLocation(DependencyManager.class.getResource("view/productWindow.fxml"));
         loader.setController(new AddProductController("Add Product"));
 
         try {

@@ -156,8 +156,11 @@ public class MainWindowController implements Initializable {
     }
 
    @FXML private void onClose(ActionEvent e) {
-       ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
-
+       Alert confirmClose = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you wish to close the program?");
+       Optional<ButtonType> result = confirmClose.showAndWait();
+       if (result.isPresent() && result.get() == ButtonType.OK) {
+           ((Stage) (((Button) e.getSource()).getScene().getWindow())).close();
+       }
    }
 
    private void initPartTable() {
