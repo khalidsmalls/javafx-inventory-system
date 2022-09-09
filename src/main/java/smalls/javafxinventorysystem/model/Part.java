@@ -1,17 +1,55 @@
 package smalls.javafxinventorysystem.model;
 
 /**
+ * abstract part class -
+ * parent of <code>InHouse</code> and
+ * <code>Outsourced</code> classes
+ *
  * @author Khalid Smalls
  */
 
 public abstract class Part {
+
+    /**
+     * this part's id number
+     */
     private int id;
+
+    /**
+     * this part's name
+     */
     private String name;
+
+    /**
+     * this part's price
+     */
     private double price;
+
+    /**
+     * this part's stock
+     */
     private int stock;
+
+    /**
+     * this part's minimum stock
+     */
     private int min;
+
+    /**
+     * this part's maximum stock
+     */
     private int max;
 
+    /**
+     * class constructor.
+     *
+     * @param id the new part id
+     * @param name the new part name
+     * @param price the new part price
+     * @param stock the new part stock
+     * @param min the new part minimum stock
+     * @param max the new part maximum stock
+     */
     public Part(int id, String name, double price, int stock, int min, int max) {
         this.id = id;
         this.name = name;

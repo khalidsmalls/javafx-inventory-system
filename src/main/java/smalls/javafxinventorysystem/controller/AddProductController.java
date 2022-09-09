@@ -26,31 +26,131 @@ import java.util.function.UnaryOperator;
  */
 public class AddProductController implements Initializable {
 
+    /**
+     * constant for non-editable product id textfield value
+     */
     private static final String PRODUCT_ID_FIELD_TEXT = "Auto Gen- Disabled";
+
+    /**
+     * constant for partsTable placeholder
+     */
     private static final String PART_NOT_FOUND_MSG = "Part not found";
+
+    /**
+     * the main label for the window
+     */
     @FXML private Label productWindowLabel;
+
+    /**
+     * non-editable product id textfield
+     */
     @FXML private TextField productIdTextfield;
+
+    /**
+     * product name textfield
+     */
     @FXML private TextField productNameTextfield;
+
+    /**
+     * product price textfield
+     */
     @FXML private TextField productPriceTextfield;
+
+    /**
+     * product stock textfield
+     */
     @FXML private TextField productInvTextfield;
+
+    /**
+     * product minimum stock
+     * textfield
+     */
     @FXML private TextField productMinTextfield;
+
+    /**
+     * product maximum stock
+     * textfield
+     */
     @FXML private TextField productMaxTextfield;
+
+    /**
+     * product search textfield
+     */
     @FXML private TextField partSearchTextfield;
+
+    /**
+     * parts <code>TableView</code>.
+     * <p>
+     * set to <code>allParts</code>
+     * <code>ObservableList</code>
+     */
     @FXML private TableView<Part> partsTable;
+
+    /**
+     * product associated parts <code>TableView</code>
+     */
     @FXML private TableView<Part>  assocPartsTable;
+
+    /**
+     * <code>partsTable</code> part id column
+     */
     @FXML private TableColumn<Part,Integer> partIdCol;
+
+    /**
+     * <code>partsTable</code> part name column
+     */
     @FXML private TableColumn<Part,String> partNameCol;
+
+    /**
+     * <code>partsTable</code> part price column
+     */
     @FXML private TableColumn<Part,Double> partPriceCol;
+
+    /**
+     * <code>partsTable</code> part stock column
+     */
     @FXML private TableColumn<Part,Integer> partInvCol;
+
+    /**
+     * <code>assocPartsTable</code> part id column
+     */
     @FXML private TableColumn<Part,Integer> assocPartIdCol;
+
+    /**
+     * <code>assocPartsTable</code> part name column
+     */
     @FXML private TableColumn<Part,String> assocPartNameCol;
+
+    /**
+     * <code>assocPartsTable</code> part stock column
+     */
     @FXML private TableColumn<Part,Integer> assocPartInvCol;
+
+    /**
+     * <code>assocPartsTable</code> part price column
+     */
     @FXML private TableColumn<Part,Double> assocPartPriceCol;
+
+    /**
+     * <code>ObservableList</code> of a product's
+     * associated parts.
+     */
     @FXML private ObservableList<Part> assocParts;
+
+    /**
+     * text for the main window label
+     */
     private final String productWindowLabelText;
+
+    /**
+     * currency formatter for price table column
+     */
     private NumberFormat currencyFormat;
 
-    //functional interfaces for restricting text input to valid characters
+    /**
+     * unary operator for restricting text input to an integer
+     * of less than 15 characters
+     */
     private final UnaryOperator<TextFormatter.Change> integerFilter = change -> {
         String newText = change.getControlNewText();
         if (newText.length() > 15) {
@@ -62,6 +162,10 @@ public class AddProductController implements Initializable {
         return null;
     };
 
+    /**
+     * unary operator for restricting text input to double values
+     * of less than 15 characters.
+     */
     private final UnaryOperator<TextFormatter.Change> doubleFilter = change -> {
         String newText = change.getControlNewText();
         if (newText.length() > 15) {
@@ -73,6 +177,10 @@ public class AddProductController implements Initializable {
         return null;
     };
 
+    /**
+     * unary operator for restricting text input to strings of
+     * less than 35 characters.
+     */
     private final UnaryOperator<TextFormatter.Change> stringFilter = change -> {
         String newText = change.getControlNewText();
         if (newText.length() > 35) {
@@ -84,6 +192,10 @@ public class AddProductController implements Initializable {
         return null;
     };
 
+    /**
+     * unary operator for restricting text input of part search field to
+     * less than 35 characters
+     */
     private final UnaryOperator<TextFormatter.Change> lengthFilter = change -> {
         String newText = change.getControlNewText();
         if (newText.length() > 35) {
@@ -110,7 +222,8 @@ public class AddProductController implements Initializable {
      * sets main window label text,
      * sets product id textField non-editable,
      * sets text formatters, initializes part
-     * and associated part tableviews.
+     * and associated part tableviews,
+     * initializes associated parts list.
      *
      * @param url not used
      * @param resourceBundle not used
@@ -166,7 +279,7 @@ public class AddProductController implements Initializable {
      * attempts to add a part or parts to
      * <code>assocPartsTable</code> tableview.
      * <p>
-     * The part is not added to this product's associated parts
+     * The part is not saved to this product's associated parts
      * list until <code>onSave</code> is successfully executed.
      */
     @FXML private void onAddAssocPart() {
@@ -183,7 +296,8 @@ public class AddProductController implements Initializable {
     }
 
     /**
-     * removes a part or parts from <code>assocPartsTable</code> tableview.
+     * removes a part or parts from <code>assocPartsTable</code> tableview
+     * if the user has selected one or more.
      * <p>
      * The part is not removed from this product's associated parts list
      * until <code>onSave</code> is successfully executed.
@@ -309,7 +423,8 @@ public class AddProductController implements Initializable {
     }
 
     /**
-     * helper method sets filters on textFields to restrict user-entered data to proper types
+     * helper method sets filters on textFields to restrict user-entered data
+     * to proper data types
      */
     private void setTextFormatters() {
         productInvTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));

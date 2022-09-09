@@ -11,11 +11,9 @@ package smalls.javafxinventorysystem.model;
 public class InHouse extends Part {
 
     /**
-     * identifies this <code>InHouse</code> part
-     * as unique.
+     * machine id number of in-house part
      */
     private int machineId;
-
 
     /**
      * class constructor.

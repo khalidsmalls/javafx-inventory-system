@@ -11,6 +11,10 @@ package smalls.javafxinventorysystem.model;
  */
 public class Outsourced extends Part {
 
+    /**
+     * company name of the <code>Outsourced</code>
+     * <code>Part</code>
+     */
     private String companyName;
 
     /**

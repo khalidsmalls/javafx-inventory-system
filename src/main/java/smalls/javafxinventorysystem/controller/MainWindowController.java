@@ -33,13 +33,45 @@ import java.util.function.UnaryOperator;
  * @author Khalid Smalls
  */
 public class MainWindowController implements Initializable {
+
+    /**
+     * part search textfield
+     */
     @FXML private TextField partSearchField;
+
+    /**
+     * product search textfield
+     */
     @FXML private TextField productSearchField;
+
+    /**
+     * displays the <code>allParts</code>
+     * <code>ObservableList</code>
+     */
     @FXML private TableView<Part> partsTable;
+
+    /**
+     * displays the <code>allProducts</code>
+     * <code>ObservableList</code>
+     */
     @FXML private TableView<Product> productsTable;
+
+    /**
+     * sets currency format on price columns of
+     * part and product tableviews
+     */
     private NumberFormat currencyFormat;
+
+    /**
+     * the stage to pass to part and product
+     * windows
+     */
     private final Stage stage;
 
+    /**
+     * unary operator for restricting input of search fields to
+     * less than 35 characters.
+     */
     private final UnaryOperator<TextFormatter.Change> lengthFilter = change -> {
         String newText = change.getControlNewText();
         if (newText.length() > 35) {
@@ -51,7 +83,7 @@ public class MainWindowController implements Initializable {
     /**
      * class constructor.
      * <p>
-     * creates a new stage to pass to part and product windows
+     * initializes a new stage to pass to part and product windows
      * at the appropriate time.
      */
     public MainWindowController() {
@@ -63,6 +95,7 @@ public class MainWindowController implements Initializable {
      * but before the scene is displayed.
      * <p>
      * initializes tableviews and currency formatter.
+     * sets textFormatters on search fields.
      *
      * @param url not used
      * @param resourceBundle not used
@@ -87,7 +120,7 @@ public class MainWindowController implements Initializable {
      * a "part not found" placeholder is displayed.
      *
      * RUNTIME_ERROR - IllegalArgumentException - thrown when the partsTable
-     *                 is passed a null value to the setItems() method. The updateItem
+     *                 is passed a null value to the setItems method. The updateItem
      *                 functional interface in the initPartTable method is where
      *                 the error originated due to not being able to format null
      *                 to a number. It was fixed by adding the "if(p != null)"
@@ -121,7 +154,6 @@ public class MainWindowController implements Initializable {
                 partsTable.getSelectionModel().select(partList.get(0));
             }
         }
-
     }
 
     /**

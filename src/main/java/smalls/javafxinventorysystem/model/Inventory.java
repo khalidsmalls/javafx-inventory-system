@@ -19,9 +19,6 @@ import java.util.Scanner;
  */
 public class Inventory {
 
-    private static final String INVENTORY_FILE = "src/main/java/smalls/javafxinventorysystem/parts.txt";
-    private static final String PRODUCT_INVENTORY = "src/main/java/smalls/javafxinventorysystem/products.txt";
-
     /**
      * part id's start at 1000 and incremenet by two
      * so they will always be even integers.
@@ -100,6 +97,10 @@ public class Inventory {
 
     /**
      * searches for a part by <code>id</code>.
+     * <p>
+     * sorts parts by implementing <code>comparePartsById</code>
+     * functional interface, then implements binary search
+     * helper method, <code>searchPartsById</code>.
      *
      * @param partId the <code>id</code> to look up
      * @return the <code>Part</code> matching the <code>id</code>
@@ -112,6 +113,10 @@ public class Inventory {
 
     /**
      * searches for a <code>Product</code> by <code>id</code>.
+     * <p>
+     * sorts products by implementing <code>compareProductsById</code>
+     * functional interface, then implements binary search
+     * helper method, <code>searchProductsById</code>.
      *
      * @param productId the <code>id</code> to look up
      * @return the <code>Product</code> matching the <code>id</code>
@@ -144,7 +149,7 @@ public class Inventory {
 
     /**
      * searches for a <code>Product</code> by name.
-     *
+     * <p>
      * returns a <code>FilteredList</code>
      * of products whose name contains the search string.
      *
@@ -278,36 +283,5 @@ public class Inventory {
             mid = (start + end) / 2;
         }
         return product;
-    }
-
-    public static void loadParts() {
-        String[] record;
-        try (Scanner inFile = new Scanner(new FileInputStream(INVENTORY_FILE))) {
-            while (inFile.hasNextLine()) {
-                record = inFile.nextLine().split(",");
-                Part part = new InHouse(Integer.parseInt(record[0]), record[1], Double.parseDouble(record[2]),
-                        Integer.parseInt(record[3]), Integer.parseInt(record[4]), Integer.parseInt(record[5]),
-                        Integer.parseInt(record[6]));
-                Inventory.addPart(part);
-            }
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void loadProducts() {
-        String[] record;
-        try (Scanner inFile = new Scanner(new FileInputStream(PRODUCT_INVENTORY))) {
-            while (inFile.hasNextLine()) {
-                record = inFile.nextLine().split(",");
-                Product p = new Product(Integer.parseInt(record[0]), record[1], Double.parseDouble(record[2]),
-                        Integer.parseInt(record[3]), Integer.parseInt(record[4]), Integer.parseInt(record[5]));
-                Inventory.addProduct(p);
-            }
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 }

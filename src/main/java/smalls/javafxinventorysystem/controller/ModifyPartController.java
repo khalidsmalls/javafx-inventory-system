@@ -16,38 +16,149 @@ import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
 /**
- * Responsible for funcionality that allows end-user
+ * Responsible for functionality that allows end-user
  * to modify an existing <code>Part</code>.
  *
  * @author Khalid Smalls
  */
 public class ModifyPartController implements Initializable {
+
+    /**
+     * constant for <code>InHouse</code> part dynamic
+     * label text
+     */
     private final String IN_HOUSE_LABEL = "Machine ID";
+
+    /**
+     * constant for <code>Outsourced</code> part dynamic
+     * label
+     */
     private final String OUTSOURCED_LABEL = "Company Name";
+
+    /**
+     * main window label
+     */
     @FXML private Label partWindowLabel;
+
+    /**
+     * the label that changes from "machine id" to
+     * "company name" and back according to the type of
+     * part to be modified.
+     */
     @FXML private Label dynamicLabel;
+
+    /**
+     * specifies an <code>InHouse</code>
+     * <code>Part</code>
+     */
     @FXML private RadioButton inHouseRadioBtn;
+
+    /**
+     * specifies an <code>Outsourced</code>
+     * <code>Part</code>
+     */
     @FXML private RadioButton outsourcedRadioBtn;
+
+    /**
+     * part id textfield
+     */
     @FXML private TextField partIdTextfield;
+
+    /**
+     * part name textfield
+     */
     @FXML private TextField partNameTextfield;
+
+    /**
+     * part stock textfield
+     */
     @FXML private TextField partInvTextfield;
+
+    /**
+     * part price textfield
+     */
     @FXML private TextField partPriceTextfield;
+
+    /**
+     * maximum part stock textfield
+     */
     @FXML private TextField partMaxTextfield;
+
+    /**
+     * minimum part stock textfield
+     */
     @FXML private TextField partMinTextfield;
+
+    /**
+     * textfield for <code>machindId</code> or
+     * <code>company_name</code>
+     */
     @FXML private TextField dynamicPartTextfield;
+
+    /**
+     * text for the main window label
+     */
     private final String partWindowLabelText;
+
+    /**
+     * the part to be modified
+     */
     private final Part part;
+
+    /**
+     * the index of the part to
+     * be modified
+     */
     private int partIndex;
+
+    /**
+     * boolean to flag part name
+     * if it is modified by user
+     */
     private boolean partNameModified;
+
+    /**
+     * boolean to flag part price
+     * if it is modified by user
+     */
     private boolean partPriceModified;
+
+    /**
+     * boolean to flag part stock
+     * if it is modified by user
+     */
     private boolean partInvModified;
+
+    /**
+     * boolean to flag minimum part
+     * stock if it is modified by
+     * user
+     */
     private boolean partMinModified;
+
+    /**
+     * boolean to flag maximum part
+     * stock if it is modified by
+     * user
+     */
     private boolean partMaxModified;
+
+    /**
+     * boolean to flag dynamic textfield
+     * if it is modified by user
+     */
     private boolean dynamicFieldModified;
+
+    /**
+     * <code>InHouse</code> and <code>Outsourced</code>
+     * radio toggle group
+     */
     private ToggleGroup toggleGroup;
 
-//       the following functional interfaces restrict form input to valid
-//       characters using regular expressions
+    /**
+     * unary operator for restricting text input to an integer
+     * of less than 15 characters
+     */
     private final UnaryOperator<TextFormatter.Change> integerFilter = change -> {
         String newText = change.getControlNewText();
         if (newText.length() > 15) {
@@ -59,6 +170,10 @@ public class ModifyPartController implements Initializable {
         return null;
     };
 
+    /**
+     * unary operator for restricting text input to double values
+     * of less than 15 characters.
+     */
     private final UnaryOperator<TextFormatter.Change> doubleFilter = change -> {
         String newText = change.getControlNewText();
         if (newText.length() > 15) {
@@ -70,6 +185,10 @@ public class ModifyPartController implements Initializable {
         return null;
     };
 
+    /**
+     * unary operator for restricting text input to strings of
+     * less than 35 characters.
+     */
     private final UnaryOperator<TextFormatter.Change> stringFilter = change -> {
         String newText = change.getControlNewText();
         if (newText.length() > 35) {
@@ -144,7 +263,7 @@ public class ModifyPartController implements Initializable {
     }
 
     /**
-     * specifies an <code>outsourced</code> part.
+     * specifies an <code>Outsourced</code> part.
      * <p>
      * sets dynamic label text to "company name" and sets
      * string filter on corresponding textField. Also
@@ -157,8 +276,8 @@ public class ModifyPartController implements Initializable {
     }
 
     /**
-     * saves a modified part or creates a new part if the user selects
-     * the other part type, and saves the part to the same index.
+     * saves a modified part or creates a new part if the user changes the
+     * part type, and saves the part to the same index.
      * <p>
      * First, validates fields are populated and that min stock
      * entered by user is less than or equal to inventory and inventory
@@ -253,7 +372,7 @@ public class ModifyPartController implements Initializable {
         int newPartMax = Integer.parseInt(partMaxTextfield.getText());
 
         if (toggleGroup.getSelectedToggle() == inHouseRadioBtn) {
-            int newPartMachineId = 0;
+            int newPartMachineId;
             try {
                 newPartMachineId = Integer.parseInt(dynamicPartTextfield.getText());
             } catch (NumberFormatException e) {
@@ -320,7 +439,8 @@ public class ModifyPartController implements Initializable {
     }
 
     /**
-     * validates all fields except dynamic textfield are populated.
+     * validates all fields except dynamic textfield are populated. dynamic field
+     * is validated on part save.
      *
      * @return <code>true</code> if fields are populated. <code>false</code> if not.
      */
@@ -333,7 +453,7 @@ public class ModifyPartController implements Initializable {
     }
 
     /**
-     * validates user-entered min stock is less that or equal to inventory and inventory is
+     * validates user-entered min stock is less than or equal to inventory and inventory is
      *  less than or equal to max stock entered by user.
      *
      * @return <code>true</code> if min is less than or equal to inventory and inventory is
@@ -377,10 +497,6 @@ public class ModifyPartController implements Initializable {
 
     /**
      * helper method initializes invalidation listeners and adds them to textFields.
-     * this helper method is called during initialization, however, the
-     * invalidation listeners are of interest to the modifyPart helper
-     * method called by onPartSave and used to flag the fields that the user
-     * has modified.
      */
     public void initInvalidationListeners() {
         partNameModified = false;

@@ -4,24 +4,50 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- * Product class, similar to <code>Part</code>,
- * with the addition of a list of associated parts.
+ * Product class.
  * <p>
- * The class members are similar with the exception
- * of an associated parts list, an <code>ObservableList</code>,
- * added to the <code>Product</code> class to track the
- * product's associated parts.
+ * each product object is instantiated
+ * with a list of associated parts, which
+ * may be chosen at product creation and edited
+ * during product modification.
  *
  * @author Khalid Smalls
  */
 public class Product {
 
+    /**
+     * this product's list of associated parts
+     */
     private final ObservableList<Part> associatedParts;
+
+    /**
+     * this product's id number
+     */
     private int id;
+
+    /**
+     * this product's name
+     */
     private String name;
+
+    /**
+     * this product's price
+     */
     private double price;
+
+    /**
+     * this product's stock
+     */
     private int stock;
+
+    /**
+     * this product's  minimum stock
+     */
     private int min;
+
+    /**
+     * this product's maximum stock
+     */
     private int max;
 
     /**

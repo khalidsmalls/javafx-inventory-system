@@ -28,35 +28,154 @@ import java.util.function.UnaryOperator;
  * @author Khalid Smalls
  */
 public class ModifyProductController implements Initializable {
+
+    /**
+     * the product to be modified
+     */
     private final Product product;
+
+    /**
+     * the text for the main window
+     * label
+     */
     private final String productWindowLabelText;
+
+    /**
+     * the main window label
+     */
     @FXML private Label productWindowLabel;
+
+    /**
+     * product id textfield
+     */
     @FXML private TextField productIdTextfield;
+
+    /**
+     * product name textfield
+     */
     @FXML private TextField productNameTextfield;
+
+    /**
+     * product price textfield
+     */
     @FXML private TextField productPriceTextfield;
+
+    /**
+     * product stock textfield
+     */
     @FXML private TextField productInvTextfield;
+
+    /**
+     * product minimum stock textfield
+     */
     @FXML private TextField productMinTextfield;
+
+    /**
+     * product maximum stock textfield
+     */
     @FXML private TextField productMaxTextfield;
+
+    /**
+     * part search textfield
+     */
     @FXML private TextField partSearchTextfield;
+
+    /**
+     * displays the <code>allParts</code>
+     * <code>ObservableList</code>
+     */
     @FXML private TableView<Part> partsTable;
+
+    /**
+     * displays the product's list of associated
+     * parts
+     */
     @FXML private TableView<Part> assocPartsTable;
+
+    /**
+     * part id table column
+     */
     @FXML private TableColumn<Part,Integer> partIdCol;
+
+    /**
+     * part name table column
+     */
     @FXML private TableColumn<Part,Integer> partNameCol;
+
+    /**
+     * part stock table column
+     */
     @FXML private TableColumn<Part,Integer> partInvCol;
+
+    /**
+     * part price table column
+     */
     @FXML private TableColumn<Part,Double> partPriceCol;
+
+    /**
+     * associated part id column
+     */
     @FXML private TableColumn<Part,Integer> assocPartIdCol;
+
+    /**
+     * associated part name column
+     */
     @FXML private TableColumn<Part,Integer> assocPartNameCol;
+
+    /**
+     * associated part stock table column
+     */
     @FXML private TableColumn<Part,Integer> assocPartInvCol;
+
+    /**
+     * associated part price table column
+     */
     @FXML private TableColumn<Part,Double> assocPartPriceCol;
+
+    /**
+     * the index of the part to be modified
+     */
     private int productIndex;
+
+    /**
+     * boolean to flag the product name if it
+     * is modified by the user
+     */
     private boolean productNameModified;
+
+    /**
+     * boolean to flag the product price if it
+     * is modified by the user
+     */
     private boolean productPriceModified;
+
+    /**
+     * boolean to flag the product stock if it
+     * is modified by the user
+     */
     private boolean productInvModified;
+
+    /**
+     * boolean to flag the product minimum stock
+     * if it is modified by user
+     */
     private boolean productMinModified;
+
+    /**
+     * boolean to flag the product maximum stock if
+     * it is modified by the user
+     */
     private boolean productMaxModified;
+
+    /**
+     * currency formatter
+     */
     private NumberFormat currencyFormat;
 
-    //functional interfaces for restricting text input to valid characters
+    /**
+     * unary operator for restricting text input to an integer
+     * of less than 15 characters
+     */
     private final UnaryOperator<TextFormatter.Change> integerFilter = change -> {
         String newText = change.getControlNewText();
         if (newText.length() > 15) {
@@ -68,6 +187,10 @@ public class ModifyProductController implements Initializable {
         return null;
     };
 
+    /**
+     * unary operator for restricting text input to double values
+     * of less than 15 characters.
+     */
     private final UnaryOperator<TextFormatter.Change> doubleFilter = change -> {
         String newText = change.getControlNewText();
         if (newText.length() > 15) {
@@ -79,6 +202,10 @@ public class ModifyProductController implements Initializable {
         return null;
     };
 
+    /**
+     * unary operator for restricting text input to strings of
+     * less than 35 characters.
+     */
     private final UnaryOperator<TextFormatter.Change> stringFilter = change -> {
         String newText = change.getControlNewText();
         if (newText.length() > 35) {
@@ -90,6 +217,10 @@ public class ModifyProductController implements Initializable {
         return null;
     };
 
+    /**
+     * unary operator for restricting text input to less than 35 characters.
+     * implemented by part search textfield.
+     */
     private final UnaryOperator<TextFormatter.Change> lengthFilter = change -> {
         String newText = change.getControlNewText();
         if (newText.length() > 35) {
@@ -178,8 +309,8 @@ public class ModifyProductController implements Initializable {
     /**
      * adds a part to <code>assocPartsTable</code> <code>Tableview</code>.
      * <p>
-     * The part is not added to this
-     * product's associated parts list until <code>onSave</code> method is successfully executed.
+     * The part is not saved to this product's associated parts list until
+     * <code>onSave</code> method is successfully executed.
      */
     @FXML private void onAddAssocPart() {
         if (partsTable.getSelectionModel().getSelectedItem() == null) {
@@ -243,9 +374,9 @@ public class ModifyProductController implements Initializable {
     /**
      * saves a modified product.
      * <p>
-     * modifies fields with setters,
-     * always saves product with same <code>id</code>
-     * at same index in <code>allProducts</code> list.
+     * modifies fields with setters, always saves product
+     * with same <code>id</code> at same index in
+     * <code>allProducts</code> list.
      *
      * @param event the object that allows access to the stage so that
      *              it may be closed after the product is saved
@@ -400,10 +531,6 @@ public class ModifyProductController implements Initializable {
 
     /**
      * initializes invalidation listeners and adds them to textFields.
-     * <p>
-     * this helper method is called during initialization, however, the
-     * invalidation listeners are of interest to the onSave method and
-     * used to flag the fields that the user has modified.
      */
     public void initInvalidationListeners() {
         productNameModified = false;

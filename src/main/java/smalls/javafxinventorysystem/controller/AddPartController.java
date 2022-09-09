@@ -10,7 +10,6 @@ import smalls.javafxinventorysystem.model.Inventory;
 import smalls.javafxinventorysystem.model.Outsourced;
 import smalls.javafxinventorysystem.model.Part;
 import java.net.URL;
-import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.function.UnaryOperator;
 
@@ -18,31 +17,104 @@ import java.util.function.UnaryOperator;
 /**
  *  Responsible for functionality that adds an
  *  <code>InHouse</code> or <code>Outsourced</code>
- *  part to the <code>allParts</code> <code>ObservableList</code>.
+ *  <code>Part</code> to the <code>allParts</code>
+ *  <code>ObservableList</code>.
  *
  * @author Khalid Smalls
  */
 public class AddPartController implements Initializable {
+
+    /**
+     * constant for non-editable part id textfield value
+     */
     private static final String PART_ID_TEXTFIELD_TEXT = "Auto Gen- Disabled";
+
+    /**
+     * constant for <code>InHouse</code> <code>Part</code> dynamic
+     * textfield label.
+     */
     private static final String IN_HOUSE_LABEL = "Machine ID";
+
+    /**
+     * constant for <code>Outsourced</code> <code>Part</code> dynamic
+     * textfield label.
+     */
     private static final String OUTSOURCED_LABEL = "Company Name";
+
+    /**
+     * the main label for the partWindow
+     */
     @FXML private Label partWindowLabel;
+
+    /**
+     * the label that changes from "machine id" to
+     * "company name" and back according to the type of
+     * part to be added.
+     */
     @FXML private Label dynamicLabel;
+
+    /**
+     * specifies an <code>InHouse</code>
+     * <code>Part</code>.
+     */
     @FXML private RadioButton inHouseRadioBtn;
+
+    /**
+     * specifies an <code>Outsourced</code>
+     * <code>Part</code>.
+     */
     @FXML private RadioButton outsourcedRadioBtn;
+
+    /**
+     * part id textfield
+     */
     @FXML private TextField partIdTextfield;
+
+    /**
+     * part name textfield
+     */
     @FXML private TextField partNameTextfield;
+
+    /**
+     * part stock textfield
+     */
     @FXML private TextField partInvTextfield;
+
+    /**
+     * part price textfield
+     */
     @FXML private TextField partPriceTextfield;
+
+    /**
+     * part maximum stock textfield
+     */
     @FXML private TextField partMaxTextfield;
+
+    /**
+     * part minimum stock textfield
+     */
     @FXML private TextField partMinTextfield;
+
+    /**
+     * textfield for <code>machineId</code> or
+     * <code>company_name</code>
+     */
     @FXML private TextField dynamicPartTextfield;
+
+    /**
+     * the text for the main window label
+     */
     private final String partWindowLabelText;
+
+    /**
+     * the inHouse and outsourced radio toggle group
+     */
     private ToggleGroup toggleGroup;
 
-
-//       the following functional interfaces restrict form input to valid
-//       characters using regular expressions
+    /**
+     * unary operator for restricting text input to an integer
+     * of less than 15 characters
+     */
     private final UnaryOperator<TextFormatter.Change> integerFilter = change -> {
         String newText = change.getControlNewText();
         if (newText.length() > 15) {
@@ -55,6 +127,10 @@ public class AddPartController implements Initializable {
         return null;
     };
 
+    /**
+     * unary operator for restricting text input to double values
+     * of less than 15 characters.
+     */
     private final UnaryOperator<TextFormatter.Change> doubleFilter = change -> {
         String newText = change.getControlNewText();
         if (newText.length() > 15) {
@@ -66,6 +142,10 @@ public class AddPartController implements Initializable {
         return null;
     };
 
+    /**
+     * unary operator for restricting text input to strings of
+     * less than 35 characters.
+     */
     private final UnaryOperator<TextFormatter.Change> stringFilter = change -> {
         String newText = change.getControlNewText();
         if (newText.length() > 35) {
@@ -109,11 +189,9 @@ public class AddPartController implements Initializable {
         toggleGroup.getToggles().addAll(inHouseRadioBtn, outsourcedRadioBtn);
         inHouseRadioBtn.setSelected(true);
         dynamicLabel.setText(IN_HOUSE_LABEL);
-        dynamicPartTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
         partIdTextfield.setEditable(false);
         partIdTextfield.setText(PART_ID_TEXTFIELD_TEXT);
         partWindowLabel.setText(partWindowLabelText);
-
         setTextFormatters();
     }
 
@@ -131,7 +209,7 @@ public class AddPartController implements Initializable {
     }
 
     /**
-     * specifies an <code>outsourced</code> part.
+     * specifies an <code>Outsourced</code> part.
      * <p>
      * sets dynamic label text to "company name" and sets
      * string filter on corresponding textField. Also
@@ -222,10 +300,10 @@ public class AddPartController implements Initializable {
     }
 
     /**
-     * helper method validates all fields are populated when user
-     * clicks save button.
+     * helper method validates all fields, except dynamic field, are populated when user
+     * clicks save button. Dynamic field is validated on save.
      *
-     * @return <code>true</code> if all fields are populated, <code>false</code> if not
+     * @return <code>true</code> if fields are populated, <code>false</code> if not
      */
     private boolean validateFields() {
         return !(partNameTextfield.getText().equals("") || partNameTextfield.getText().length() == 0 ||
@@ -268,6 +346,7 @@ public class AddPartController implements Initializable {
         partMinTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
         partPriceTextfield.setTextFormatter(new TextFormatter<Double>(doubleFilter));
         partNameTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
+        dynamicPartTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
     }
 
 }//END of class
