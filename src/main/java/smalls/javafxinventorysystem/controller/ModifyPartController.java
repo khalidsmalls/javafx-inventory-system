@@ -38,11 +38,13 @@ public class ModifyPartController implements Initializable {
     private InvalidationListener partInvChangeListener;
     private InvalidationListener partMinChangeListener;
     private InvalidationListener partMaxChangeListener;
+    private InvalidationListener dynamicFieldChangeListener;
     private boolean partNameModified;
     private boolean partPriceModified;
     private boolean partInvModified;
     private boolean partMinModified;
     private boolean partMaxModified;
+    private boolean dynamicFieldModified;
     private ToggleGroup toggleGroup;
 
     /*
@@ -108,24 +110,7 @@ public class ModifyPartController implements Initializable {
     @FXML private void onPartSave(ActionEvent event) {
         if (validateFields()) {
             if (validateInventory()) {
-                if (partNameModified) {
-                    part.setName(partNameTextfield.getText());
-                }
-                if (partPriceModified) {
-                    part.setPrice(Double.parseDouble(partPriceTextfield.getText()));
-                }
-                if (partInvModified) {
-                    part.setStock(Integer.parseInt(partInvTextfield.getText()));
-                }
-                if (partMinModified) {
-                    part.setMin(Integer.parseInt(partMinTextfield.getText()));
-                }
-                if (partMaxModified) {
-                    part.setMax(Integer.parseInt(partMaxTextfield.getText()));
-                }
-                inv.updatePart(partIndex, part);
-                clearFields();
-                ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
+
             } else {
                 //validate inventory returned false
                 new Alert(Alert.AlertType.ERROR, "Inventory must be greater than or equal to Minimum and " +
@@ -135,6 +120,44 @@ public class ModifyPartController implements Initializable {
             //validate fields returned false
             new Alert(Alert.AlertType.ERROR, "Please enter a value for all fields").showAndWait();
         }
+    }
+
+    private void modifyPart(ActionEvent event) {
+        if (partNameModified) {
+            part.setName(partNameTextfield.getText());
+        }
+        if (partPriceModified) {
+            part.setPrice(Double.parseDouble(partPriceTextfield.getText()));
+        }
+        if (partInvModified) {
+            part.setStock(Integer.parseInt(partInvTextfield.getText()));
+        }
+        if (partMinModified) {
+            part.setMin(Integer.parseInt(partMinTextfield.getText()));
+        }
+        if (partMaxModified) {
+            part.setMax(Integer.parseInt(partMaxTextfield.getText()));
+        }
+        if (dynamicFieldModified) {
+            if (part instanceof InHouse) {
+                try {
+                    ((InHouse) part).setMachineId(Integer.parseInt(dynamicPartTextfield.getText()));
+                } catch (NumberFormatException e) {
+                    new Alert(Alert.AlertType.ERROR, "Please enter a machine id").showAndWait();
+                    return;
+                }
+            }
+            if (part instanceof Outsourced) {
+                if (dynamicPartTextfield.getText().equals("")) {
+                    new Alert(Alert.AlertType.ERROR, "Please enter a company name").showAndWait();
+                    return;
+                }
+                ((Outsourced) part).setCompanyName(dynamicPartTextfield.getText());
+            }
+        }
+        inv.updatePart(partIndex, part);
+        clearFields();
+        ((Stage) (((Button) event.getSource()).getScene().getWindow())).close();
     }
 
     private void createNewPart(ActionEvent event) {
@@ -242,6 +265,7 @@ public class ModifyPartController implements Initializable {
         partInvModified = false;
         partMinModified = false;
         partMaxModified = false;
+        dynamicFieldModified = false;
         partNameChangeListener = new InvalidationListener() {
             @Override
             public void invalidated(Observable observable) {
@@ -272,12 +296,19 @@ public class ModifyPartController implements Initializable {
                 partMaxModified = true;
             }
         };
+        dynamicFieldChangeListener = new InvalidationListener() {
+            @Override
+            public void invalidated(Observable observable) {
+                dynamicFieldModified = true;
+            }
+        };
 
         partNameTextfield.textProperty().addListener(partNameChangeListener);
         partPriceTextfield.textProperty().addListener(partPriceChangeListener);
         partInvTextfield.textProperty().addListener(partInvChangeListener);
         partMinTextfield.textProperty().addListener(partMinChangeListener);
         partMaxTextfield.textProperty().addListener(partMaxChangeListener);
+        dynamicPartTextfield.textProperty().addListener(dynamicFieldChangeListener);
     }
 
 }
