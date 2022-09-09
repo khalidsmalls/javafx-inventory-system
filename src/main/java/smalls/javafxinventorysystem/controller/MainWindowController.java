@@ -17,6 +17,7 @@ import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.UnaryOperator;
 
 public class MainWindowController implements Initializable {
     @FXML private TextField partSearchField;
@@ -27,6 +28,13 @@ public class MainWindowController implements Initializable {
     private NumberFormat currencyFormat;
     private final Stage stage;
 
+    private final UnaryOperator<TextFormatter.Change> lengthFilter = change -> {
+        if (change.getControlNewText().length() > 35) {
+            return null;
+        }
+        return change;
+    };
+
     public MainWindowController() {
         inv = Inventory.getInstance();
         stage = new Stage();
@@ -36,6 +44,8 @@ public class MainWindowController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initPartTable();
         initProductTable();
+        partSearchField.setTextFormatter(new TextFormatter<>(lengthFilter));
+        productSearchField.setTextFormatter(new TextFormatter<>(lengthFilter));
         currencyFormat = NumberFormat.getCurrencyInstance();
     }
 

@@ -85,6 +85,13 @@ public class ModifyProductController implements Initializable {
         return null;
     };
 
+    private final UnaryOperator<TextFormatter.Change> lengthFilter = change -> {
+        if (change.getControlNewText().length() > 35) {
+            return null;
+        }
+        return change;
+    };
+
     public ModifyProductController(Product product, String windowLabelText) {
         this.product = product;
         this.windowLabelText = windowLabelText;
@@ -266,6 +273,7 @@ public class ModifyProductController implements Initializable {
         productMinTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
         productPriceTextfield.setTextFormatter(new TextFormatter<Double>(doubleFilter));
         productNameTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
+        partSearchTextfield.setTextFormatter(new TextFormatter<>(lengthFilter));
     }
 
     private void populateFields() {

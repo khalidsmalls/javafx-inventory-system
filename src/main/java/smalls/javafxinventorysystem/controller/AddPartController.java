@@ -69,13 +69,6 @@ public class AddPartController implements Initializable {
         return null;
     };
 
-    private final UnaryOperator<TextFormatter.Change> lengthFilter = change -> {
-        if (change.getControlNewText().length() > 35) {
-            return null;
-        }
-        return change;
-    };
-
     public AddPartController(String partWindowLabelText) {
         this.partWindowLabelText = partWindowLabelText;
     }
@@ -193,7 +186,6 @@ public class AddPartController implements Initializable {
         partMinTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
         partPriceTextfield.setTextFormatter(new TextFormatter<Double>(doubleFilter));
         partNameTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
-        dynamicPartTextfield.setTextFormatter(new TextFormatter<>(lengthFilter));
     }
 
 }//END of class
