@@ -20,6 +20,7 @@ import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.UnaryOperator;
 
 /**
  * displays full inventory of parts and products.
@@ -38,6 +39,14 @@ public class MainWindowController implements Initializable {
     @FXML private TableView<Product> productsTable;
     private NumberFormat currencyFormat;
     private final Stage stage;
+
+    private final UnaryOperator<TextFormatter.Change> lengthFilter = change -> {
+        String newText = change.getControlNewText();
+        if (newText.length() > 35) {
+            return null;
+        }
+        return change;
+    };
 
     /**
      * class constructor.
@@ -62,6 +71,8 @@ public class MainWindowController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initPartTable();
         initProductTable();
+        partSearchField.setTextFormatter(new TextFormatter<>(lengthFilter));
+        productSearchField.setTextFormatter(new TextFormatter<>(lengthFilter));
         currencyFormat = NumberFormat.getCurrencyInstance();
     }
 

@@ -90,6 +90,14 @@ public class ModifyProductController implements Initializable {
         return null;
     };
 
+    private final UnaryOperator<TextFormatter.Change> lengthFilter = change -> {
+        String newText = change.getControlNewText();
+        if (newText.length() > 35) {
+            return null;
+        }
+        return change;
+    };
+
     /**
      * class constructor.
      * <p>
@@ -123,6 +131,7 @@ public class ModifyProductController implements Initializable {
         productIdTextfield.setText(String.valueOf(product.getId()));
         productIndex = Inventory.getAllProducts().indexOf(product);
         currencyFormat = NumberFormat.getCurrencyInstance();
+        partSearchTextfield.setTextFormatter(new TextFormatter<>(lengthFilter));
 
         setTextFormatters();
         populateFields();

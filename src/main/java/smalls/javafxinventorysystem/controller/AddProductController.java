@@ -84,6 +84,14 @@ public class AddProductController implements Initializable {
         return null;
     };
 
+    private final UnaryOperator<TextFormatter.Change> lengthFilter = change -> {
+        String newText = change.getControlNewText();
+        if (newText.length() > 35) {
+            return null;
+        }
+        return change;
+    };
+
     /**
      * class constructor.
      * <p>
@@ -114,6 +122,7 @@ public class AddProductController implements Initializable {
         productIdTextfield.setEditable(false);
         productIdTextfield.setText(PRODUCT_ID_FIELD_TEXT);
         currencyFormat = NumberFormat.getCurrencyInstance();
+        partSearchTextfield.setTextFormatter(new TextFormatter<>(lengthFilter));
 
         setTextFormatters();
         initPartsTable();
