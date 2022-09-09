@@ -53,6 +53,9 @@ public class AddProductController implements Initializable {
     //functional interfaces for restricting text input to valid characters
     private final UnaryOperator<TextFormatter.Change> integerFilter = change -> {
         String newText = change.getControlNewText();
+        if (newText.length() > 15) {
+            return null;
+        }
         if (newText.matches("([1-9][0-9]*)?")) {
             return change;
         }
@@ -61,6 +64,9 @@ public class AddProductController implements Initializable {
 
     private final UnaryOperator<TextFormatter.Change> doubleFilter = change -> {
         String newText = change.getControlNewText();
+        if (newText.length() > 15) {
+            return null;
+        }
         if (newText.matches("[\\d]*(\\.((\\d{0,2})?))?")) {
             return change;
         }
@@ -69,6 +75,9 @@ public class AddProductController implements Initializable {
 
     private final UnaryOperator<TextFormatter.Change> stringFilter = change -> {
         String newText = change.getControlNewText();
+        if (newText.length() > 35) {
+            return null;
+        }
         if (newText.matches("([a-zA-Z\\-]*)")) {
             return change;
         }

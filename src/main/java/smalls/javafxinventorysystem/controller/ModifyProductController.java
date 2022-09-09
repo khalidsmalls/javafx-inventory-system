@@ -30,7 +30,6 @@ import java.util.function.UnaryOperator;
 public class ModifyProductController implements Initializable {
     private final Product product;
     private final String productWindowLabelText;
-    private final String PART_NOT_FOUND_MSG = "Part not found";
     @FXML private Label productWindowLabel;
     @FXML private TextField productIdTextfield;
     @FXML private TextField productNameTextfield;
@@ -60,6 +59,9 @@ public class ModifyProductController implements Initializable {
     //functional interfaces for restricting text input to valid characters
     private final UnaryOperator<TextFormatter.Change> integerFilter = change -> {
         String newText = change.getControlNewText();
+        if (newText.length() > 15) {
+            return null;
+        }
         if (newText.matches("([1-9][0-9]*)?")) {
             return change;
         }
@@ -68,6 +70,9 @@ public class ModifyProductController implements Initializable {
 
     private final UnaryOperator<TextFormatter.Change> doubleFilter = change -> {
         String newText = change.getControlNewText();
+        if (newText.length() > 15) {
+            return null;
+        }
         if (newText.matches("[\\d]*(\\.((\\d{0,2})?))?")) {
             return change;
         }
@@ -76,6 +81,9 @@ public class ModifyProductController implements Initializable {
 
     private final UnaryOperator<TextFormatter.Change> stringFilter = change -> {
         String newText = change.getControlNewText();
+        if (newText.length() > 35) {
+            return null;
+        }
         if (newText.matches("([a-zA-Z\\-]*)")) {
             return change;
         }
@@ -154,6 +162,7 @@ public class ModifyProductController implements Initializable {
                 partsTable.getSelectionModel().select(partList.get(0));
             }
         }
+        String PART_NOT_FOUND_MSG = "Part not found";
         partsTable.setPlaceholder(new Text(PART_NOT_FOUND_MSG));
     }
 
