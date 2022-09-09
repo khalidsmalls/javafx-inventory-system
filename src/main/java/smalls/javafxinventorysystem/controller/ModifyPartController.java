@@ -53,6 +53,9 @@ public class ModifyPartController implements Initializable {
      */
     private final UnaryOperator<TextFormatter.Change> integerFilter = change -> {
         String newText = change.getControlNewText();
+        if (newText.length() > 15) {
+            return null;
+        }
         if (newText.matches("([1-9][0-9]*)?")) {
             return change;
         }
@@ -61,6 +64,9 @@ public class ModifyPartController implements Initializable {
 
     private final UnaryOperator<TextFormatter.Change> doubleFilter = change -> {
         String newText = change.getControlNewText();
+        if (newText.length() > 15) {
+            return null;
+        }
         if (newText.matches("[\\d]*(\\.((\\d{0,2})?))?")) {
             return change;
         }
@@ -69,10 +75,20 @@ public class ModifyPartController implements Initializable {
 
     private final UnaryOperator<TextFormatter.Change> stringFilter = change -> {
         String newText = change.getControlNewText();
+        if (newText.length() > 35) {
+            return null;
+        }
         if (newText.matches("([a-zA-Z\\- ']*)")) {
             return change;
         }
         return null;
+    };
+
+    private final UnaryOperator<TextFormatter.Change> lengthFilter = change -> {
+        if (change.getControlNewText().length() > 35) {
+            return null;
+        }
+        return change;
     };
 
     public ModifyPartController(Part part, String windowLabelText) {
@@ -110,7 +126,12 @@ public class ModifyPartController implements Initializable {
     @FXML private void onPartSave(ActionEvent event) {
         if (validateFields()) {
             if (validateInventory()) {
-
+                if ((part instanceof InHouse && outsourcedRadioBtn.isSelected()) ||
+                        (part instanceof Outsourced && inHouseRadioBtn.isSelected())) {
+                    createNewPart(event);
+                } else {
+                    modifyPart(event);
+                }
             } else {
                 //validate inventory returned false
                 new Alert(Alert.AlertType.ERROR, "Inventory must be greater than or equal to Minimum and " +

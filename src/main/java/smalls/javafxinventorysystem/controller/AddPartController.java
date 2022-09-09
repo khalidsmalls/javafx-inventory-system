@@ -38,6 +38,9 @@ public class AddPartController implements Initializable {
      */
     private final UnaryOperator<TextFormatter.Change> integerFilter = change -> {
         String newText = change.getControlNewText();
+        if (newText.length() > 15) {
+            return null;
+        }
         if (newText.matches("([1-9][0-9]*)?")) {
             return change;
         }
@@ -46,6 +49,9 @@ public class AddPartController implements Initializable {
 
     private final UnaryOperator<TextFormatter.Change> doubleFilter = change -> {
         String newText = change.getControlNewText();
+        if (newText.length() > 15) {
+            return null;
+        }
         if (newText.matches("[\\d]*(\\.((\\d{0,2})?))?")) {
             return change;
         }
@@ -54,10 +60,20 @@ public class AddPartController implements Initializable {
 
     private final UnaryOperator<TextFormatter.Change> stringFilter = change -> {
         String newText = change.getControlNewText();
+        if (newText.length() > 35) {
+            return null;
+        }
         if (newText.matches("([a-zA-Z\\- ']*)")) {
             return change;
         }
         return null;
+    };
+
+    private final UnaryOperator<TextFormatter.Change> lengthFilter = change -> {
+        if (change.getControlNewText().length() > 35) {
+            return null;
+        }
+        return change;
     };
 
     public AddPartController(String partWindowLabelText) {
@@ -107,13 +123,23 @@ public class AddPartController implements Initializable {
                 newPartMax = Integer.parseInt(partMaxTextfield.getText());
 
                 if (toggleGroup.getSelectedToggle() == inHouseRadioBtn) {
-                    int newPartMachineId = Integer.parseInt(dynamicPartTextfield.getText());
+                    int newPartMachineId = 0;
+                    try {
+                        newPartMachineId = Integer.parseInt(dynamicPartTextfield.getText());
+                    } catch (NumberFormatException e) {
+                        new Alert(Alert.AlertType.ERROR, "Please enter a machine id").showAndWait();
+                        return;
+                    }
                     p = new InHouse(
                             newPartId, newPartName, newPartPrice, newPartInv,
                             newPartMin, newPartMax, newPartMachineId
                     );
                 } else {
                     String newPartCompanyName = dynamicPartTextfield.getText();
+                    if (newPartCompanyName.isEmpty()) {
+                        new Alert(Alert.AlertType.ERROR, "Please enter a company name").showAndWait();
+                        return;
+                    }
                     p = new Outsourced(
                             newPartId, newPartName, newPartPrice, newPartInv,
                             newPartMin, newPartMax, newPartCompanyName
@@ -167,6 +193,7 @@ public class AddPartController implements Initializable {
         partMinTextfield.setTextFormatter(new TextFormatter<Integer>(integerFilter));
         partPriceTextfield.setTextFormatter(new TextFormatter<Double>(doubleFilter));
         partNameTextfield.setTextFormatter(new TextFormatter<String>(stringFilter));
+        dynamicPartTextfield.setTextFormatter(new TextFormatter<>(lengthFilter));
     }
 
 }//END of class

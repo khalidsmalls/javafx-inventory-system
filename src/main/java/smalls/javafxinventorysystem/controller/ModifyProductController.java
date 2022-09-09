@@ -54,6 +54,9 @@ public class ModifyProductController implements Initializable {
     //functional interfaces for restricting text input to valid characters
     private final UnaryOperator<TextFormatter.Change> integerFilter = change -> {
         String newText = change.getControlNewText();
+        if (newText.length() > 15) {
+            return null;
+        }
         if (newText.matches("([1-9][0-9]*)?")) {
             return change;
         }
@@ -62,6 +65,9 @@ public class ModifyProductController implements Initializable {
 
     private final UnaryOperator<TextFormatter.Change> doubleFilter = change -> {
         String newText = change.getControlNewText();
+        if (newText.length() > 15) {
+            return null;
+        }
         if (newText.matches("[\\d]*(\\.((\\d{0,2})?))?")) {
             return change;
         }
@@ -70,6 +76,9 @@ public class ModifyProductController implements Initializable {
 
     private final UnaryOperator<TextFormatter.Change> stringFilter = change -> {
         String newText = change.getControlNewText();
+        if (newText.length() > 35) {
+            return null;
+        }
         if (newText.matches("([a-zA-Z\\-]*)")) {
             return change;
         }
@@ -123,6 +132,10 @@ public class ModifyProductController implements Initializable {
     }
 
     @FXML private void onAddAssocPart() {
+        if (partsTable.getSelectionModel().getSelectedItem() == null) {
+            new Alert(Alert.AlertType.ERROR, "Please select one or more parts").showAndWait();
+            return;
+        }
         if (partsTable.getSelectionModel().getSelectedItems().size() > 1) {
             product.addAssociatedParts(partsTable.getSelectionModel().getSelectedItems());
         } else {
