@@ -118,7 +118,7 @@ public class MainWindowController implements Initializable {
      * If a part or parts are found that match the search string, they are added
      * to an observable list created and set to the parts table. Otherwise,
      * a "part not found" placeholder is displayed.
-     *
+     * <p>
      * RUNTIME_ERROR - IllegalArgumentException - thrown when the partsTable
      *                 is passed a null value to the setItems method. The updateItem
      *                 functional interface in the initPartTable method is where
@@ -290,7 +290,7 @@ public class MainWindowController implements Initializable {
      * <p>
      * <code>FXMLLoader</code> displays <code>productWindow</code> and assigns
      * <code>ModifyProductController</code> to it. Also, passes <code>productWindowLabelText</code>
-     * and the <code>Product</code> to be modified to <code><ModifyProductController</code>.
+     * and the <code>Product</code> to be modified to <code>ModifyProductController</code>.
      */
     @FXML private void onModifyProduct() {
         Product p = productsTable.getSelectionModel().getSelectedItem();

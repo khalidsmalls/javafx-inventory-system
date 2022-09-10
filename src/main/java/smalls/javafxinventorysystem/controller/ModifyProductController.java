@@ -133,7 +133,7 @@ public class ModifyProductController implements Initializable {
     @FXML private TableColumn<Part,Double> assocPartPriceCol;
 
     /**
-     * the index of the part to be modified
+     * the index of the product to be modified
      */
     private int productIndex;
 
