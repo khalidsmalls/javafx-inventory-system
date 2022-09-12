@@ -1,5 +1,5 @@
 /*
-   #F7F2D4 - lightgray
+   #F7F2D4 - beige, or khaki
    #FDDC22 - yellow
    #236AB9 - blue
    #D61A46 - hot pink
@@ -19,7 +19,9 @@
 }
 
 .table-view {
-    -fx-background-color: #236AB9;
+    /*-fx-background-color: #236AB9; original darkish blue*/
+    /*-fx-background-color: #87bbf9; lighter shade of blue*/
+    -fx-background-color: #eeeeee; /*light grey - the winner? for now...*/
     -fx-border-color: black;
 }
 
@@ -35,7 +37,7 @@
     -fx-text-background-color: #091D34;
 }
 
-.table-view .table-cell{
+.table-view .table-cell {
     -fx-border-color: transparent;
     -fx-padding: 2 0 2 10px;
 
@@ -44,17 +46,22 @@
     -fx-background-color: #93f9b911;
     -fx-text-background-color: red;
 }
-.table-row-cell: odd{
+.table-row-cell: odd {
     -fx-background-color: #F7F2D4;
     -fx-text-background-color: #091D34;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em;
 }
-.table-row-cell: even{
-    -fx-background-color: #091D34;
-    -fx-text-background-color: #F7F2D4;
+.table-row-cell: even {
+    /*-fx-background-color: #091D34;*/
+    -fx-background-color: #87bbf9;
+    /*-fx-text-background-color: #F7F2D4;*/
+    -fx-text-background-color: #091D34;
     -fx-background-insets: 0, 0 0 1 0;
     -fx-padding: 0.0em;
+}
+.table-row-cell:selected {
+    -fx-background-color: #FDDC22;
 }
 
 /*
