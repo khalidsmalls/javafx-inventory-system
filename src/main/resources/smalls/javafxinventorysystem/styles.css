@@ -7,7 +7,8 @@
 */
 
 .root {
-    -fx-background-color: #F7F2D4;
+    /*-fx-background-color: #F7F2D4;*/
+    -fx-background-color: radial-gradient(center 35% 55%, radius 55%, #CDCCCA 65%, #FAF9F9);
 }
 
 .form-label {
