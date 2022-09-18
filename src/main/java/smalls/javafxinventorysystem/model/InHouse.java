@@ -1,5 +1,11 @@
 package smalls.javafxinventorysystem.model;
 
+/**
+ * <code>Part</code> subclass.
+ * <p>
+ * adds the <code>machineId</code> attribute
+ * to the parent class.
+ */
 public class InHouse extends Part {
 
     private int machineId;
@@ -23,8 +29,4 @@ public class InHouse extends Part {
         return machineId;
     }
 
-    @Override
-    public String toString() {
-        return "InHouse{" + this.getName() + '}';
-    }
 }
